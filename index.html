@@ -20,7 +20,7 @@
                         </svg>
                     </button>
                     <a href="#" class="flex ms-2 md:me-24">
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">威倩馥珈</span>
+                        <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">About Us</span>
                     </a>
                 </div>
                 <div class="flex items-center">
@@ -94,10 +94,8 @@
                 </div>
             </aside>
 
-            <div class="p-4 sm:ml-64">
-                <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-                    <object :data="objectData" class="w-full h-svh"></object>
-                </div>
+            <div id="objectContainer" class="p-4 h-svh sm:ml-64 mt-15">
+                <object :data="objectData" class="w-full h-full"></object>
             </div>
 
         </div>
@@ -105,8 +103,27 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
+        <script>
+            // 調整 content 高度
+            {
+                let objEle_indexApp = document.getElementById("indexApp");
+                let objEle_objectContainer = document.getElementById("objectContainer");
+
+                let winH = window.innerHeight;
+                let displayH = winH - 60;
+                objEle_indexApp.style.height = "" + displayH + "px";
+                objEle_objectContainer.style.height = "" + displayH + "px";
+            }
+        </script>
+        <script type="importmap">
+        {
+            "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+            }
+        }
+        </script>
         <script type="module">
-            import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js'
+            import { createApp, ref } from 'vue'
 
             createApp({
                 setup() {
