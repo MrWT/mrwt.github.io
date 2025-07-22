@@ -7,10 +7,9 @@
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     </head>
     <body>
-        <h1>hello quiz</h1>
         <div id="quizApp">
             <!-- banner -->
-            <div id="informational-banner" tabindex="-1" class="fixed top-0 start-0 z-50 flex flex-col justify-between w-full p-4 border-b border-gray-200 md:flex-row bg-gray-50 ">
+            <div id="informational-banner" tabindex="-1" class="fixed top-0 start-0 z-50 flex flex-col justify-between w-full p-4 border-b border-gray-200 md:flex-row bg-orange-50 ">
                 <div class="mb-4 md:mb-0 md:me-4">
                     <h2 class="mb-1 text-base font-semibold text-gray-900 ">數學題</h2>
                     <p class="flex items-center text-sm font-normal text-gray-500 ">共有 {{ quizs.length }} 道題目</p>
@@ -22,37 +21,35 @@
                         </svg> 
                         產生題目
                     </a>
-                    <a href="#" v-if="quizs.length > 0" @click="checkAns" class="inline-flex items-center justify-center px-3 py-2 me-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none ">
+                    <a href="#" v-if="showCheck" @click="checkAns" class="inline-flex items-center justify-center px-3 py-2 me-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none ">
                         <svg class="w-4 h-4 text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
                         </svg>
                         驗證結果
                     </a>
-                    <span v-if="quizs.length > 0" class="pl-8">
+                    <span v-if="showCheck" class="pl-8">
                         {{ checkRst }}
                     </span>
                 </div>
             </div>
 
-            <div class="w-full md:mt-[60px] sm:mt-[120px]">
-                <ol>
-                    <li v-for="(quizObj, index) in quizs">
-                        <span class="text-blue-900 text-sm mr-10">Q{{ index + 1 }}.</span> 
-                        {{ quizObj.quiz }}
-                        <input type="number" :id="quizObj.inputAnsId" @change="changeAns" placeholder="0" required
+            <div class="w-full md:mt-[100px] sm:mt-[140px] justify-items-center">
+                <div v-for="(quizObj, index) in quizs" 
+                    :id="quizObj.quizId"
+                    class="w-md p-6 bg-gray-100 border border-gray-900 rounded-lg shadow-lg">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Q{{ index + 1 }}.</h5>
+                    <span class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ quizObj.quiz }}</span>
+                    <input type="number" :id="quizObj.inputAnsId" @change="changeAns" placeholder="0" :value="quizObj.user_answer" required
                         class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 w-30 p-2.5 " 
                         :class="{ 'border-red-500': !quizObj.result && quizObj.answered, 'border-blue-500': quizObj.result && quizObj.answered, 'border-gray-300': !quizObj.answered }" />                        
 
-                        <span class="hidden">
-                            {{ quizObj.real_answer }}
-                            {{ quizObj.user_answer }}
-                            {{ quizObj.result }}
-                            {{ quizObj.answered }}
-                        </span>
-
-                        <hr class="border-gray-400" />
-                    </li>
-                </ol>
+                    <span class="hidden">
+                        {{ quizObj.real_answer }}
+                        {{ quizObj.user_answer }}
+                        {{ quizObj.result }}
+                        {{ quizObj.answered }}
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -71,12 +68,13 @@
 
             createApp({
                 setup() {
+                    const showCheck = ref(true)
                     const checkRst = ref("")
                     const quizs = reactive([])
                     // 產生 quiz 清單
                     function generateQuiz(event){
                         // 清空 quizs
-                        quizs.length = 0;
+                        quizs.splice(0, quizs.length);
                         
                         let quiz_count = Math.floor(Math.random() * 30) + 1;
 
@@ -90,10 +88,14 @@
                                 user_answer: 0,
                                 result: false,
                                 answered: false,
+                                quizId: "quiz_" + q_i,
                                 inputAnsId: "ans_" + q_i,
+                                nextQuizId: "next_" + q_i,
                             };
                             quizs.push( quizObj );
                         }
+
+                        checkRst.value = "";
                     }
                     // answer input 改變時, 同步改變 quizs 中的 user_answer
                     function changeAns(event){
@@ -105,7 +107,7 @@
                         let quizIndex = parseInt( targetEleId.split("_")[1] );
                         quizs[quizIndex].answered = true;
                         quizs[quizIndex].user_answer = parseInt( targetValue );
-                        quizs[quizIndex].result = parseInt(quizs[quizIndex].user_answer) === parseInt(quizs[quizIndex].real_answer)
+                        quizs[quizIndex].result = parseInt(quizs[quizIndex].user_answer) === parseInt(quizs[quizIndex].real_answer);
                     }
                     // 驗證答案
                     function checkAns(event){
@@ -130,12 +132,13 @@
                     }
 
                     return {
+                        showCheck,
                         checkRst,
                         quizs,
 
                         generateQuiz,
                         changeAns,
-                        checkAns
+                        checkAns,
                     }
                 }
             }).mount('#quizApp')
