@@ -33,10 +33,10 @@
                 </div>
             </div>
 
-            <div class="w-full md:mt-[100px] sm:mt-[140px] justify-items-center">
+            <div class="w-full md:mt-[100px] sm:mt-[140px] mt-[150px] justify-items-center">
                 <div v-for="(quizObj, index) in quizs" 
                     :id="quizObj.quizId"
-                    class="w-md p-6 bg-gray-100 border border-gray-900 rounded-lg shadow-lg">
+                    class="w-3/4 sm:w-1/2 p-6 bg-gray-100 border border-gray-900 rounded-lg shadow-lg">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Q{{ index + 1 }}.</h5>
                     <span class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ quizObj.quiz }}</span>
                     <input type="number" :id="quizObj.inputAnsId" @change="changeAns" placeholder="0" :value="quizObj.user_answer" required
