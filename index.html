@@ -20,29 +20,31 @@
                                 </svg>
                             </button>
                             <a href="#" class="flex ms-2 md:me-24">
-                                <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap ">About Us</span>
+                                <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap ">2+2 幸福慢生活</span>
                             </a>
                         </div>
                         <div class="flex items-center">
                             <div class="flex items-center ms-3">
                                 <div>
-                                    <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                                    <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                         <span class="sr-only">Open user menu</span>
-                                        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                                        <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-black text-white rounded-full">
+                                            <span class="font-medium">{{ targetUser.shortName }}</span>
+                                        </div>
                                     </button>
                                 </div>
-                                <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                                <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm" id="dropdown-user">
                                     <div class="px-4 py-3" role="none">
                                         <p class="text-sm text-gray-900 " role="none">
-                                        Bryant Kuo
+                                            {{ targetUser.name }}
                                         </p>
                                         <p class="text-sm font-medium text-gray-900 truncate " role="none">
-                                        waitingpa23@gmail.com
+                                            {{ targetUser.name }}@mail
                                         </p>
                                     </div>
                                     <ul class="py-1" role="none">
                                         <li>
-                                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                                            <a href="#" @click="signOut" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -72,7 +74,7 @@
                                 <span class="flex-1 ms-3 whitespace-nowrap">Quiz</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="hidden">
                             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
                             <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
@@ -80,7 +82,7 @@
                             <span class="flex-1 ms-3 whitespace-nowrap">Sign In</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="hidden">
                             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
                             <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
@@ -95,9 +97,35 @@
             </aside>
 
             <div id="objectContainer" class="p-4 h-svh sm:ml-64 mt-15">
-                <object :data="objectData" class="w-full h-full"></object>
+                <object :data="pageUrl" class="w-full h-full"></object>
             </div>
 
+            <!-- signin card -->
+            <div id="signinCard" class="w-full h-full bg-gray-500 hidden fixed top-0 left-0 z-60 flex justify-center items-center">
+                <div class="w-1/4 h-1/2 p-6 bg-gray-100 border border-gray-900 rounded-lg shadow-lg">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Hello</h5>
+                    <label for="inputAccount" class="mr-2">你的名字是 </label>
+                    <input id="inputAccount" name="inputAccount" type="text" placeholder="Name" value="" required class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 w-30 p-2.5 " />                        
+                    <button type="button" @click="signIn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-full mt-15">
+                        進入
+                        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 警告訊息 -->
+            <div id="warning" class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 hidden z-999 fixed bottom-0 right-5" role="alert">
+                <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                    <span id="warningTitle" class="font-medium">Danger alert!</span> 
+                    <span id="warningContent" class="ml-2">Change a few things up and try submitting again.</span>
+                </div>
+            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -123,27 +151,87 @@
             }
         </script>
         <script type="module">
-            import { createApp, ref } from 'vue'
+            import { createApp, ref, reactive } from 'vue'
 
             createApp({
                 setup() {
-                    const objectData = ref('./galaxy.html')
+                    const appState = ref("");
+                    const pageUrl = ref('./galaxy.html');
+                    const targetUser = reactive({});
+                    const userInfos = reactive([
+                        {
+                            name: "Bryant",
+                            email: "waitingpa23@gmail.com",
+                            photo: "https://flowbite.com/docs/images/people/profile-picture-1.jpg",
+                        },
+                    ]);
 
                     function gotoGalaxy() {
-                        objectData.value = './galaxy.html'
+                        pageUrl.value = './galaxy.html'
                     }
 
                     function gotoQuiz() {
-                        objectData.value = './quiz.html'
+                        pageUrl.value = './quiz.html'
+                    }
+
+                    function signIn(){
+                        let account = document.getElementById("inputAccount").value;
+                        if(!account){
+                            document.getElementById("warningTitle").innerText = "Hello !";
+                            document.getElementById("warningContent").innerText = "還是沒有看到你的名字喔~~";
+
+                            let warning = document.getElementById("warning");
+                            warning.classList.remove("hidden");
+
+                            setTimeout(() => {
+                                warning.classList.add("hidden");
+                            }, 5000);
+
+                            return;
+                        }
+                        targetUser["name"] = account.toUpperCase();
+                        targetUser["shortName"] = account.substr(0, 1).toUpperCase();
+                        let signinEle = document.getElementById("signinCard");
+                        signinEle.classList.add("hidden");
+                    }
+
+                    function signOut(){
+                        targetUser.name = "";
+                        
+                        let signinEle = document.getElementById("signinCard");
+                        signinEle.classList.remove("hidden");
                     }
 
                     return {
-                        objectData,
+                        appState,
+                        pageUrl,
+                        targetUser,
+                        userInfos,
 
                         gotoGalaxy,
                         gotoQuiz,
+                        signIn,
+                        signOut,
                     }
-                }
+                },
+                created() {
+                    //console.log('Component created!', this,);
+
+                    if(!this.targetUser.hasOwnProperty("name")){
+                        //let signinEle = document.getElementById("signinCard");
+
+                        //signinEle.classList.remove("hidden");
+                    }
+                },
+                mounted(){
+                    //console.log('Component mounted!', this,);
+
+                    // 若無 user, 則跳出 signinCard
+                    if(!this.targetUser.hasOwnProperty("name") || !this.targetUser.name){
+                        let signinEle = document.getElementById("signinCard");
+                        signinEle.classList.remove("hidden");
+                    }
+                },
             }).mount('#indexApp')
         </script>
     </body>

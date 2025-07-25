@@ -27,11 +27,13 @@
 
             createApp({
                 setup() {
+                    const appState = ref("")
                     const msg = ref('galaxy in vue')
 
                 
 
                     return {
+                        appState,
                         msg,
                     }
                 }
