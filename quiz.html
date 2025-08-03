@@ -46,12 +46,41 @@
             <div v-if="appState=='SET'" class="w-full md:mt-[100px] sm:mt-[140px] mt-[150px] justify-items-center">
                 <div class="p-4 space-y-4">
                     <div class="w-full">
-                        <label for="quizCount">題目數量: </label>
-                        <input name="quizCount" type="number" :value="quizCount" class="w-30 ml-2" @change="setQuizCount" />
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">題型:</legend>
+
+                            <div class="join">
+                                <label class="label mr-3 text-[20px]">
+                                    <input type="checkbox" checked="checked" class="checkbox" @click="changeQuizType($event, 'add')" />
+                                    加法
+                                </label>
+                                <label class="label mr-3 text-[20px]">
+                                    <input type="checkbox" checked="checked" class="checkbox" @click="changeQuizType($event, 'sub')" />
+                                    減法
+                                </label>
+                                <label class="label mr-3 text-[20px]">
+                                    <input type="checkbox" checked="checked" class="checkbox" @click="changeQuizType($event, 'mul')" />
+                                    乘法
+                                </label>
+                                <label class="label mr-3 text-[20px]">
+                                    <input type="checkbox" class="checkbox" disabled @click="changeQuizType($event, 'div')" />
+                                    除法
+                                </label>
+                            </div>
+
+                        </fieldset>
                     </div>
                     <div class="w-full">
-                        <label for="quizMaxNum">題目中可能的最大數字: </label>
-                        <input name="quizMaxNum" type="number" :value="quizMaxNum" class="w-30 ml-2" @change="setQuizMaxNum" />
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">題目數量:</legend>
+                            <input type="text" class="input" placeholder="請輸入" :value="quizCount" @change="setQuizCount" />
+                        </fieldset>
+                    </div>
+                    <div class="w-full">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">題目中可能的最大數字: </legend>
+                            <input type="number" class="input" placeholder="請輸入" :value="quizMaxNum" @change="setQuizMaxNum" />
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -106,6 +135,12 @@
                     const showCheck = ref(true)
                     const checkRst = ref("")
                     const quizs = reactive([])
+                    const quizTypes = reactive({
+                        add: true,
+                        sub: true,
+                        mul: true,
+                        div: false
+                    });
 
                     // 設定題型
                     function setQuiz(event){
@@ -126,14 +161,32 @@
 
                         // 清空 quizs
                         quizs.splice(0, quizs.length);
+
+                        let quizOps = [];
+                        Object.keys(quizTypes).forEach((qz, qz_i) => {
+                            if(quizTypes[qz] && qz === "add"){
+                                quizOps.push("+");
+                            }
+                            if(quizTypes[qz] && qz === "sub"){
+                                quizOps.push("-");
+                            }
+                            if(quizTypes[qz] && qz === "mul"){
+                                quizOps.push("*");
+                            }
+                            if(quizTypes[qz] && qz === "div"){
+                                quizOps.push("/");
+                            }
+                        });
                         
                         for(let q_i = 0; q_i < quizCount.value; q_i++){
                             let q_left = Math.floor(Math.random() * quizMaxNum.value) + 1;
                             let q_right = Math.floor(Math.random() * quizMaxNum.value) + 1;
-
+                            let q_op = quizOps[Math.floor(Math.random() * quizOps.length)];
+                            let q_op_for_ui = q_op === "*" ? "×" : q_op === "/" ? "÷" : q_op;
+                           
                             let quizObj = {
-                                quiz: q_left + " + " + q_right + " = ",
-                                real_answer: q_left + q_right,
+                                quiz: q_left + " " + q_op_for_ui + " " + q_right + " = ",
+                                real_answer: eval(q_left + " " + q_op + " " + q_right),
                                 user_answer: 0,
                                 result: false,
                                 answered: false,
@@ -179,6 +232,12 @@
 
                         checkRst.value = "正確: " + correctCount + " / 錯誤: " + wrongCount + " / 未答: " + noneCount;
                     }
+                    // 改變題型
+                    function changeQuizType(event, type) {
+                        //console.log("changeQuizType", event, type);
+
+                        quizTypes[type] = event.target.checked;
+                    }
 
                     return {
                         appState,
@@ -187,12 +246,14 @@
                         showCheck,
                         checkRst,
                         quizs,
+                        quizTypes,
 
                         setQuiz,
                         setQuizCount,
                         setQuizMaxNum,
                         generateQuiz,
                         changeAns,
+                        changeQuizType,
                         checkAns,
                     }
                 }
