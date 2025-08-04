@@ -73,7 +73,7 @@
                     <div class="w-full">
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">題目數量:</legend>
-                            <input type="text" class="input" placeholder="請輸入" :value="quizCount" @change="setQuizCount" />
+                            <input type="number" class="input" placeholder="請輸入" :value="quizCount" @change="setQuizCount" />
                         </fieldset>
                     </div>
                     <div class="w-full">
@@ -85,10 +85,10 @@
                 </div>
             </div>
 
-            <!-- 題目清單 -->
+            <!-- 題目卡片 -->
             <div v-if="appState=='QUIZ'" class="w-full md:mt-[100px] sm:mt-[140px] mt-[150px] justify-items-center">
                 <div class="carousel carousel-vertical rounded-box h-96 w-full">
-                    <div v-for="(quizObj, index) in quizs" class="carousel-item h-full w-full flex items-center justify-center">
+                    <div v-for="(quizObj, index) in quizs" :id="quizObj.quizCard" class="carousel-item h-full w-full flex items-center justify-center">
 
                         <div class="card w-96 bg-gray-200 card-xl shadow-sm text-black ">
                             <div class="card-body">
@@ -111,7 +111,6 @@
 
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -190,9 +189,10 @@
                                 user_answer: 0,
                                 result: false,
                                 answered: false,
-                                quizId: "quiz_" + q_i,
                                 inputAnsId: "ans_" + q_i,
-                                nextQuizId: "next_" + q_i,
+                                quizCard: "quiz_" + q_i,
+                                preQuizCard: "#quiz_" + (q_i - 1 < 0 ? 0 : q_i -1),
+                                nextQuizCard: "#quiz_" + (q_i + 1 === quizCount.value ? quizCount.value -1 : q_i+1),
                             };
                             quizs.push( quizObj );
                         }

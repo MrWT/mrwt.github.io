@@ -17,31 +17,62 @@
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                         </div>
-                        <ul tabindex="0" class="menu menu-sm dropdown-content bg-yellow-300/100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li><a @click="gotoGalaxy">Galaxy</a></li>
-                            <li><a @click="gotoQuiz">Quiz</a></li>
+                        <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            <li v-if="userInfo.account" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoGalaxy">Galaxy</a></li>
+                            <li v-if="userInfo.account" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoQuiz">Quiz</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="navbar-center">
-                    <a class="btn btn-ghost text-xl">2+2 幸福慢生活</a>
+                    <a class="btn btn-ghost text-xl">K49 <!--2+2 幸福慢生活--></a>
                 </div>
                 <div class="navbar-end">
-                    <button class="btn btn-ghost btn-circle">
+                    <button v-if="userInfo.account" class="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
                     </button>
-                    <button class="btn btn-ghost btn-circle">
+                    <button v-if="userInfo.account" class="btn btn-ghost btn-circle">
                         <div class="indicator">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
                             <span class="badge badge-xs badge-primary indicator-item"></span>
                         </div>
                     </button>
+                    <div class="dropdown dropdown-end">
+                        <button class="btn btn-ghost btn-circle">
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        </button>
+                        <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            <li class="text-white text-lg">{{ userInfo.name }}</li>
+                            <li class="text-white text-lg">{{ userInfo.mail }}</li>
+                            <div class="divider"></div>
+                            <li class="">
+                                <button class="btn w-full" @click="signout">
+                                    <span v-if="userInfo.account">Signout</span>
+                                    <span v-if="!userInfo.account">Signin</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         
             <div id="objectContainer" class="p-4 h-9/10 mt-15">
-                <object :data="pageUrl" class="w-full h-full"></object>
+                <object v-if="userInfo.account" :data="pageUrl" class="w-full h-full"></object>
             </div>
+
+            <!-- signin modal -->
+            <dialog id="signinModal" class="modal">
+                <div class="modal-box">
+                    <h3 class="text-lg font-bold text-center">Hello!</h3>
+                    <div class="flex justify-center items-center">
+                        <input type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" />
+                    </div>
+                    <div class="modal-action">
+                        <button class="btn btn-primary" @click="signin" >Signin</button>
+                    </div>
+                </div>
+            </dialog>
 
         </div>
 
@@ -59,21 +90,65 @@
                 setup() {
                     const appState = ref("");
                     const pageUrl = ref('./galaxy.html');
-
+                    const tempAccount = ref("");
+                    const userInfo = reactive({
+                        account: null,
+                        name: null,
+                        mail: null,
+                        power: null,
+                    });
+                    // 轉換至 galaxy 介面
                     function gotoGalaxy() {
                         pageUrl.value = './galaxy.html'
                     }
-
+                    // 轉換至 quiz 介面
                     function gotoQuiz() {
                         pageUrl.value = './quiz.html'
+                    }
+                    // keyin account
+                    function keyinAccount(event){
+                        tempAccount.value = event.target.value.toUpperCase();
+                    }
+                    function resetUserInfo(){
+                        tempAccount.value = "";
+                        userInfo.account = null;
+                        userInfo.name = null;
+                        userInfo.mail = null;
+                        userInfo.power = null;
+                    }
+                    // 登入
+                    function signin(){
+                        //console.log("signin.click");
+                        //console.log("tempAccount.value=", tempAccount.value);
+
+                        if(tempAccount.value){
+                            userInfo.account = tempAccount.value;
+                            userInfo.name = tempAccount.value;
+                            userInfo.mail = tempAccount.value + "@mail.io";
+
+                            //console.log("signin", userInfo);
+
+                            // close signinModal
+                            document.getElementById("signinModal").close();
+                        }
+                    }
+                    // 登出
+                    function signout(){
+                        resetUserInfo();
+                        document.getElementById("signinModal").showModal();
                     }
 
                     return {
                         appState,
                         pageUrl,
+                        tempAccount,
+                        userInfo,
 
                         gotoGalaxy,
                         gotoQuiz,
+                        keyinAccount,
+                        signin,
+                        signout,
                     }
                 },
                 created() {
@@ -81,8 +156,12 @@
 
                 },
                 mounted(){
-                    //console.log('Component mounted!', this,);
+                    console.log("mounted", this.userInfo);
 
+                    // 沒有使用者資訊時, 跳出 signinModal
+                    if(!this.userInfo.account){
+                        document.getElementById("signinModal").showModal();
+                    }
                 },
             }).mount('#indexApp')
         </script>
