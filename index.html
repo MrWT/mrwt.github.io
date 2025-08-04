@@ -11,26 +11,31 @@
     <body>
         <div id="indexApp" class="w-full h-screen overflow-hidden">            
 
-            <div class="navbar bg-yellow-500/100 shadow-sm h-1/10 fixed top-0 left-0 z-50">
+            <div class="navbar bg-zinc-500/100 shadow-sm h-1/10 fixed top-0 left-0 z-50">
                 <div class="navbar-start">
                     <div class="dropdown">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li v-if="userInfo.account" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoGalaxy">Galaxy</a></li>
-                            <li v-if="userInfo.account" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoQuiz">Quiz</a></li>
+                            <li v-if="userInfo.funcs.indexOf('galaxy') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('galaxy')">Galaxy</a></li>
+                            <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('quiz')">Quiz</a></li>
+                            <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="navbar-center">
-                    <a class="btn btn-ghost text-xl">K49 <!--2+2 幸福慢生活--></a>
+                    <a class="btn btn-ghost text-xl">
+                        <span v-if="userInfo.role === 'admin'">CODER.K49</span>
+                        <span v-else-if="userInfo.role === 'tn100'">2+2 幸福慢生活</span>
+                        <span v-else>V.Demo</span>
+                    </a>
                 </div>
                 <div class="navbar-end">
-                    <button v-if="userInfo.account" class="btn btn-ghost btn-circle">
+                    <button v-if="userInfo.funcs.indexOf('search') !== -1" class="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
                     </button>
-                    <button v-if="userInfo.account" class="btn btn-ghost btn-circle">
+                    <button v-if="userInfo.funcs.indexOf('notify') !== -1" class="btn btn-ghost btn-circle">
                         <div class="indicator">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
                             <span class="badge badge-xs badge-primary indicator-item"></span>
@@ -38,9 +43,11 @@
                     </button>
                     <div class="dropdown dropdown-end">
                         <button class="btn btn-ghost btn-circle">
-                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                            </svg>
+                            <div class="avatar avatar-placeholder">
+                                <div class="bg-lime-900/100 text-white size-5 rounded-full">
+                                    <span class="text-xs">{{ userInfo.shortName }}</span>
+                                </div>
+                            </div>
                         </button>
                         <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
                             <li class="text-white text-lg">{{ userInfo.name }}</li>
@@ -91,19 +98,32 @@
                     const appState = ref("");
                     const pageUrl = ref('./galaxy.html');
                     const tempAccount = ref("");
+                    const roles = reactive([
+                        { role: "admin", name: "系統管理員", },
+                        { role: "tn100", name: "一般使用者", },
+                    ]);
+                    const roleFuncs = reactive({
+                        admin: ["galaxy", "quiz", "machineLearning", "search", "notify", ],
+                        tn100: ["galaxy", "quiz", ],
+                        tn000: ["galaxy", "quiz", ],
+                    });
+                    const userRoles = reactive([
+                        { account: "BRYANT", role: "admin", }, 
+                        { account: "FLORA", role: "tn100", }, 
+                        { account: "YUNA", role: "tn100", }, 
+                        { account: "JOY", role: "tn100", }, 
+                    ]);
                     const userInfo = reactive({
                         account: null,
                         name: null,
+                        shortName: null,
                         mail: null,
-                        power: null,
+                        role: null,
+                        funcs: [],
                     });
-                    // 轉換至 galaxy 介面
-                    function gotoGalaxy() {
-                        pageUrl.value = './galaxy.html'
-                    }
-                    // 轉換至 quiz 介面
-                    function gotoQuiz() {
-                        pageUrl.value = './quiz.html'
+                    // 轉換至內容介面
+                    function gotoPage(page) {
+                        pageUrl.value = "./" + page + ".html";
                     }
                     // keyin account
                     function keyinAccount(event){
@@ -113,8 +133,10 @@
                         tempAccount.value = "";
                         userInfo.account = null;
                         userInfo.name = null;
+                        userInfo.shortName = null;
                         userInfo.mail = null;
-                        userInfo.power = null;
+                        userInfo.role = null;
+                        userInfo.funcs = [];
                     }
                     // 登入
                     function signin(){
@@ -123,11 +145,26 @@
 
                         if(tempAccount.value){
                             userInfo.account = tempAccount.value;
+                            console.log("userInfo.account=", userInfo.account);
                             userInfo.name = tempAccount.value;
+                            console.log("userInfo.name=", userInfo.name);
+                            userInfo.shortName = userInfo.name.substr(0, 1);
+                            console.log("userInfo.shortName=", userInfo.shortName);
                             userInfo.mail = tempAccount.value + "@mail.io";
-
-                            //console.log("signin", userInfo);
-
+                            console.log("userInfo.mail=", userInfo.mail);
+                            // 使用者角色
+                            userInfo.role = "tn000";
+                            for(let ur_i = 0; ur_i < userRoles.length; ur_i++){
+                                let ur = userRoles[ur_i];
+                                if(ur.account === tempAccount.value){
+                                    userInfo.role = ur.role;
+                                    break;
+                                }
+                            }
+                            console.log("userInfo.role=", userInfo.role);
+                            // 使用者可使用的功能
+                            userInfo.funcs = roleFuncs[userInfo.role];
+                            console.log("userInfo.funcs=", userInfo.funcs);
                             // close signinModal
                             document.getElementById("signinModal").close();
                         }
@@ -144,8 +181,7 @@
                         tempAccount,
                         userInfo,
 
-                        gotoGalaxy,
-                        gotoQuiz,
+                        gotoPage,
                         keyinAccount,
                         signin,
                         signout,
