@@ -9,7 +9,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body>
-        <div id="indexApp" class="w-full h-screen overflow-hidden">            
+        <div id="app" class="w-full h-screen overflow-hidden">            
 
             <div class="navbar bg-zinc-500/100 shadow-sm h-1/10 fixed top-0 left-0 z-50">
                 <div class="navbar-start">
@@ -18,7 +18,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li v-if="userInfo.funcs.indexOf('galaxy') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('galaxy')">Galaxy</a></li>
+                            <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('gallery')">Gallery</a></li>
                             <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('quiz')">Quiz</a></li>
                             <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
                         </ul>
@@ -64,7 +64,7 @@
             </div>
         
             <div class="p-4 h-9/10 mt-15">
-                <galaxy-component v-if="appSetting.contentComponent === 'galaxy'" :title="appSetting.title"></galaxy-component>
+                <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title"></readme-component>
             </div>
@@ -89,13 +89,13 @@
         </script>
         <script type="module">
             import { createApp, ref, reactive } from 'vue'
-            import galaxy from './galaxy.js'
+            import gallery from './gallery.js'
             import quiz from './quiz.js'
             import readme from './readme.js'
 
             const app = createApp({
                 components: {
-                    'galaxy-component': galaxy, // Register the component
+                    'gallery-component': gallery, // Register the component
                     'quiz-component': quiz, // Register the component
                     'readme-component': readme, // Register the component
                 },
@@ -103,7 +103,7 @@
                     // 系統資訊
                     const appSetting = reactive({
                         state: "",
-                        contentComponent: "galaxy",
+                        contentComponent: "gallery",
                         title: "V.Demo",
                         roles: [
                             { role: "admin", name: "系統管理員", },
@@ -111,9 +111,9 @@
                         ],
                         commonFuncs: [ "readme", "userInfo", ],
                         roleFuncs: {
-                            admin: ["galaxy", "quiz", "machineLearning", "search", "notify", ],
-                            tn100: ["galaxy", "quiz", ],
-                            tn000: ["galaxy", "quiz", ],    
+                            admin: ["gallery", "quiz", "machineLearning", "search", "notify", ],
+                            tn100: ["gallery", "quiz", ],
+                            tn000: ["gallery", "quiz", ],    
                         },
                         userRoles: [
                             { account: "BRYANT", role: "admin", }, 
@@ -133,6 +133,11 @@
                         funcs: [],
                     });
 
+                    // 重設系統設定
+                    function resetAppSetting(){
+                        appSetting.contentComponent = "gallery";
+                        appSetting.title = "V.Demo";
+                    }
                     // 置換 component
                     function gotoPage(page) {
                         if(page === "machineLearning"){
@@ -202,7 +207,7 @@
                     // 登出
                     function signout(){
                         resetUserInfo();
-                        appSetting.contentComponent = "galaxy";
+                        resetAppSetting();
                         document.getElementById("signinModal").showModal();
                     }
 
@@ -230,7 +235,7 @@
                     }
                 },
             });
-            app.mount('#indexApp');
+            app.mount('#app');
         </script>
     </body>
 </html>
