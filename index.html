@@ -26,9 +26,7 @@
                 </div>
                 <div class="navbar-center">
                     <a class="btn btn-ghost text-xl" @click="gotoPage('readme')">
-                        <span v-if="userInfo.role === 'admin'">CODER.K49</span>
-                        <span v-else-if="userInfo.role === 'tn100'">2+2 幸福慢生活</span>
-                        <span v-else>V.Demo</span>
+                        <span>{{ appSetting.title }}</span>
                     </a>
                 </div>
                 <div class="navbar-end">
@@ -41,10 +39,11 @@
                             <span class="badge badge-xs badge-primary indicator-item"></span>
                         </div>
                     </button>
-                    <div  v-if="userInfo.funcs.indexOf('userInfo') !== -1" class="dropdown dropdown-end">
+                    <div v-if="userInfo.funcs.indexOf('userInfo') !== -1" class="dropdown dropdown-end">
                         <button class="btn btn-ghost btn-circle">
                             <div class="avatar avatar-placeholder">
-                                <div class="bg-lime-900/100 text-white size-5 rounded-full">
+                                <div class="bg-gray-900/100 text-white size-8 rounded-full"
+                                     :class="{'bg-lime-900/100': userInfo.role === 'admin', 'bg-yellow-900/100': userInfo.role === 'tn100'}">
                                     <span class="text-xs">{{ userInfo.shortName }}</span>
                                 </div>
                             </div>
@@ -64,10 +63,10 @@
                 </div>
             </div>
         
-            <div id="objectContainer" class="p-4 h-9/10 mt-15">
-                <galaxy-component v-if="appContent === 'galaxy'"></galaxy-component>
-                <quiz-component v-if="appContent === 'quiz'"></quiz-component>
-                <readme-component v-if="appContent === 'readme'"></readme-component>
+            <div class="p-4 h-9/10 mt-15">
+                <galaxy-component v-if="appSetting.contentComponent === 'galaxy'" :title="appSetting.title"></galaxy-component>
+                <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
+                <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title"></readme-component>
             </div>
 
             <!-- signin modal -->
@@ -94,35 +93,37 @@
             import quiz from './quiz.js'
             import readme from './readme.js'
 
-            createApp({
+            const app = createApp({
                 components: {
                     'galaxy-component': galaxy, // Register the component
                     'quiz-component': quiz, // Register the component
                     'readme-component': readme, // Register the component
                 },
                 setup() {
-                    const appState = ref("");
-                    const appContent = ref("galaxy");
-                    const pageUrl = ref('./galaxy.html');
-                    const tempAccount = ref("");
-                    const roles = reactive([
-                        { role: "admin", name: "系統管理員", },
-                        { role: "tn100", name: "一般使用者", },
-                    ]);
-                    const commonFuncs = reactive([
-                        "readme", "userInfo",
-                    ]);
-                    const roleFuncs = reactive({
-                        admin: ["galaxy", "quiz", "machineLearning", "search", "notify", ],
-                        tn100: ["galaxy", "quiz", ],
-                        tn000: ["galaxy", "quiz", ],
+                    // 系統資訊
+                    const appSetting = reactive({
+                        state: "",
+                        contentComponent: "galaxy",
+                        title: "V.Demo",
+                        roles: [
+                            { role: "admin", name: "系統管理員", },
+                            { role: "tn100", name: "一般使用者", },
+                        ],
+                        commonFuncs: [ "readme", "userInfo", ],
+                        roleFuncs: {
+                            admin: ["galaxy", "quiz", "machineLearning", "search", "notify", ],
+                            tn100: ["galaxy", "quiz", ],
+                            tn000: ["galaxy", "quiz", ],    
+                        },
+                        userRoles: [
+                            { account: "BRYANT", role: "admin", }, 
+                            { account: "FLORA", role: "tn100", }, 
+                            { account: "YUNA", role: "tn100", }, 
+                            { account: "JOY", role: "tn100", },     
+                        ],
                     });
-                    const userRoles = reactive([
-                        { account: "BRYANT", role: "admin", }, 
-                        { account: "FLORA", role: "tn100", }, 
-                        { account: "YUNA", role: "tn100", }, 
-                        { account: "JOY", role: "tn100", }, 
-                    ]);
+                    // 使用者資訊
+                    const tempAccount = ref("");
                     const userInfo = reactive({
                         account: null,
                         name: null,
@@ -131,18 +132,20 @@
                         role: null,
                         funcs: [],
                     });
-                    // 轉換至內容介面
+
+                    // 置換 component
                     function gotoPage(page) {
                         if(page === "machineLearning"){
                             window.open("./machineLearning.html", "_blank");
                         }else{
-                            appContent.value = page;
+                            appSetting.contentComponent = page;
                         }
                     }
                     // keyin account
                     function keyinAccount(event){
                         tempAccount.value = event.target.value.toUpperCase();
                     }
+                    // 重設使用者資訊
                     function resetUserInfo(){
                         tempAccount.value = "";
                         userInfo.account = null;
@@ -168,8 +171,8 @@
                             console.log("userInfo.mail=", userInfo.mail);
                             // 使用者角色
                             userInfo.role = "tn000";
-                            for(let ur_i = 0; ur_i < userRoles.length; ur_i++){
-                                let ur = userRoles[ur_i];
+                            for(let ur_i = 0; ur_i < appSetting.userRoles.length; ur_i++){
+                                let ur = appSetting.userRoles[ur_i];
                                 if(ur.account === tempAccount.value){
                                     userInfo.role = ur.role;
                                     break;
@@ -177,26 +180,34 @@
                             }
                             console.log("userInfo.role=", userInfo.role);
                             // 角色限定功能
-                            userInfo.funcs = roleFuncs[userInfo.role];
+                            userInfo.funcs = appSetting.roleFuncs[userInfo.role];
                             // 共用功能
-                            commonFuncs.forEach((cf, cf_i) => {
+                            appSetting.commonFuncs.forEach((cf, cf_i) => {
                                 userInfo.funcs.push(cf);
                             });
                             console.log("userInfo.funcs=", userInfo.funcs);
                             // close signinModal
                             document.getElementById("signinModal").close();
+
+                            // app title
+                            if(userInfo.role === "admin"){
+                                appSetting.title = "CODER.K49";
+                            }else if(userInfo.role === "tn100"){
+                                appSetting.title = "2+2 幸福慢生活";
+                            }else{
+                                appSetting.title = "V.Demo";
+                            }
                         }
                     }
                     // 登出
                     function signout(){
                         resetUserInfo();
+                        appSetting.contentComponent = "galaxy";
                         document.getElementById("signinModal").showModal();
                     }
 
                     return {
-                        appState,
-                        appContent,
-                        pageUrl,
+                        appSetting,
                         tempAccount,
                         userInfo,
 
@@ -218,7 +229,8 @@
                         document.getElementById("signinModal").showModal();
                     }
                 },
-            }).mount('#indexApp')
+            });
+            app.mount('#indexApp');
         </script>
     </body>
 </html>

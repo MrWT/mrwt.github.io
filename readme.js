@@ -1,9 +1,9 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, defineProps } from 'vue'
 
 export default {
-  setup() {
+  props: ['title'],
+  setup(props) {
     const appState = ref("");
-    const helloMsg = ref("Hello readme");
     const resource = reactive({
         vueJS: "https://vuejs.org/",
         tailwindCSS: "https://tailwindcss.com/",
@@ -12,13 +12,13 @@ export default {
     });
 
     return {
+        props,
         appState,
-        helloMsg,
         resource,                        
     }
   },
   template: `
-    <h1>{{ helloMsg }}</h1>
+    <div class='text-center text-3xl'>Hello! Welcome to {{ props.title }}</div>
 
     <!-- 實作技術參考 -->
     <ul class="list bg-base-100 rounded-box shadow-md">  

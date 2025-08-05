@@ -2,12 +2,12 @@ import { ref, reactive } from 'vue'
 
 export default {
     setup() {
-        const appState = ref("QUIZ")
-        const quizCount = ref(10)
-        const quizMaxNum = ref(10)
-        const showCheck = ref(true)
-        const checkRst = ref("")
-        const quizs = reactive([])
+        const appState = ref("QUIZ");
+        const quizCount = ref(10);
+        const quizMaxNum = ref(10);
+        const showCheck = ref(true);
+        const checkRst = ref("");
+        const quizs = reactive([]);
         const quizTypes = reactive({
             add: true,
             sub: true,
@@ -103,8 +103,12 @@ export default {
                 }
             });
 
-
-            checkRst.value = "正確: " + correctCount + " / 錯誤: " + wrongCount + " / 未答: " + noneCount;
+            let rstMsg = "";
+            rstMsg += "共有 " + quizCount.value + " 題 ( ";
+            rstMsg += "正確: " + correctCount + " 題 / ";
+            rstMsg += "錯誤: " + wrongCount + " 題 / ";
+            rstMsg += "未答: " + noneCount + " 題 )";
+            checkRst.value = rstMsg;
         }
         // 改變題型
         function changeQuizType(event, type) {
@@ -208,7 +212,7 @@ export default {
 
             <div class="card w-96 bg-gray-200 card-xl shadow-sm text-black ">
                 <div class="card-body">
-                    <h2 class="card-title">Q{{ index + 1 }}.</h2>
+                    <h2 class="card-title">Q{{ index + 1 }} / {{ quizCount }}</h2>
                     <div class="flex items-center mb-4">
                         <p>{{ quizObj.quiz }}</p>
                         <input type="number" :id="quizObj.inputAnsId" @change="changeAns" :disabled="quizObj.answered" required placeholder="0"
