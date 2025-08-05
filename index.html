@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="navbar-center">
-                    <a class="btn btn-ghost text-xl">
+                    <a class="btn btn-ghost text-xl" @click="gotoPage('readme')">
                         <span v-if="userInfo.role === 'admin'">CODER.K49</span>
                         <span v-else-if="userInfo.role === 'tn100'">2+2 幸福慢生活</span>
                         <span v-else>V.Demo</span>
@@ -41,7 +41,7 @@
                             <span class="badge badge-xs badge-primary indicator-item"></span>
                         </div>
                     </button>
-                    <div class="dropdown dropdown-end">
+                    <div  v-if="userInfo.funcs.indexOf('userInfo') !== -1" class="dropdown dropdown-end">
                         <button class="btn btn-ghost btn-circle">
                             <div class="avatar avatar-placeholder">
                                 <div class="bg-lime-900/100 text-white size-5 rounded-full">
@@ -65,7 +65,9 @@
             </div>
         
             <div id="objectContainer" class="p-4 h-9/10 mt-15">
-                <object v-if="userInfo.account" :data="pageUrl" class="w-full h-full"></object>
+                <galaxy-component v-if="appContent === 'galaxy'"></galaxy-component>
+                <quiz-component v-if="appContent === 'quiz'"></quiz-component>
+                <readme-component v-if="appContent === 'readme'"></readme-component>
             </div>
 
             <!-- signin modal -->
@@ -73,7 +75,7 @@
                 <div class="modal-box">
                     <h3 class="text-lg font-bold text-center">Hello!</h3>
                     <div class="flex justify-center items-center">
-                        <input type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" />
+                        <input type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" />
                     </div>
                     <div class="modal-action">
                         <button class="btn btn-primary" @click="signin" >Signin</button>
@@ -84,23 +86,31 @@
         </div>
 
         <script type="importmap">
-            {
-                "imports": {
-                    "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
-                }
-            }
+            { "imports": { "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js" } }
         </script>
         <script type="module">
             import { createApp, ref, reactive } from 'vue'
+            import galaxy from './galaxy.js'
+            import quiz from './quiz.js'
+            import readme from './readme.js'
 
             createApp({
+                components: {
+                    'galaxy-component': galaxy, // Register the component
+                    'quiz-component': quiz, // Register the component
+                    'readme-component': readme, // Register the component
+                },
                 setup() {
                     const appState = ref("");
+                    const appContent = ref("galaxy");
                     const pageUrl = ref('./galaxy.html');
                     const tempAccount = ref("");
                     const roles = reactive([
                         { role: "admin", name: "系統管理員", },
                         { role: "tn100", name: "一般使用者", },
+                    ]);
+                    const commonFuncs = reactive([
+                        "readme", "userInfo",
                     ]);
                     const roleFuncs = reactive({
                         admin: ["galaxy", "quiz", "machineLearning", "search", "notify", ],
@@ -123,7 +133,11 @@
                     });
                     // 轉換至內容介面
                     function gotoPage(page) {
-                        pageUrl.value = "./" + page + ".html";
+                        if(page === "machineLearning"){
+                            window.open("./machineLearning.html", "_blank");
+                        }else{
+                            appContent.value = page;
+                        }
                     }
                     // keyin account
                     function keyinAccount(event){
@@ -162,8 +176,12 @@
                                 }
                             }
                             console.log("userInfo.role=", userInfo.role);
-                            // 使用者可使用的功能
+                            // 角色限定功能
                             userInfo.funcs = roleFuncs[userInfo.role];
+                            // 共用功能
+                            commonFuncs.forEach((cf, cf_i) => {
+                                userInfo.funcs.push(cf);
+                            });
                             console.log("userInfo.funcs=", userInfo.funcs);
                             // close signinModal
                             document.getElementById("signinModal").close();
@@ -177,6 +195,7 @@
 
                     return {
                         appState,
+                        appContent,
                         pageUrl,
                         tempAccount,
                         userInfo,

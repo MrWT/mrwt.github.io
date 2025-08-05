@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CODER.K49</title>
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    </head>
-    <body>
-        <div id="galaxyApp">
+import { ref, reactive } from 'vue'
 
+export default {
+    setup() {
+        const appState = ref("");
+
+        return {
+            appState,
+        }
+    },
+    template: `
 <div class="carousel w-full">
   <div id="slide1" class="carousel-item relative w-full items-center">
      <img
@@ -49,27 +47,5 @@
     </div>
   </div>
 </div>
-        </div>
-        
-        <script type="importmap">
-        {
-            "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
-            }
-        }
-        </script>
-        <script type="module">
-            import { createApp, ref, reactive } from 'vue'
-
-            createApp({
-                setup() {
-                    const appState = ref("")
-
-                    return {
-                        appState,
-                    }
-                }
-            }).mount('#galaxyApp')
-        </script>
-    </body>
-</html>
+  `
+}
