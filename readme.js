@@ -18,7 +18,7 @@ export default {
     }
   },
   template: `
-    <div class='text-center text-3xl'>Hello! Welcome to {{ props.title }}</div>
+    <div class='text-center text-3xl mt-10 md:mt-0'>Hello! Welcome to {{ props.title }}</div>
 
     <!-- 實作技術參考 -->
     <ul class="list bg-base-100 rounded-box shadow-md">  

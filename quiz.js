@@ -1,12 +1,13 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, } from 'vue'
 
 export default {
     setup() {
-        const appState = ref("QUIZ");
+        const appState = ref("");
         const quizCount = ref(10);
         const quizMaxNum = ref(10);
-        const showCheck = ref(true);
-        const checkRst = ref("");
+        const correctAns = ref(0);
+        const wrongAns = ref(0);
+        const noneAns = ref(0);
         const quizs = reactive([]);
         const quizTypes = reactive({
             add: true,
@@ -15,23 +16,28 @@ export default {
             div: false
         });
 
-        // 設定題型
-        function setQuiz(event){
-            //console.log("setQuiz", event);
-            appState.value = "SET";
+        // 改變題型
+        function changeQuizType(event, type) {
+            //console.log("changeQuizType", event, type);
+
+            quizTypes[type] = event.target.checked;
+
+            generateQuiz();
         }
         // 設定題目數量
         function setQuizCount(event){
             quizCount.value = event.target.value;
+
+            generateQuiz();
         }
         // 設定產生題目時最大可能出現的數字
         function setQuizMaxNum(event){
             quizMaxNum.value = event.target.value;
+
+            generateQuiz();
         }
         // 產生 quiz 清單
         function generateQuiz(event){
-            appState.value = "QUIZ";
-
             // 清空 quizs
             quizs.splice(0, quizs.length);
 
@@ -56,6 +62,15 @@ export default {
                 let q_right = Math.floor(Math.random() * quizMaxNum.value) + 1;
                 let q_op = quizOps[Math.floor(Math.random() * quizOps.length)];
                 let q_op_for_ui = q_op === "*" ? "×" : q_op === "/" ? "÷" : q_op;
+
+                // 減法, 除法時, 特別注意數字大小
+                if(q_op === "-" || q_op === "/"){
+                    if(q_left < q_right){
+                        let q_tmp = q_right;
+                        q_right = q_left;
+                        q_left = q_tmp;
+                    }
+                }
                 
                 let quizObj = {
                     quiz: q_left + " " + q_op_for_ui + " " + q_right + " = ",
@@ -64,14 +79,14 @@ export default {
                     result: false,
                     answered: false,
                     inputAnsId: "ans_" + q_i,
-                    quizCard: "quiz_" + q_i,
+                    quizCard: "quiz_" + (q_i === quizCount.value -1 ? "final" : q_i),
                     preQuizCard: "#quiz_" + (q_i - 1 < 0 ? 0 : q_i -1),
-                    nextQuizCard: "#quiz_" + (q_i + 1 === quizCount.value ? quizCount.value -1 : q_i+1),
+                    nextQuizCard: "#quiz_" + (q_i + 1 === quizCount.value -1 ? "final" : q_i+1),
                 };
                 quizs.push( quizObj );
             }
 
-            checkRst.value = "";
+            checkAns();
         }
         // answer input 改變時, 同步改變 quizs 中的 user_answer
         function changeAns(event){
@@ -84,9 +99,12 @@ export default {
             quizs[quizIndex].answered = true;
             quizs[quizIndex].user_answer = parseInt( targetValue );
             quizs[quizIndex].result = parseInt(quizs[quizIndex].user_answer) === parseInt(quizs[quizIndex].real_answer);
+
+            // 驗證答案
+            checkAns();
         }
         // 驗證答案
-        function checkAns(event){
+        function checkAns(){
             let correctCount = 0;
             let wrongCount = 0;
             let noneCount = 0;
@@ -103,68 +121,106 @@ export default {
                 }
             });
 
-            let rstMsg = "";
-            rstMsg += "共有 " + quizCount.value + " 題 ( ";
-            rstMsg += "正確: " + correctCount + " 題 / ";
-            rstMsg += "錯誤: " + wrongCount + " 題 / ";
-            rstMsg += "未答: " + noneCount + " 題 )";
-            checkRst.value = rstMsg;
+            correctAns.value = correctCount;
+            wrongAns.value = wrongCount;
+            noneAns.value = noneCount;
         }
-        // 改變題型
-        function changeQuizType(event, type) {
-            //console.log("changeQuizType", event, type);
+        function showCheckRstList(event){
+            document.getElementById("accountingModal").showModal();
 
-            quizTypes[type] = event.target.checked;
+            setTimeout(function(){
+                console.log("accountingModal.height=", $("#accountingModal").height() );
+                $("#checkRstList").height( $("#accountingModal").height() * 0.8 );
+            }, 100);
         }
 
         return {
             appState,
             quizCount,
             quizMaxNum,
-            showCheck,
-            checkRst,
+            correctAns,
+            wrongAns,
+            noneAns,
             quizs,
             quizTypes,
 
-            setQuiz,
             setQuizCount,
             setQuizMaxNum,
             generateQuiz,
             changeAns,
             changeQuizType,
-            checkAns,
+            showCheckRstList,
         }
+    },
+    created(){
+        console.log("created");
+    },
+    mounted(){
+        console.log("mounted");
+        // mount 後, 生成題目
+        this.generateQuiz();
     },
     template: `
 
-<div class="flex items-center border-b mt-10 pb-5">
-    <a href="#" @click="setQuiz" class="inline-flex items-center justify-center px-3 py-2 me-3 text-xs font-medium text-gray-900 bg-red-300 border border-gray-200 rounded-lg hover:text-gray-900 hover:bg-gray-100 hover:ring-2 hover:ring-black focus:outline-none focus:z-10 focus:ring-4 focus:ring-gray-100 ">
-        <svg class="w-3 h-3 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+<!-- 上方功能區塊 -->
+<div class="border-b mt-10 pb-5 grid grid-flow-row-dense grid-cols-2 md:grid-cols-5">
+    <a href="#" @click="generateQuiz" class="inline-flex items-center justify-center px-3 py-2 me-3 text-xs font-medium text-gray-900 bg-orange-300 border border-gray-200 rounded-lg hover:text-gray-900 hover:bg-gray-100 hover:ring-2 hover:ring-black focus:outline-none focus:z-10 focus:ring-4 focus:ring-gray-100 order-1">
+        <svg class="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+            <path d="M9 1.334C7.06.594 1.646-.84.293.653a1.158 1.158 0 0 0-.293.77v13.973c0 .193.046.383.134.55.088.167.214.306.366.403a.932.932 0 0 0 .5.147c.176 0 .348-.05.5-.147 1.059-.32 6.265.851 7.5 1.65V1.334ZM19.707.653C18.353-.84 12.94.593 11 1.333V18c1.234-.799 6.436-1.968 7.5-1.65a.931.931 0 0 0 .5.147.931.931 0 0 0 .5-.148c.152-.096.279-.235.366-.403.088-.167.134-.357.134-.55V1.423a1.158 1.158 0 0 0-.293-.77Z"/>
+        </svg> 
+        重新產生題目
+    </a>
+    <div class="flex justify-center items-center order-3 col-span-3 md:order-2">
+        <div class="flex justify-center items-center text-xs mt-5 md:text-lg md:mt-0">
+            <div>
+                共有 {{ quizCount }} 題
+            </div>
+            <span class="mx-2">
+                /
+            </span>
+            <div>
+                正確 {{ correctAns }} 題
+            </div>
+            <span class="mx-2">
+                /
+            </span>
+            <div :class="{'text-gray-900': wrongAns === 0, 'text-red-900': wrongAns > 0}" >
+                錯誤 {{ wrongAns }} 題 
+            </div>
+            <span class="mx-2">
+                /
+            </span>
+            <div :class="{'text-gray-900': noneAns === 0, 'text-blue-900': noneAns > 0}" >
+                未答 {{ noneAns }} 題
+            </div>
+        </div>
+
+        <div class="tooltip tooltip-bottom">
+            <div class="tooltip-content">
+                <div class="animate-bounce text-orange-400 -rotate-10 text-2xl font-black">核算答案!</div>
+            </div>
+            <a href="#" class="ml-2"  @click="showCheckRstList" class="flex justify-center items-center mt-5 md:mt-0">
+                <svg class="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 18h14M5 18v3h14v-3M5 18l1-9h12l1 9M16 6v3m-4-3v3m-2-6h8v3h-8V3Zm-1 9h.01v.01H9V12Zm3 0h.01v.01H12V12Zm3 0h.01v.01H15V12Zm-6 3h.01v.01H9V15Zm3 0h.01v.01H12V15Zm3 0h.01v.01H15V15Z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    <a href="#" onclick="settingModal.showModal()" class="inline-flex items-center justify-center px-3 py-2 me-3 text-xs font-medium text-gray-900 bg-red-300 border border-gray-200 rounded-lg hover:text-gray-900 hover:bg-gray-100 hover:ring-2 hover:ring-black focus:outline-none focus:z-10 focus:ring-4 focus:ring-gray-100 order-2 md:order-3">
+        <svg class="w-6 h-6 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
         </svg>
-        設定題型
+        題型設定
     </a>
-    <a href="#" @click="generateQuiz" class="inline-flex items-center justify-center px-3 py-2 me-3 text-xs font-medium text-gray-900 bg-orange-300 border border-gray-200 rounded-lg hover:text-gray-900 hover:bg-gray-100 hover:ring-2 hover:ring-black focus:outline-none focus:z-10 focus:ring-4 focus:ring-gray-100 ">
-        <svg class="w-3 h-3 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-            <path d="M9 1.334C7.06.594 1.646-.84.293.653a1.158 1.158 0 0 0-.293.77v13.973c0 .193.046.383.134.55.088.167.214.306.366.403a.932.932 0 0 0 .5.147c.176 0 .348-.05.5-.147 1.059-.32 6.265.851 7.5 1.65V1.334ZM19.707.653C18.353-.84 12.94.593 11 1.333V18c1.234-.799 6.436-1.968 7.5-1.65a.931.931 0 0 0 .5.147.931.931 0 0 0 .5-.148c.152-.096.279-.235.366-.403.088-.167.134-.357.134-.55V1.423a1.158 1.158 0 0 0-.293-.77Z"/>
-        </svg> 
-        產生題目
-    </a>
-    <a href="#" v-if="showCheck" @click="checkAns" class="inline-flex items-center justify-center px-3 py-2 me-2 text-xs font-medium text-gray-900 bg-yellow-300 rounded-lg hover:text-gray-900 hover:bg-gray-100 hover:ring-2 hover:ring-black focus:ring-4 focus:ring-blue-300 focus:outline-none ">
-        <svg class="w-3 h-3 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
-        </svg>
-        總計
-    </a>
-    <span v-if="showCheck" class="pl-8">
-        {{ checkRst }}
-    </span>
 </div>
 
 <!-- 設定題型 -->
-<div v-if="appState=='SET'" class="w-full justify-items-center">
-    <div class="p-4 space-y-4">
+<dialog id="settingModal" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle bg-black text-white absolute right-2 top-2">✕</button>
+        </form>
         <div class="w-full">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">題型:</legend>
@@ -190,23 +246,25 @@ export default {
 
             </fieldset>
         </div>
-        <div class="w-full">
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">題目數量:</legend>
-                <input type="number" class="input" placeholder="請輸入" :value="quizCount" @change="setQuizCount" />
-            </fieldset>
-        </div>
-        <div class="w-full">
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">題目中可能的最大數字: </legend>
-                <input type="number" class="input" placeholder="請輸入" :value="quizMaxNum" @change="setQuizMaxNum" />
-            </fieldset>
+        <div class="flex justify-center items-center w-1/1 gap-2">
+            <div class="w-1/2">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">題目數量:</legend>
+                    <input type="number" class="input" placeholder="請輸入" :value="quizCount" @change="setQuizCount" />
+                </fieldset>
+            </div>
+            <div class="w-1/2">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">題目中可能的最大數字: </legend>
+                    <input type="number" class="input" placeholder="請輸入" :value="quizMaxNum" @change="setQuizMaxNum" />
+                </fieldset>
+            </div>
         </div>
     </div>
-</div>
+</dialog>
 
 <!-- 題目卡片 -->
-<div v-if="appState=='QUIZ'" class="w-full justify-items-center">
+<div class="w-full justify-items-center">
     <div class="carousel carousel-vertical rounded-box h-96 w-full">
         <div v-for="(quizObj, index) in quizs" :id="quizObj.quizCard" class="carousel-item h-full w-full flex items-center justify-center">
 
@@ -226,13 +284,54 @@ export default {
                         <svg v-if="quizObj.answered && !quizObj.result" class="w-6 h-6 text-red-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                         </svg>
-
                     </div>
-
+                    <div class="justify-end card-actions">
+                        <a v-if="quizObj.quizCard !== 'quiz_final'" class="btn bg-gray-500 text-white" :href="quizObj.nextQuizCard">下一題</a>
+                        <a v-if="quizObj.quizCard === 'quiz_final'" class="btn bg-gray-500 text-white" @click="showCheckRstList">核算答案</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- 核算答案 -->
+<dialog id="accountingModal" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle bg-black text-white absolute right-2 top-2">✕</button>
+        </form>
+        <div id="checkRstList" class="w-full">
+            <ul class="list bg-base-100 rounded-box shadow-md h-10/10 overflow-y-auto">
+                <li class="p-4 pb-2 text-lg opacity-100 tracking-wide">答案清單</li>
+  
+                <li v-for="(quizObj, index) in quizs" class="list-row">
+                    <div class="text-4xl font-thin opacity-30 tabular-nums">{{ index + 1 < 10 ? "0" + (index + 1) : (index + 1) }}.</div>
+                    <div class="text-4xl">
+                        {{ quizObj.quiz }}{{ quizObj.user_answer }}
+                    </div>
+                    <div class="list-col-wrap">
+                        <div v-if="!quizObj.answered" class="badge badge-outline badge-warning">
+                            未作答
+                        </div>
+
+                        <div v-if="quizObj.answered && quizObj.result" class="badge badge-outline badge-success">
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                            </svg>
+                        </div>
+                        
+                        <div v-if="quizObj.answered && !quizObj.result" class="badge badge-outline badge-error">
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </li>
+            </ul>    
+        </div>
+    </div>
+</dialog>
+
   `
 }

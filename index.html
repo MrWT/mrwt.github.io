@@ -11,16 +11,16 @@
     <body>
         <div id="app" class="w-full h-screen overflow-hidden">            
 
-            <div class="navbar bg-zinc-500/100 shadow-sm h-1/10 fixed top-0 left-0 z-50">
+            <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
                 <div class="navbar-start">
-                    <div class="dropdown">
+                    <div class="dropdown dropdown-hover">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('gallery')">Gallery</a></li>
-                            <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('quiz')">Quiz</a></li>
-                            <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
+                            <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('gallery')">Gallery</a></li>
+                            <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('quiz')">Quiz</a></li>
+                            <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
                         </ul>
                     </div>
                 </div>
@@ -54,8 +54,19 @@
                             <div class="divider"></div>
                             <li class="">
                                 <button class="btn w-full" @click="signout">
-                                    <span v-if="userInfo.account">Signout</span>
-                                    <span v-if="!userInfo.account">Signin</span>
+                                    <span v-if="userInfo.account">
+                                        Signout
+                                    </span>
+                                    <svg v-if="userInfo.account" class="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
+                                    </svg>    
+
+                                    <svg v-if="!userInfo.account" class="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+                                    </svg>
+                                    <span v-if="!userInfo.account">
+                                        Signin
+                                    </span>
                                 </button>
                             </li>
                         </ul>
@@ -73,11 +84,13 @@
             <dialog id="signinModal" class="modal">
                 <div class="modal-box">
                     <h3 class="text-lg font-bold text-center">Hello!</h3>
-                    <div class="flex justify-center items-center">
+                    <div class="flex justify-center items-center gap-2">
                         <input type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" />
-                    </div>
-                    <div class="modal-action">
-                        <button class="btn btn-primary" @click="signin" >Signin</button>
+                        <button class="btn btn-primary" @click="signin" >
+                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </dialog>
