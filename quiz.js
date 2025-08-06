@@ -38,6 +38,9 @@ export default {
         }
         // 產生 quiz 清單
         function generateQuiz(event){
+            // 開啟"系統處理中 mask"
+            $("#loading").show();
+
             // 清空 quizs
             quizs.splice(0, quizs.length);
 
@@ -87,6 +90,12 @@ export default {
             }
 
             checkAns();
+
+            // 關閉"系統處理中 mask"
+            let processTime = Math.floor(Math.random() * 5) + 3;
+            setTimeout(() => {
+                $("#loading").hide();
+            }, processTime * 1000);
         }
         // answer input 改變時, 同步改變 quizs 中的 user_answer
         function changeAns(event){

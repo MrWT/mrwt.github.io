@@ -9,6 +9,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body>
+        <!-- 系統 loading mask -->
+        <div id="loading" class="w-full h-full flex justify-center items-center bg-gray-700/70 absolute top-0 left-0 z-999" style="display:none;">
+            <span class="loading loading-spinner text-white loading-xl"></span>
+            <span class="sr-only">Loading...</span>
+        </div>
+
         <div id="app" class="w-full h-screen overflow-hidden">            
 
             <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
