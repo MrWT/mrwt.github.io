@@ -5,6 +5,7 @@ export default {
         let componentState = ref("STOP_CHANGE_CARD");
         let changeCardIntervalId = ref(null);
         let turnOverDuration = ref(2000);
+        let showHandChangeCard = ref(true);
         let restaurantInfo = reactive([]);
         let meals = reactive([]);
         let mealCards = reactive([]);
@@ -60,17 +61,21 @@ export default {
             // 將翻卡開關設定回原來狀態
             $('#iptToggle').prop('checked', isOriginalChecked);
         }
-        // 翻卡開關
+        // 自動翻卡開關
         function toggleChangeCard(event){
             //console.log("toggleChangeCard", event);
 
             if( event.target.checked ){
+                showHandChangeCard.value = false;
+
                 // 開始翻卡動作
                 componentState.value = "START_CHANGE_CARD";
                 if(!changeCardIntervalId.value){
                     changeCardIntervalId.value = setInterval(nextMealCard, turnOverDuration.value);
                 }
             }else{
+                showHandChangeCard.value = true;
+
                 // 停止翻卡動作
                 componentState.value = "STOP_CHANGE_CARD";
                 clearInterval(changeCardIntervalId.value);
@@ -99,14 +104,25 @@ export default {
                 turnOver_count += 1;
             }, 100);
         }
+        // 手動翻卡
+        function handChangeCard(event){
+            nextMealCard();
+        }
+        // 選定一張 meal card
+        function selectCard(sel_mealObj){
+            console.log("selectCard", sel_mealObj);
+        }
 
         return {
             componentState,
             mealCards,
+            showHandChangeCard,
 
             init,
             genMealCards,
             toggleChangeCard,
+            selectCard,
+            handChangeCard,
         }
     },
     created(){
@@ -132,27 +148,42 @@ export default {
 
 <div class="w-full h-10/10 overflow-y-auto grid grid-rows-2">
     <div class="w-10/10 h-10/10 grid grid-cols-1 justify-items-center border-b border-gray-500/100 shadow-lg">
-        <div class="stack w-2/10 h-10/10 mt-3">
-            <div v-for="(mealObj, m_i) in mealCards" class="w-10/10 h-10/10 bg-gray-100/100 text-gray-900/100 flex justify-center items-center border rounded-box"
+        <div class="stack w-5/10 h-7/10 mt-5">
+            <div v-for="(mealObj, m_i) in mealCards" @click="selectCard(mealObj)" class="w-10/10 h-10/10 bg-gray-100/100 text-gray-900/100 p-4 border rounded-box cursor-pointer"
                                                     :class="{'origin-top transition-transform duration-1300 ease rotate-x-180': componentState === 'TURN_UP' && m_i === 0, 
                                                              'transition-discrete opacity-0 duration-2000 ease': componentState === 'FADE_OUT' && m_i === 0,
                                                              'transition-none hidden': componentState === 'HIDDEN' && m_i === 0,
                                                              'transition-none opacity-100': componentState === 'CHANGE_CARD' && m_i === 0, }" >
-                <h2 class="">
+                <div class="w-10/10 text-xl">
                     {{ mealObj.meal }}
-                </h2>
+                </div>
+                <div class="w-10/10 text-md">
+                    {{ mealObj.restaurant }}
+                </div>
+                <div class="w-10/10 text-xs flex items-center">
+                    ( {{ mealObj.location }} )
+                    <svg class="w-6 h-6 text-gray-800 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
+                    </svg>
+                </div>
             </div>
         </div>
-        <div class="w-10/10 h-10/10 mt-7 grid grid-cols-2 justify-items-center gap-2">
-            <div class="w-10/10 h-10/10 mt-7 grid grid-cols-1 justify-items-end items-start">
+        <div class="w-10/10 h-10/10 grid grid-cols-5 justify-items-center gap-4">
+            <div class="w-10/10 h-10/10 col-start-2 grid grid-cols-1 justify-items-center items-center">
                 <label class="label mt-2">
                     <input id="iptToggle" type="checkbox" @click="toggleChangeCard" class="toggle toggle-primary" />
-                    翻卡
+                    自動翻卡
                 </label>
             </div>
-            <div class="w-10/10 h-10/10 mt-7 grid grid-cols-1 justify-items-start">
-                <a class="btn" @click="genMealCards">
+            <div class="w-10/10 h-10/10 grid grid-cols-1 justify-items-center items-center">
+                <a class="btn bg-success" @click="genMealCards">
                     打亂順序
+                </a>
+            </div>
+             <div v-if="showHandChangeCard" class="w-10/10 h-10/10 grid grid-cols-1 justify-items-center items-center">
+                <a class="btn bg-primary text-white" @click="handChangeCard">
+                    翻至下一張卡
                 </a>
             </div>
         </div>

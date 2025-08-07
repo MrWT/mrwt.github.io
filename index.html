@@ -212,17 +212,10 @@
                                 userInfo.funcs.push(cf);
                             });
                             console.log("userInfo.funcs=", userInfo.funcs);
+                            // 設定 title of application
+                            appSetting.title = appSetting.roles[userInfo.role] ? appSetting.roles[userInfo.role]["appTitle"] : appSetting.title;
                             // close signinModal
                             document.getElementById("signinModal").close();
-
-                            // app title
-                            if(userInfo.role === "admin"){
-                                appSetting.title = "CODER.K49";
-                            }else if(userInfo.role === "tn100"){
-                                appSetting.title = "2+2 幸福慢生活";
-                            }else{
-                                appSetting.title = "V.Demo";
-                            }
                         }
                     }
                     // 登出
@@ -246,7 +239,6 @@
                 },
                 created() {
                     console.log('app.created');
-
                 },
                 mounted(){
                     console.log("app.mounted", this.userInfo);
