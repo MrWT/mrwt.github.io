@@ -1,0 +1,5 @@
+{
+    "admin": ["gallery", "quiz", "meals", "machineLearning", "search", "notify" ],
+    "tn100": ["gallery", "quiz", "meals" ],
+    "tn000": ["gallery", "quiz", "meals" ]    
+}

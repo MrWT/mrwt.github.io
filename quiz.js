@@ -3,8 +3,8 @@ import { ref, reactive, } from 'vue'
 export default {
     setup() {
         const appState = ref("");
-        const quizCount = ref(10);
-        const quizMaxNum = ref(10);
+        let quizCount = ref(0);
+        let quizMaxNum = ref(0);
         const correctAns = ref(0);
         const wrongAns = ref(0);
         const noneAns = ref(0);
@@ -16,6 +16,13 @@ export default {
             div: false
         });
 
+        // 初始化 component
+        function init(qJsonObj){
+            console.log("quiz.init", qJsonObj);
+
+            quizCount.value = qJsonObj["count"];
+            quizMaxNum.value = qJsonObj["maxNumber"];
+        }
         // 改變題型
         function changeQuizType(event, type) {
             //console.log("changeQuizType", event, type);
@@ -92,10 +99,7 @@ export default {
             checkAns();
 
             // 關閉"系統處理中 mask"
-            let processTime = Math.floor(Math.random() * 5) + 3;
-            setTimeout(() => {
-                $("#loading").hide();
-            }, processTime * 1000);
+            $("#loading").hide();
         }
         // answer input 改變時, 同步改變 quizs 中的 user_answer
         function changeAns(event){
@@ -134,6 +138,7 @@ export default {
             wrongAns.value = wrongCount;
             noneAns.value = noneCount;
         }
+        // 呈現答題結果清單
         function showCheckRstList(event){
             document.getElementById("accountingModal").showModal();
 
@@ -153,6 +158,7 @@ export default {
             quizs,
             quizTypes,
 
+            init,
             setQuizCount,
             setQuizMaxNum,
             generateQuiz,
@@ -162,12 +168,21 @@ export default {
         }
     },
     created(){
-        console.log("created");
+        console.log("quiz.created");
     },
     mounted(){
-        console.log("mounted");
-        // mount 後, 生成題目
-        this.generateQuiz();
+        console.log("quiz.mounted");
+
+        // 取得系統資料
+        let fetchQuiz = fetchJson("quiz.json");
+        Promise.all([fetchQuiz]).then((values) => {
+            //console.log(values); 
+            let qJsonObj = values[0];
+            this.init(qJsonObj);
+
+            // mount 後, 生成題目
+            this.generateQuiz();
+        });
     },
     template: `
 

@@ -7,6 +7,8 @@
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <script src="./index.js"></script>
     </head>
     <body>
         <!-- 系統 loading mask -->
@@ -27,6 +29,7 @@
                             <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('gallery')">Gallery</a></li>
                             <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('quiz')">Quiz</a></li>
                             <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
+                            <li v-if="userInfo.funcs.indexOf('meals') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('meals')">Meals</a></li>
                         </ul>
                     </div>
                 </div>
@@ -84,6 +87,7 @@
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title"></readme-component>
+                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></readme-component>
             </div>
 
             <!-- signin modal -->
@@ -100,7 +104,6 @@
                     </div>
                 </div>
             </dialog>
-
         </div>
 
         <script type="importmap">
@@ -111,35 +114,25 @@
             import gallery from './gallery.js'
             import quiz from './quiz.js'
             import readme from './readme.js'
+            import meals from './meals.js'
 
             const app = createApp({
                 components: {
                     'gallery-component': gallery, // Register the component
                     'quiz-component': quiz, // Register the component
                     'readme-component': readme, // Register the component
+                    'meals-component': meals, // Register the component
                 },
                 setup() {
                     // 系統資訊
-                    const appSetting = reactive({
+                    let appSetting = reactive({
                         state: "",
                         contentComponent: "gallery",
                         title: "V.Demo",
-                        roles: [
-                            { role: "admin", name: "系統管理員", },
-                            { role: "tn100", name: "一般使用者", },
-                        ],
-                        commonFuncs: [ "readme", "userInfo", ],
-                        roleFuncs: {
-                            admin: ["gallery", "quiz", "machineLearning", "search", "notify", ],
-                            tn100: ["gallery", "quiz", ],
-                            tn000: ["gallery", "quiz", ],    
-                        },
-                        userRoles: [
-                            { account: "BRYANT", role: "admin", }, 
-                            { account: "FLORA", role: "tn100", }, 
-                            { account: "YUNA", role: "tn100", }, 
-                            { account: "JOY", role: "tn100", },     
-                        ],
+                        roles: [],
+                        commonFuncs: [],
+                        roleFuncs: {},
+                        userRoles: [],
                     });
                     // 使用者資訊
                     const tempAccount = ref("");
@@ -152,6 +145,15 @@
                         funcs: [],
                     });
 
+                    // 初始化 app
+                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj){
+                        console.log("app.init", cfJsonObj, rfJsonObj, rJsonObj, urJsonObj);
+
+                        appSetting.commonFuncs = cfJsonObj;
+                        appSetting.roleFuncs = rfJsonObj;
+                        appSetting.roles = rJsonObj;
+                        appSetting.userRoles = urJsonObj;
+                    }
                     // 重設系統設定
                     function resetAppSetting(){
                         appSetting.contentComponent = "gallery";
@@ -235,6 +237,7 @@
                         tempAccount,
                         userInfo,
 
+                        init,
                         gotoPage,
                         keyinAccount,
                         signin,
@@ -242,15 +245,32 @@
                     }
                 },
                 created() {
-                    //console.log('Component created!', this,);
+                    console.log('app.created');
 
                 },
                 mounted(){
-                    console.log("mounted", this.userInfo);
+                    console.log("app.mounted", this.userInfo);
 
-                    // 沒有使用者資訊時, 跳出 signinModal
-                    if(!this.userInfo.account){
-                        document.getElementById("signinModal").showModal();
+                    // 取得系統資料
+                    {
+                        let fetchCommonFunc = fetchJson("commonFunction.json");
+                        let fetchRoleFunc = fetchJson("roleFunction.json");
+                        let fetchRole = fetchJson("role.json");
+                        let fetchUserRole = fetchJson("userRole.json");
+
+                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole]).then((values) => {
+                            //console.log(values); 
+                            let cfJsonObj = values[0];
+                            let rfJsonObj = values[1];
+                            let rJsonObj = values[2];
+                            let urJsonObj = values[3];
+                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj);
+
+                            // 沒有使用者資訊時, 跳出 signinModal
+                            if(!this.userInfo.account){
+                                document.getElementById("signinModal").showModal();
+                            }
+                        });
                     }
                 },
             });

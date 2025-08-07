@@ -4,9 +4,23 @@ export default {
     setup() {
         const appState = ref("");
 
+        // 初始化 component
+        function init(){
+          console.log("gallery.init");
+        }
+
         return {
             appState,
+
+            init,
         }
+    },
+    created(){
+      console.log("gallery.created");
+    },
+    mounted(){
+      console.log("gallery.mounted");
+      this.init();
     },
     template: `
 <div class="w-full h-10/10 overflow-y-auto grid grid-flow-row-dense">

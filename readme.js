@@ -1,23 +1,42 @@
 import { ref, reactive, defineProps } from 'vue'
 
 export default {
-  props: ['title'],
-  setup(props) {
-    const appState = ref("");
-    const resource = reactive({
-        vueJS: "https://vuejs.org/",
-        tailwindCSS: "https://tailwindcss.com/",
-        daisyUI: "https://daisyui.com/",
-        ml5_learn: "https://dopeorion.medium.com/%E5%85%A8%E7%AB%AF%E7%94%9F%E6%B4%BB-ml5-js-%E4%B8%8D%E5%98%B4%E7%A0%B2%E5%AF%A6%E5%81%9A-77ac79a28773",
-    });
+    props: ['title'],
+    setup(props) {
+        let appState = ref("");
+        let resource = reactive({});
 
-    return {
-        props,
-        appState,
-        resource,                        
-    }
-  },
-  template: `
+        // 初始化 component
+        function init(rJsonObj){
+            console.log("readme.init", rJsonObj);
+
+            resource = rJsonObj;
+        }
+
+        return {
+            props,
+            appState,
+            resource,    
+            
+            init,
+        }
+    },
+    created(){
+        console.log("readme.created");
+    },
+    mounted(){
+        console.log("readme.mounted");
+        
+        // 取得系統資料
+        let fetchReadme = fetchJson("readme.json");
+        Promise.all([fetchReadme]).then((values) => {
+            //console.log(values); 
+            let rJsonObj = values[0];
+            this.init(rJsonObj);
+        });
+    },
+    template: `
+
     <div class='text-center text-3xl mt-10 md:mt-0'>Hello! Welcome to {{ props.title }}</div>
 
     <!-- 實作技術參考 -->
