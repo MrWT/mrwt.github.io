@@ -40,6 +40,11 @@
                     </a>
                 </div>
                 <div class="navbar-end">
+                    <button v-if="userInfo.funcs.indexOf('fullscreen') !== -1" class="btn btn-ghost btn-circle" title="全螢幕" @click="launchIntoFullscreen">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/>
+                        </svg>
+                    </button>
                     <button v-if="userInfo.funcs.indexOf('search') !== -1" class="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
                     </button>
@@ -87,7 +92,7 @@
             <div class="p-4 h-9/10 mt-15">
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
-                <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title"></readme-component>
+                <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
                 <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></readme-component>
             </div>
 
@@ -134,6 +139,7 @@
                         commonFuncs: [],
                         roleFuncs: {},
                         userRoles: [],
+                        resources: [],
                     });
                     // 使用者資訊
                     const tempAccount = ref("");
@@ -147,13 +153,14 @@
                     });
 
                     // 初始化 app
-                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj){
-                        console.log("app.init", cfJsonObj, rfJsonObj, rJsonObj, urJsonObj);
+                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj){
+                        console.log("app.init", cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj);
 
                         appSetting.commonFuncs = cfJsonObj;
                         appSetting.roleFuncs = rfJsonObj;
                         appSetting.roles = rJsonObj;
                         appSetting.userRoles = urJsonObj;
+                        appSetting.resources = rsJsonObj;
                     }
                     // 重設系統設定
                     function resetAppSetting(){
@@ -225,6 +232,20 @@
                         resetAppSetting();
                         document.getElementById("signinModal").showModal();
                     }
+                    // 進入全螢幕模式
+                    function launchIntoFullscreen() {
+                        let ele = document.documentElement;
+
+                        if (ele.requestFullscreen) {
+                            ele.requestFullscreen();
+                        } else if (ele.mozRequestFullScreen) { /* Firefox */
+                            ele.mozRequestFullScreen();
+                        } else if (ele.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                            ele.webkitRequestFullscreen();
+                        } else if (ele.msRequestFullscreen) { /* IE/Edge */
+                            ele.msRequestFullscreen();
+                        }
+                    }
 
                     return {
                         appSetting,
@@ -236,6 +257,7 @@
                         keyinAccount,
                         signin,
                         signout,
+                        launchIntoFullscreen,
                     }
                 },
                 created() {
@@ -250,14 +272,16 @@
                         let fetchRoleFunc = fetchJson("roleFunction.json");
                         let fetchRole = fetchJson("role.json");
                         let fetchUserRole = fetchJson("userRole.json");
+                        let fetchRscs = fetchJson("resources.json");
 
-                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole]).then((values) => {
+                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole, fetchRscs]).then((values) => {
                             //console.log(values); 
                             let cfJsonObj = values[0];
                             let rfJsonObj = values[1];
                             let rJsonObj = values[2];
                             let urJsonObj = values[3];
-                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj);
+                            let rsJsonObj = values[4];
+                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj);
 
                             // 沒有使用者資訊時, 跳出 signinModal
                             if(!this.userInfo.account){

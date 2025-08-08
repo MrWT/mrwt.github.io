@@ -146,7 +146,7 @@ export default {
     },
     template: `
 
-<div class="w-full h-10/10 overflow-y-auto grid grid-rows-2">
+<div class="w-full h-10/10 overflow-y-auto grid grid-rows-2 gap-4">
     <div class="w-10/10 h-10/10 grid grid-cols-1 justify-items-center border-b border-gray-500/100 shadow-lg">
         <div class="stack w-5/10 h-7/10 mt-5">
             <div v-for="(mealObj, m_i) in mealCards" @click="selectCard(mealObj)" class="w-10/10 h-10/10 bg-gray-100/100 text-gray-900/100 p-4 border rounded-box cursor-pointer"
@@ -188,7 +188,14 @@ export default {
             </div>
         </div>
     </div>
-
+    <div class="w-10/10 h-10/10 grid grid-cols-3 ">
+        <div class="w-10/10 h-10/10 col-start-2 flex flex-col gap-4">
+            <div class="skeleton h-32 w-full"></div>
+            <div class="skeleton h-4 w-28"></div>
+            <div class="skeleton h-4 w-full"></div>
+            <div class="skeleton h-4 w-full"></div>
+        </div>
+    </div>
 
 </div>
 

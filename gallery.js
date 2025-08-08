@@ -13,6 +13,7 @@ export default {
             "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp",
             "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp",
             "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp",
+            "https://img.daisyui.com/images/stock/453966.webp",
         ]);
 
         // 初始化 component

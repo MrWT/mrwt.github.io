@@ -70,7 +70,8 @@ export default {
             for(let q_i = 0; q_i < quizCount.value; q_i++){
                 let q_left = getRandomNumber(1, quizMaxNum.value);
                 let q_right = getRandomNumber(1, quizMaxNum.value);
-                let q_op = quizOps[ getRandomNumber(0, quizOps.length)];
+                let q_op = quizOps[ getRandomNumber(0, quizOps.length-1)];
+
                 let q_op_for_ui = q_op === "*" ? "×" : q_op === "/" ? "÷" : q_op;
 
                 // 減法, 除法時, 特別注意數字大小

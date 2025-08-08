@@ -1,39 +1,33 @@
 import { ref, reactive, defineProps } from 'vue'
 
 export default {
-    props: ['title'],
+    props: ['title', 'resources'],
     setup(props) {
         let appState = ref("");
-        let resource = reactive({});
 
         // 初始化 component
-        function init(rJsonObj){
-            console.log("readme.init", rJsonObj);
-
-            resource = rJsonObj;
+        function init(){
+           
         }
 
         return {
             props,
             appState,
-            resource,    
             
             init,
         }
     },
+    beforeCreate(){
+        console.log("readme.beforeCreate");
+    },
     created(){
         console.log("readme.created");
     },
+    beforeMount(){
+        console.log("readme.beforeMount");
+    },
     mounted(){
         console.log("readme.mounted");
-        
-        // 取得系統資料
-        let fetchReadme = fetchJson("readme.json");
-        Promise.all([fetchReadme]).then((values) => {
-            //console.log(values); 
-            let rJsonObj = values[0];
-            this.init(rJsonObj);
-        });
     },
     template: `
 
@@ -45,24 +39,24 @@ export default {
         <li class="list-row hover:bg-yellow-300/10">
             <div class="text-4xl font-thin opacity-30 tabular-nums">01</div>
             <div class="list-col-grow">
-                <div>VueJS</div>
-                <div class="text-xs lowercase font-semibold opacity-60">{{ resource.vueJS }}</div>
+                <div>{{ props.resources[0].text }}</div>
+                <div class="text-xs lowercase font-semibold opacity-60">{{ props.resources[0].link }}</div>
             </div>
             <button class="btn btn-square btn-ghost">
-                <a :href="resource.vueJS" target="_blank">
+                <a :href="props.resources[0].link" target="_blank">
                     <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
                 </a>
             </button>
         </li>
-    
+
         <li class="list-row hover:bg-yellow-300/10">
             <div class="text-4xl font-thin opacity-30 tabular-nums">02</div>
             <div class="list-col-grow">
-                <div>TailwindCSS</div>
-                <div class="text-xs lowercase font-semibold opacity-60">{{ resource.tailwindCSS }}</div>
+                <div>{{ props.resources[1].text }}</div>
+                <div class="text-xs lowercase font-semibold opacity-60">{{ props.resources[1].link }}</div>
             </div>
             <button class="btn btn-square btn-ghost">
-                <a :href="resource.tailwindCSS" target="_blank">
+                <a :href="props.resources[1].link" target="_blank">
                     <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
                 </a>
             </button>
@@ -71,11 +65,11 @@ export default {
         <li class="list-row hover:bg-yellow-300/10">
             <div class="text-4xl font-thin opacity-30 tabular-nums">03</div>
             <div class="list-col-grow">
-                <div>DaisyUI</div>
-                <div class="text-xs lowercase font-semibold opacity-60">{{ resource.daisyUI }}</div>
+                <div>{{ props.resources[2].text }}</div>
+                <div class="text-xs lowercase font-semibold opacity-60">{{ props.resources[2].link }}</div>
             </div>
             <button class="btn btn-square btn-ghost">
-                <a :href="resource.daisyUI" target="_blank">
+                <a :href="props.resources[2].link" target="_blank">
                     <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
                 </a>
             </button>
@@ -84,16 +78,28 @@ export default {
         <li class="list-row hover:bg-yellow-300/10">
             <div class="text-4xl font-thin opacity-30 tabular-nums">04</div>
             <div class="list-col-grow">
-                <div>Learn ml5.js</div>
-                <div class="text-xs lowercase font-semibold opacity-60">{{ resource.ml5_learn }}</div>
+                <div>{{ props.resources[3].text }}</div>
+                <div class="text-xs lowercase font-semibold opacity-60">{{ props.resources[3].link }}</div>
             </div>
             <button class="btn btn-square btn-ghost">
-                <a :href="resource.ml5_learn" target="_blank">
+                <a :href="props.resources[3].link" target="_blank">
                     <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
                 </a>
             </button>
         </li>
 
+        <li class="list-row hover:bg-yellow-300/10">
+            <div class="text-4xl font-thin opacity-30 tabular-nums">05</div>
+            <div class="list-col-grow">
+                <div>{{ props.resources[4].text }}</div>
+                <div class="text-xs lowercase font-semibold opacity-60">{{ props.resources[4].link }}</div>
+            </div>
+            <button class="btn btn-square btn-ghost">
+                <a :href="props.resources[4].link" target="_blank">
+                    <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+                </a>
+            </button>
+        </li>
     </ul>
   `
 }
