@@ -12,3 +12,13 @@ function fetchJson(jsonFileName){
     });
     return fetchJsonPromise;
 }
+
+// 取得真亂數
+function getRandomNumber(min, max){
+    // Example using window.crypto.getRandomValues() for cryptographically secure random numbers
+    const array = new Uint32Array(1);
+    window.crypto.getRandomValues(array);
+    const secureRandomNumber = array[0] / (2**32); // Normalize to a float between 0 and 1
+
+    return Math.floor(secureRandomNumber * (max - min + 1)) + min;
+}

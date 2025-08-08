@@ -3,7 +3,11 @@ import { ref, reactive } from 'vue'
 export default {
     setup() {
         let appState = ref("");
-        let masonryItems = reactive([]);
+        // 選擇的圖片 url
+        let selImgUrl = ref("");
+        // 生成的磚塊清單
+        let masonryBricks = reactive([]);
+        // 圖片清單
         let imageUrls = reactive([
             "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp",
             "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp",
@@ -14,18 +18,18 @@ export default {
         // 初始化 component
         function init(){
             console.log("gallery.init");
-
+            // 建立區塊
             genBricks();
         }
 
         // 建立區塊
         function genBricks(imageUrl){
-          let brickCount = Math.floor(Math.random() * 10) + 5;
+          let brickCount = getRandomNumber(5, 10);
 
           let imageBrickIndexs = [];
           imageUrls.forEach((iu, iu_i) => {
             while(imageBrickIndexs.length < imageUrls.length){
-              let randomIndex = Math.floor(Math.random() * brickCount) + 0;
+              let randomIndex = getRandomNumber(0, brickCount);
 
               if(imageBrickIndexs.indexOf(randomIndex) < 0){
                 imageBrickIndexs.push(randomIndex);
@@ -33,43 +37,49 @@ export default {
             }
           });
 
-          for(let mi_i = 0; mi_i < brickCount; mi_i++){
+          for(let mb_i = 0; mb_i < brickCount; mb_i++){
             let gridRow = "";
             let gridCol = "";
             let imgSrc = null;
             let bgColor = "#" 
-                        + Math.floor(Math.random() * 15).toString(16)
-                        + Math.floor(Math.random() * 15).toString(16)
-                        + Math.floor(Math.random() * 15).toString(16)
-                        + Math.floor(Math.random() * 15).toString(16)
-                        + Math.floor(Math.random() * 15).toString(16)
-                        + Math.floor(Math.random() * 15).toString(16);
+                        + getRandomNumber(0, 15).toString(16)
+                        + getRandomNumber(0, 15).toString(16)
+                        + getRandomNumber(0, 15).toString(16)
+                        + getRandomNumber(0, 15).toString(16)
+                        + getRandomNumber(0, 15).toString(16)
+                        + getRandomNumber(0, 15).toString(16);
                                   
-            if(imageBrickIndexs.indexOf(mi_i) >= 0){
-              imgSrc = imageUrls[ imageBrickIndexs.indexOf(mi_i) ];
+            if(imageBrickIndexs.indexOf(mb_i) >= 0){
+              imgSrc = imageUrls[ imageBrickIndexs.indexOf(mb_i) ];
             }
-            let rowSpan = imgSrc ? 8 : ( Math.floor(Math.random() * 5) + 3 );
-            let colSpan = imgSrc ? 0 : ( Math.floor(Math.random() * 5) + 0 );
+            let rowSpan = imgSrc ? 5 : getRandomNumber(2, 5);
+            let colSpan = imgSrc ? 1 : getRandomNumber(1, 3);
             gridRow = rowSpan > 0 ? ("grid-row: span " + rowSpan + ";") : "";
             gridCol = colSpan > 0 ? ("grid-column: span " + colSpan + ";") : "";
 
-            masonryItems.push({
-              text: "Item " + (mi_i + 1),
+            masonryBricks.push({
+              text: "",
               style: "background-color: " + bgColor + ";" + gridRow + gridCol,
               //gridRow: gridRow,
               //gridCol: gridCol,
               imgSrc: imgSrc,
             });
           }
+        }
 
-          console.log("masonryItems=", masonryItems);
+        // showModal
+        function showModal(imgUrl){
+          selImgUrl.value = imgUrl;
+          document.getElementById("imgModal").showModal();
         }
 
         return {
             appState,
-            masonryItems,
+            selImgUrl,
+            masonryBricks,
 
             init,
+            showModal,
         }
     },
     created(){
@@ -83,50 +93,36 @@ export default {
         window.dispatchEvent(new Event('resize'));
 
       }, 1000);
+
+      // object-scale-down
     },
     template: `
 
 <div class="w-full h-10/10 overflow-y-auto grid grid-flow-row-dense">
     <!-- masonry 效果定義於 masonry.css -->
     <div class="masonry">
-        <div v-for="(miObj, mi_i) in masonryItems" class="masonry-item" :style="miObj.style">
-            <img v-if="miObj.imgSrc !== null" :src="miObj.imgSrc" class="object-scale-down" />
-            <span v-if="miObj.imgSrc === null">{{ miObj.text }}</span>
+        <div v-for="(mbObj, mb_i) in masonryBricks" class="masonry-item" :style="mbObj.style">
+            <img v-if="mbObj.imgSrc !== null" :src="mbObj.imgSrc" class="h-20 w-96 object-fill cursor-pointer" @click="showModal(mbObj.imgSrc)" />
+            <span v-if="mbObj.imgSrc === null">{{ mbObj.text }}</span>
         </div>
-
-        <!--
-        <div class="masonry-item" style="grid-row: span 8; grid-column: span 3; background-color: #ff6f61;">
-            <img src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp" />
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; background-color: #6b5b95;">
-            Item 2
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; background-color: #88b04b; ">
-            Item 3
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; grid-column: span 3; background-color: #d65076;">
-            <img src="https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp" />
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; grid-column: span 3; background-color: #ffb347;">
-            <img src="https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp" />
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; background-color: #45b8ac;">
-            Item 6
-        </div>
-        <div class="masonry-item" style="grid-row: span 10; background-color: #e94b3c;">
-            Item 7
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; grid-column: span 3; background-color: #6c5b7b;">
-            <img src="https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp" />
-        </div>
-        <div class="masonry-item" style="grid-row: span 8; grid-column: span 3; background-color: #00a86b;">
-            Item 9
-        </div>
-        <div class="masonry-item" style="grid-row: span 20; background-color: #b565a7; ">
-            Item 10
-        </div>
-        -->
     </div>
 </div>
+
+<dialog id="imgModal" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Hello!</h3>
+    <div class="w-10/10 h-10/10">
+      <img :src="selImgUrl" class="object-none" />
+    </div>
+
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
   `
 }
