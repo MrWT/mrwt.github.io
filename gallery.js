@@ -23,8 +23,29 @@ export default {
             genBricks();
         }
 
+        function getImageRatio(imageUrl){
+          return new Promise((resolve, reject) => {
+              let img = new Image();
+              img.onload = function() {
+                  const naturalWidth = img.naturalWidth;
+                  const naturalHeight = img.naturalHeight;
+
+                  function gcd(a, b) {
+                      return b === 0 ? a : gcd(b, a % b);
+                  }
+
+                  const commonDivisor = gcd(naturalWidth, naturalHeight);
+                  const simplifiedWidth = naturalWidth / commonDivisor;
+                  const simplifiedHeight = naturalHeight / commonDivisor;
+
+                  resolve({width: simplifiedWidth, height: simplifiedHeight});
+              }
+              img.src = imageUrl;
+          });
+        }
+
         // 建立區塊
-        function genBricks(imageUrl){
+        async function genBricks(imageUrl){
           let brickCount = getRandomNumber(5, 10);
 
           let imageBrickIndexs = [];
@@ -38,25 +59,63 @@ export default {
             }
           });
 
+          let gridRow = "";
+          let gridCol = "";
+          let imgSrc = null;
+          let imgRatio = null;
+          let className = "";
+          let rowSpan = 0;
+          let colSpan = 0;
+          let bgColor = "";
           for(let mb_i = 0; mb_i < brickCount; mb_i++){
-            let gridRow = "";
-            let gridCol = "";
-            let imgSrc = null;
-            let bgColor = "#" 
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16);
+            gridRow = "";
+            gridCol = "";
+            imgSrc = null;
+            imgRatio = null;
+            className = "";
+            bgColor = "#" 
+                      + getRandomNumber(0, 15).toString(16)
+                      + getRandomNumber(0, 15).toString(16)
+                      + getRandomNumber(0, 15).toString(16)
+                      + getRandomNumber(0, 15).toString(16)
+                      + getRandomNumber(0, 15).toString(16)
+                      + getRandomNumber(0, 15).toString(16);
                                   
             if(imageBrickIndexs.indexOf(mb_i) >= 0){
-              imgSrc = imageUrls[ imageBrickIndexs.indexOf(mb_i) ];
+                imgSrc = imageUrls[ imageBrickIndexs.indexOf(mb_i) ];
+                imgRatio = await getImageRatio(imgSrc);
+                //console.log("imgRatio", imgRatio);
             }
-            let rowSpan = imgSrc ? 5 : getRandomNumber(2, 5);
-            let colSpan = imgSrc ? 1 : getRandomNumber(1, 3);
-            gridRow = rowSpan > 0 ? ("grid-row: span " + rowSpan + ";") : "";
-            gridCol = colSpan > 0 ? ("grid-column: span " + colSpan + ";") : "";
+
+            rowSpan = 0;
+            colSpan = 0;
+            if(imgSrc){
+                if(imgRatio["height"] > imgRatio["width"]){
+                    // 直式圖
+                    rowSpan = 12;
+                    colSpan = 0;
+                    gridRow = rowSpan > 0 ? ("grid-row: span " + rowSpan + ";") : "";
+                    gridCol = colSpan > 0 ? ("grid-column: span " + colSpan + ";") : "";
+
+                    className = "h-70 w-55 object-fill cursor-pointer";
+                }else{
+                    // 橫式圖
+                    rowSpan = 4;
+                    colSpan = 0;
+                    gridRow = rowSpan > 0 ? ("grid-row: span " + rowSpan + ";") : "";
+                    gridCol = colSpan > 0 ? ("grid-column: span " + colSpan + ";") : "";
+
+                    className = "h-20 w-96 object-fill cursor-pointer";
+                }
+            }else{
+                rowSpan = getRandomNumber(2, 5);
+                colSpan = getRandomNumber(1, 3);
+                gridRow = rowSpan > 0 ? ("grid-row: span " + rowSpan + ";") : "";
+                gridCol = colSpan > 0 ? ("grid-column: span " + colSpan + ";") : "";
+
+                className = "h-20 w-96 object-fill cursor-pointer";
+            }
+
 
             masonryBricks.push({
               text: "",
@@ -64,6 +123,7 @@ export default {
               //gridRow: gridRow,
               //gridCol: gridCol,
               imgSrc: imgSrc,
+              className: className,
             });
           }
         }
@@ -103,7 +163,7 @@ export default {
     <!-- masonry 效果定義於 masonry.css -->
     <div class="masonry">
         <div v-for="(mbObj, mb_i) in masonryBricks" class="masonry-item" :style="mbObj.style">
-            <img v-if="mbObj.imgSrc !== null" :src="mbObj.imgSrc" class="h-20 w-96 object-fill cursor-pointer" @click="showModal(mbObj.imgSrc)" />
+            <img v-if="mbObj.imgSrc !== null" :src="mbObj.imgSrc" :class="mbObj.className" @click="showModal(mbObj.imgSrc)" />
             <span v-if="mbObj.imgSrc === null">{{ mbObj.text }}</span>
         </div>
     </div>
