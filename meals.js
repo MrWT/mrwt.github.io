@@ -148,7 +148,7 @@ export default {
 
 <div class="w-full h-10/10 overflow-y-auto grid grid-rows-2 gap-4">
     <div class="w-10/10 h-10/10 grid grid-cols-1 justify-items-center border-b border-gray-500/100 shadow-lg">
-        <div class="stack w-5/10 h-7/10 mt-5">
+        <div class="stack h-7/10 w-8/10 mt-15 md:w-5/10 md:h-8/10 md:mt-5">
             <div v-for="(mealObj, m_i) in mealCards" @click="selectCard(mealObj)" class="w-10/10 h-10/10 bg-gray-100/100 text-gray-900/100 p-4 border rounded-box cursor-pointer"
                                                     :class="{'origin-top transition-transform duration-1300 ease rotate-x-180': componentState === 'TURN_UP' && m_i === 0, 
                                                              'transition-discrete opacity-0 duration-2000 ease': componentState === 'FADE_OUT' && m_i === 0,
@@ -169,8 +169,8 @@ export default {
                 </div>
             </div>
         </div>
-        <div class="w-10/10 h-10/10 grid grid-cols-5 justify-items-center gap-4">
-            <div class="w-10/10 h-10/10 col-start-2 grid grid-cols-1 justify-items-center items-center">
+        <div class="w-10/10 h-10/10 grid grid-cols-3 md:grid-cols-5 justify-items-center gap-4">
+            <div class="w-10/10 h-10/10 md:col-start-2 grid grid-cols-1 justify-items-center items-center">
                 <label class="label mt-2">
                     <input id="iptToggle" type="checkbox" @click="toggleChangeCard" class="toggle toggle-primary" />
                     自動翻卡
