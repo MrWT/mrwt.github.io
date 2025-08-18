@@ -1,35 +1,6 @@
 import { ref, reactive, defineProps } from 'vue'
 
-export default {
-    props: ['title', 'resources'],
-    setup(props) {
-        let appState = ref("");
-
-        // 初始化 component
-        function init(){
-           
-        }
-
-        return {
-            props,
-            appState,
-            
-            init,
-        }
-    },
-    beforeCreate(){
-        console.log("readme.beforeCreate");
-    },
-    created(){
-        console.log("readme.created");
-    },
-    beforeMount(){
-        console.log("readme.beforeMount");
-    },
-    mounted(){
-        console.log("readme.mounted");
-    },
-    template: `
+const template = `
 
     <div class='text-center text-3xl mt-10 md:mt-0'>Hello! Welcome to {{ props.title }}</div>
 
@@ -101,5 +72,36 @@ export default {
             </button>
         </li>
     </ul>
-  `
+  `;
+
+export default {
+    props: ['title', 'resources'],
+    template: template,
+    setup(props) {
+        let appState = ref("");
+
+        // 初始化 component
+        function init(){
+           
+        }
+
+        return {
+            props,
+            appState,
+            
+            init,
+        }
+    },
+    beforeCreate(){
+        console.log("readme.beforeCreate");
+    },
+    created(){
+        console.log("readme.created");
+    },
+    beforeMount(){
+        console.log("readme.beforeMount");
+    },
+    mounted(){
+        console.log("readme.mounted");
+    },
 }

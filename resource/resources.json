@@ -3,5 +3,6 @@
    { "name": "tailwindCSS", "link": "https://tailwindcss.com/", "text": "TailwindCSS" },
    { "name": "daisyUI", "link": "https://daisyui.com/", "text": "DaisyUI" },
    { "name": "ml5_learn", "link": "https://dopeorion.medium.com/%E5%85%A8%E7%AB%AF%E7%94%9F%E6%B4%BB-ml5-js-%E4%B8%8D%E5%98%B4%E7%A0%B2%E5%AF%A6%E5%81%9A-77ac79a28773", "text": "Learn ml5.js" },
-   { "name": "masonry", "link": "https://www.freecodecamp.org/news/how-to-create-a-mansory-layout-using-html-and-css/", "text": "masonry 效果" }
+   { "name": "masonry", "link": "https://www.freecodecamp.org/news/how-to-create-a-mansory-layout-using-html-and-css/", "text": "masonry 效果" },
+   { "name": "Gemini Code Assist", "link": "https://codeassist.google/", "text": "結合 AI Coding 工具" }
 ]

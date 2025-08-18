@@ -7,6 +7,7 @@
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
         <script src="./index.js"></script>
         <link href="./masonry.css" rel="stylesheet" type="text/css" />
@@ -93,6 +94,7 @@
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
+                <machine-learning-component v-else-if="appSetting.contentComponent === 'machineLearning'" :title="appSetting.title"></machine-learning-component>
                 <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></readme-component>
             </div>
 
@@ -120,6 +122,7 @@
             import gallery from './gallery.js'
             import quiz from './quiz.js'
             import readme from './readme.js'
+            import machineLearning from './machineLearning.js'
             import meals from './meals.js'
 
             const app = createApp({
@@ -127,6 +130,7 @@
                     'gallery-component': gallery, // Register the component
                     'quiz-component': quiz, // Register the component
                     'readme-component': readme, // Register the component
+                    'machine-learning-component': machineLearning, // Register the component
                     'meals-component': meals, // Register the component
                 },
                 setup() {
@@ -169,11 +173,7 @@
                     }
                     // 置換 component
                     function gotoPage(page) {
-                        if(page === "machineLearning"){
-                            window.open("./machineLearning.html", "_blank");
-                        }else{
-                            appSetting.contentComponent = page;
-                        }
+                        appSetting.contentComponent = page;
                     }
                     // keyin account
                     function keyinAccount(event){
