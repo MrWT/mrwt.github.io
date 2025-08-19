@@ -1,5 +1,6 @@
 {
     "zh-TW": {
+        "sayhello": "你好~!",
         "gallery": "相冊",
         "quiz": "題目",
         "meals": "餐點選擇", 
@@ -15,6 +16,7 @@
         "signin": "登入"
     },
     "EN": {
+        "sayhello": "Hello!",
         "gallery": "gallery",
         "quiz": "quiz",
         "meals": "meals", 
