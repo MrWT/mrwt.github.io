@@ -1,10 +1,10 @@
 
-// 取得檔案  json 內容
-function fetchJson(jsonFileName){
+// 取得系統設定檔案  json 內容
+function fetchSysSetting(jsonFileName){
     if(!jsonFileName) return  null;
 
     let fetchJsonPromise = new Promise((resolve, reject) => {
-        fetch("./resource/" + jsonFileName)
+        fetch("./sys_setting/" + jsonFileName)
             .then((response) => response.json() )
             .then((json) => { 
                 resolve(json);

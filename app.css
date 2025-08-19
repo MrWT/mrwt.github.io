@@ -1,0 +1,20 @@
+/* 模擬滑鼠游標的樣式 */
+.custom-cursor {
+  position: fixed; /* 使用 fixed 定位，使其相對於整個視窗 */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00aaff;
+  border-radius: 50%;
+  background-color: rgba(0, 170, 255, 0.3);
+  transform: translate(-50%, -50%); /* 讓游標中心對準座標點 */
+  pointer-events: none; /* 讓游標不會擋住下方的元素 */
+  transition: transform 0.1s ease-out, background-color 0.1s, border-color 0.1s;
+  z-index: 9999;
+}
+
+/* 點擊時的動畫效果 */
+.custom-cursor.cursor-click {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: rgba(255, 0, 0, 0.7);
+  border-color: #ff0000;
+}

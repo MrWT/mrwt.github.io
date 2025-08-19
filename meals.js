@@ -190,8 +190,8 @@ export default {
         console.log("meals.mounted");
 
         // 取得系統資料
-        let fetchMeal = fetchJson("meal.json");
-        let fetchRestaurant = fetchJson("restaurant.json");
+        let fetchMeal = fetchSysSetting("meal.json");
+        let fetchRestaurant = fetchSysSetting("restaurant.json");
         Promise.all([fetchMeal, fetchRestaurant]).then((values) => {
             //console.log(values); 
             let mealJsonObj = values[0];

@@ -1,4 +1,4 @@
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 
 const template = `
 <div class="w-full h-full flex flex-col items-center justify-center p-4">
@@ -31,10 +31,10 @@ export default {
                 // 載入 face-api.js 的模型
                 // 確保您的模型檔案放在可公開訪問的 /models 路徑下
                 await Promise.all([
-                    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-                    faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-                    faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-                    faceapi.nets.faceExpressionNet.loadFromUri('/models')
+                    faceapi.nets.tinyFaceDetector.loadFromUri('/ai/faceapi/models'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('/ai/faceapi/models'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('/ai/faceapi/models'),
+                    faceapi.nets.faceExpressionNet.loadFromUri('/ai/faceapi/models')
                 ]);
                 console.log("模型載入完成");
                 startVideo();
@@ -103,10 +103,11 @@ export default {
         }
     },
     mounted() {
-        console.log("machineLearning.mounted");
+        console.log("facedetect.mounted");
         this.init();
     },
-    onBeforeUnmount() {
+    beforeUnmount() {
+        console.log("facedetect.beforeUnmount");
         // 元件銷毀前，清除 interval 並關閉攝影機
         if (this.detectionInterval) clearInterval(this.detectionInterval);
         if (this.videoEl && this.videoEl.srcObject) {

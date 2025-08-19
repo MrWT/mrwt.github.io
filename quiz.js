@@ -351,7 +351,7 @@ export default {
         console.log("quiz.mounted");
 
         // 取得系統資料
-        let fetchQuiz = fetchJson("quiz.json");
+        let fetchQuiz = fetchSysSetting("quiz.json");
         Promise.all([fetchQuiz]).then((values) => {
             //console.log(values); 
             let qJsonObj = values[0];

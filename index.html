@@ -11,6 +11,7 @@
 
         <script src="./index.js"></script>
         <link href="./masonry.css" rel="stylesheet" type="text/css" />
+        <link href="./app.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <!-- 系統 loading mask -->
@@ -23,15 +24,36 @@
 
             <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
                 <div class="navbar-start">
-                    <div class="dropdown dropdown-hover">
+                    <div class="dropdown">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                         </div>
                         <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('gallery')">Gallery</a></li>
-                            <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('quiz')">Quiz</a></li>
-                            <li v-if="userInfo.funcs.indexOf('machineLearning') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('machineLearning')">MachineLearning</a></li>
-                            <li v-if="userInfo.funcs.indexOf('meals') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown-toggle"><a @click="gotoPage('meals')">Meals</a></li>
+                            <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('gallery')">{{ userInfo.funcLangs["gallery"] }}</a></li>
+                            <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('quiz')">{{ userInfo.funcLangs["quiz"] }}</a></li>
+                            <li v-if="userInfo.funcs.indexOf('meals') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('meals')">{{ userInfo.funcLangs["meals"] }}</a></li>
+
+                            <li v-if="userInfo.funcs.indexOf('laboratory') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown group">
+                                <div class="dropdown dropdown-right dropdown-start">
+                                    <div tabindex="0" role="button" class="w-40 group-hover:text-black group-hover:rounded-lg">
+                                        K49 實驗室 >
+                                    </div>
+                                    <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                                        <li v-if="userInfo.funcs.indexOf('faceDetect') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                            <a @click="gotoPage('faceDetect')">Face Detect</a>
+                                        </li>
+                                        <li v-if="userInfo.funcs.indexOf('eyeMouse') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                            <a @click="gotoPage('eyeMouse')">Eye Mouse</a>
+                                        </li>
+                                        <li class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                            <a>實驗3</a>
+                                        </li>
+                                        <li class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                            <a>實驗4</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -71,7 +93,7 @@
                             <li class="">
                                 <button class="btn w-full" @click="signout">
                                     <span v-if="userInfo.account">
-                                        Signout
+                                        {{ userInfo.funcLangs["signout"] }}
                                     </span>
                                     <svg v-if="userInfo.account" class="w-6 h-6 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
@@ -81,7 +103,7 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
                                     </svg>
                                     <span v-if="!userInfo.account">
-                                        Signin
+                                        {{ userInfo.funcLangs["signin"] }}
                                     </span>
                                 </button>
                             </li>
@@ -94,8 +116,9 @@
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
-                <machine-learning-component v-else-if="appSetting.contentComponent === 'machineLearning'" :title="appSetting.title"></machine-learning-component>
-                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></readme-component>
+                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></meals-component>
+                <face-detect-component v-else-if="appSetting.contentComponent === 'faceDetect'" :title="appSetting.title"></face-detect-component>
+                <eye-mouse-component v-else-if="appSetting.contentComponent === 'eyeMouse'" :title="appSetting.title"></eye-mouse-component>
             </div>
 
             <!-- signin modal -->
@@ -122,16 +145,18 @@
             import gallery from './gallery.js'
             import quiz from './quiz.js'
             import readme from './readme.js'
-            import machineLearning from './machineLearning.js'
             import meals from './meals.js'
+            import faceDetect from './laboratory/faceDetect.js'
+            import eyeMouse from './laboratory/eyeMouse.js'
 
             const app = createApp({
                 components: {
                     'gallery-component': gallery, // Register the component
                     'quiz-component': quiz, // Register the component
                     'readme-component': readme, // Register the component
-                    'machine-learning-component': machineLearning, // Register the component
                     'meals-component': meals, // Register the component
+                    'face-detect-component': faceDetect, // Register the component
+                    'eye-mouse-component': eyeMouse, // Register the component
                 },
                 setup() {
                     // 系統資訊
@@ -142,8 +167,9 @@
                         roles: [],
                         commonFuncs: [],
                         roleFuncs: {},
-                        userRoles: [],
+                        users: [],
                         resources: [],
+                        languages: [],
                     });
                     // 使用者資訊
                     const tempAccount = ref("");
@@ -151,20 +177,29 @@
                         account: null,
                         name: null,
                         shortName: null,
+                        lang: "EN",
                         mail: null,
                         role: null,
                         funcs: [],
+                        funcLangs: {},
                     });
 
                     // 初始化 app
-                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj){
-                        console.log("app.init", cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj);
+                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj, langJsonObj){
+                        console.log("app.init");
+                        console.log("common functions=", cfJsonObj);
+                        console.log("role functions=", rfJsonObj);
+                        console.log("roles=", rJsonObj);
+                        console.log("users=", urJsonObj);
+                        console.log("resources=", rsJsonObj);
+                        console.log("languages=", langJsonObj);
 
                         appSetting.commonFuncs = cfJsonObj;
                         appSetting.roleFuncs = rfJsonObj;
                         appSetting.roles = rJsonObj;
-                        appSetting.userRoles = urJsonObj;
+                        appSetting.users = urJsonObj;
                         appSetting.resources = rsJsonObj;
+                        appSetting.languages = langJsonObj;
                     }
                     // 重設系統設定
                     function resetAppSetting(){
@@ -185,9 +220,11 @@
                         userInfo.account = null;
                         userInfo.name = null;
                         userInfo.shortName = null;
+                        userInfo.lang = "EN";
                         userInfo.mail = null;
                         userInfo.role = null;
                         userInfo.funcs = [];
+                        userInfo.funcLangs = {};
                     }
                     // 登入
                     function signin(){
@@ -204,11 +241,13 @@
                             userInfo.mail = tempAccount.value + "@mail.io";
                             console.log("userInfo.mail=", userInfo.mail);
                             // 使用者角色
+                            userInfo.lang = "EN";
                             userInfo.role = "tn000";
-                            for(let ur_i = 0; ur_i < appSetting.userRoles.length; ur_i++){
-                                let ur = appSetting.userRoles[ur_i];
+                            for(let ur_i = 0; ur_i < appSetting.users.length; ur_i++){
+                                let ur = appSetting.users[ur_i];
                                 if(ur.account === tempAccount.value){
                                     userInfo.role = ur.role;
+                                    userInfo.lang = ur.lang;
                                     break;
                                 }
                             }
@@ -220,6 +259,12 @@
                                 userInfo.funcs.push(cf);
                             });
                             console.log("userInfo.funcs=", userInfo.funcs);
+
+                            userInfo.funcs.forEach((func, f_i) => {
+                                let f_text  = appSetting.languages[userInfo.lang][func] ?? func;
+                                userInfo.funcLangs[func] = f_text;
+                            });
+
                             // 設定 title of application
                             appSetting.title = appSetting.roles[userInfo.role] ? appSetting.roles[userInfo.role]["appTitle"] : appSetting.title;
                             // close signinModal
@@ -268,20 +313,22 @@
 
                     // 取得系統資料
                     {
-                        let fetchCommonFunc = fetchJson("commonFunction.json");
-                        let fetchRoleFunc = fetchJson("roleFunction.json");
-                        let fetchRole = fetchJson("role.json");
-                        let fetchUserRole = fetchJson("userRole.json");
-                        let fetchRscs = fetchJson("resources.json");
+                        let fetchCommonFunc = fetchSysSetting("commonFunction.json");
+                        let fetchRoleFunc = fetchSysSetting("roleFunction.json");
+                        let fetchRole = fetchSysSetting("role.json");
+                        let fetchUserRole = fetchSysSetting("user.json");
+                        let fetchRscs = fetchSysSetting("resources.json");
+                        let fetchLanguage = fetchSysSetting("language.json");
 
-                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole, fetchRscs]).then((values) => {
+                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole, fetchRscs, fetchLanguage]).then((values) => {
                             //console.log(values); 
                             let cfJsonObj = values[0];
                             let rfJsonObj = values[1];
                             let rJsonObj = values[2];
                             let urJsonObj = values[3];
                             let rsJsonObj = values[4];
-                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj);
+                            let langJsonObj = values[5];
+                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj, langJsonObj);
 
                             // 沒有使用者資訊時, 跳出 signinModal
                             if(!this.userInfo.account){

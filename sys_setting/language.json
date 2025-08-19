@@ -1,0 +1,32 @@
+{
+    "zh-TW": {
+        "gallery": "相冊",
+        "quiz": "題目",
+        "meals": "餐點選擇", 
+        "search": "search", 
+        "notify": "notify", 
+        "laboratory": "K49 實驗室", 
+        "faceDetect": "人臉辨識",
+        "eyeMouse": "動眼滑鼠",
+        "readme": "系統資訊", 
+        "userInfo": "使用者資訊", 
+        "fullscreen": "全螢幕",
+        "signout": "登出",
+        "signin": "登入"
+    },
+    "EN": {
+        "gallery": "gallery",
+        "quiz": "quiz",
+        "meals": "meals", 
+        "search": "search", 
+        "notify": "notify", 
+        "laboratory": "laboratory", 
+        "faceDetect": "face detect",
+        "eyeMouse": "eye mouse",
+        "readme": "readme", 
+        "userInfo": "userInfo", 
+        "fullscreen": "fullscreen",
+        "signout": "Sign out",
+        "signin": "login"
+    }
+}
