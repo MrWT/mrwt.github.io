@@ -50,6 +50,8 @@ const template = `
             <div class="skeleton h-4 w-28"></div>
             <div class="skeleton h-4 w-full"></div>
             <div class="skeleton h-4 w-full"></div>
+
+            <div id="map" class="w-full h-full"></div>
         </div>
     </div>
 
@@ -73,6 +75,8 @@ export default {
             console.log("props.meals=", props.meals);
 
             genMealCards();
+
+            drawMap();
         }
         // 依序產生 meal 清單
         function genMealCards(){
@@ -156,6 +160,26 @@ export default {
         // 選定一張 meal card
         function selectCard(sel_mealObj){
             console.log("selectCard", sel_mealObj);
+        }
+        // 畫 Google Map
+        function drawMap(){
+            // 設定地圖的中心點座標 (這裡以台北為例)
+            const center = { lat: 25.0330, lng: 121.5654 };
+
+            // 創建一個新的地圖實例
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: center, // 設定地圖的中心點
+                // 設定地圖縮放比例 0-20
+                zoom: 15,
+                // 限制使用者能縮放地圖的最大比例
+                maxZoom: 20,
+                // 限制使用者能縮放地圖的最小比例
+                minZoom: 3,
+                // 設定是否呈現右下角街景小人
+                streetViewControl: false,
+                // 設定是否讓使用者可以切換地圖樣式：一般、衛星圖等
+                mapTypeControl: false
+            });
         }
 
         return {
