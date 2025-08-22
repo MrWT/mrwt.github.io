@@ -7,7 +7,6 @@
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7bDj72HeE-I-jYTgCsii3cL4w04r-1uY" async defer></script>
         <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
         <script src="./index.js"></script>
@@ -22,7 +21,6 @@
         </div>
 
         <div id="app" class="w-full h-screen overflow-hidden">            
-
             <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
                 <div class="navbar-start">
                     <div class="dropdown">
@@ -117,7 +115,7 @@
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
-                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title" :meals="appSetting.meals"></meals-component>
+                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title" :meals="appSetting.meals" :googleMapKey="appSetting.google_map_key"></meals-component>
                 <face-detect-component v-else-if="appSetting.contentComponent === 'faceDetect'" :title="appSetting.title"></face-detect-component>
                 <eye-mouse-component v-else-if="appSetting.contentComponent === 'eyeMouse'" :title="appSetting.title"></eye-mouse-component>
             </div>
@@ -183,7 +181,7 @@
 
                     // 初始化 app
                     function init(){
-                        
+
                     }
                     // 重設系統設定
                     function resetAppSetting(){
@@ -256,11 +254,28 @@
                                     });
                                 }
 
+                                // 動態載入 Google Maps API
+                                {
+                                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?key=" + appSettingObj["google_map_key"];
+                                    const script = document.createElement('script');
+                                    script.src = google_map_api_src;
+                                    script.defer = true;
+                                    script.async = true;
+                                    script.onload = () => { /* 成功載入回調 */ };
+                                    document.body.appendChild(script);
+                                }                                
+                                
+                                //console.log("appSetting.google_map_key=", appSetting.google_map_key);
                                 // appSetting.meals
                                 appSetting.meals = appSettingObj["meal"];
                                 
                                 // appSetting.quiz
-                                appSetting.quiz = appSettingObj["quiz"];
+                                appSetting.quiz = {
+                                    count: appSettingObj["quiz_count"],
+                                    max_number: appSettingObj["quiz_max_number"],
+                                };
+
+                            
 
                                 // user info
                                 {

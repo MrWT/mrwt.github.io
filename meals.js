@@ -44,15 +44,18 @@ const template = `
             </div>
         </div>
     </div>
-    <div class="w-10/10 h-10/10 grid grid-cols-3 ">
+    <!--
+    <div class="w-10/10 h-10/10 grid grid-cols-3">
         <div class="w-10/10 h-10/10 col-start-2 flex flex-col gap-4">
             <div class="skeleton h-32 w-full"></div>
             <div class="skeleton h-4 w-28"></div>
             <div class="skeleton h-4 w-full"></div>
             <div class="skeleton h-4 w-full"></div>
-
-            <div id="map" class="w-full h-full"></div>
         </div>
+    </div>
+    -->
+    <div class="w-10/10 h-10/10">
+        <div id="map" class="w-full h-full"></div>
     </div>
 
 </div>
@@ -163,14 +166,14 @@ export default {
         }
         // 畫 Google Map
         function drawMap(){
-            // 設定地圖的中心點座標 (這裡以台北為例)
-            const center = { lat: 25.0330, lng: 121.5654 };
+            // 設定地圖的中心點座標
+            const center = { lat: 23.025185874028434, lng: 120.19128847252192 };
 
             // 創建一個新的地圖實例
             const map = new google.maps.Map(document.getElementById("map"), {
                 center: center, // 設定地圖的中心點
                 // 設定地圖縮放比例 0-20
-                zoom: 15,
+                zoom: 17,
                 // 限制使用者能縮放地圖的最大比例
                 maxZoom: 20,
                 // 限制使用者能縮放地圖的最小比例
