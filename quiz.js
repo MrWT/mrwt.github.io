@@ -1,4 +1,4 @@
-import { ref, reactive, } from 'vue'
+import { ref, reactive, defineProps } from 'vue'
 
 const template = `
 
@@ -176,8 +176,9 @@ const template = `
   `;
 
 export default {
+    props: ['title', 'setting'],
     template: template,
-    setup() {
+    setup(props) {
         const appState = ref("");
         let quizCount = ref(0);
         let quizMaxNum = ref(0);
@@ -193,11 +194,14 @@ export default {
         });
 
         // 初始化 component
-        function init(qJsonObj){
-            console.log("quiz.init", qJsonObj);
+        function init(){
+            console.log("quiz.init");
+            console.log("setting=", props.setting);
 
-            quizCount.value = qJsonObj["count"];
-            quizMaxNum.value = qJsonObj["maxNumber"];
+            quizCount.value = props.setting["count"];
+            quizMaxNum.value = props.setting["max_number"];
+
+            generateQuiz();
         }
         // 改變題型
         function changeQuizType(event, type) {
@@ -350,15 +354,6 @@ export default {
     mounted(){
         console.log("quiz.mounted");
 
-        // 取得系統資料
-        let fetchQuiz = fetchSysSetting("quiz.json");
-        Promise.all([fetchQuiz]).then((values) => {
-            //console.log(values); 
-            let qJsonObj = values[0];
-            this.init(qJsonObj);
-
-            // mount 後, 生成題目
-            this.generateQuiz();
-        });
+        this.init();
     }
 }

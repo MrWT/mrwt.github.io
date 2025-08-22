@@ -1,5 +1,0 @@
-{
-    "admin": [ "gallery", "quiz", "meals", "search", "notify", "laboratory", "faceDetect", "eyeMouse" ], 
-    "tn100": [ "gallery", "quiz", "meals" ],
-    "tn000": [ "gallery", "quiz", "meals" ]
-}

@@ -13,6 +13,47 @@ function fetchSysSetting(jsonFileName){
     return fetchJsonPromise;
 }
 
+function fetchData(postData){
+    let fetchDataPromise = new Promise((resolve, reject) => {
+        // 開啟"系統處理中 mask"
+        $("#loading").show();
+
+        const cloudRunUrl = "https://coder-k49-582921678854.asia-east1.run.app/";
+
+        fetch(cloudRunUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // 設定內容類型為 JSON
+            },
+            body: JSON.stringify(postData) // 將 JavaScript 物件轉換為 JSON 字串
+        })
+        .then(response => {
+            //console.log("response=", response);
+            if (!response.ok) {
+                reject(`HTTP error! status: ${response.status}`);
+            }
+            // 解析 JSON 格式的回應
+            return response.json();
+        })
+        .then(data => {
+            // 關閉"系統處理中 mask"
+            $("#loading").hide();
+
+            //console.log('Success:', data);
+            resolve(data);
+        })
+        .catch(error => {
+            // 關閉"系統處理中 mask"
+            $("#loading").hide();
+            
+            console.error('Error:', error);
+            reject('Error:' + error);
+        });
+    });
+
+    return fetchDataPromise;
+}
+
 // 取得真亂數
 function getRandomNumber(min, max){
     // Example using window.crypto.getRandomValues() for cryptographically secure random numbers

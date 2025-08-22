@@ -1,4 +1,4 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, defineProps } from 'vue'
 
 const template = `
 
@@ -11,13 +11,13 @@ const template = `
                                                              'transition-none hidden': componentState === 'HIDDEN' && m_i === 0,
                                                              'transition-none opacity-100': componentState === 'CHANGE_CARD' && m_i === 0, }" >
                 <div class="w-10/10 text-xl">
-                    {{ mealObj.meal }}
+                    {{ mealObj.name }}
                 </div>
                 <div class="w-10/10 text-md">
-                    {{ mealObj.restaurant }}
+                    {{ mealObj.restaurant.name }}
                 </div>
                 <div class="w-10/10 text-xs flex items-center">
-                    ( {{ mealObj.location }} )
+                    ( {{ mealObj.restaurant.address }} )
                     <svg class="w-6 h-6 text-gray-800 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
@@ -58,22 +58,21 @@ const template = `
   `;
 
 export default {
+    props: ['title', 'meals'],
     template: template,
-    setup() {
+    setup(props) {
         let componentState = ref("STOP_CHANGE_CARD");
         let changeCardIntervalId = ref(null);
         let turnOverDuration = ref(2000);
         let showHandChangeCard = ref(true);
-        let restaurantInfo = reactive([]);
-        let meals = reactive([]);
         let mealCards = reactive([]);
 
         // 初始化 component
-        function init(mealJsonObj, restaurantJsonObj){
-            console.log("meals.init", mealJsonObj, restaurantJsonObj);
+        function init(){
+            console.log("meals.init");
+            console.log("props.meals=", props.meals);
 
-            meals = mealJsonObj;
-            restaurantInfo = restaurantJsonObj;
+            genMealCards();
         }
         // 依序產生 meal 清單
         function genMealCards(){
@@ -90,26 +89,14 @@ export default {
             mealCards.splice(0, mealCards.length);
 
             let createdMealIndex = [];
-            while(createdMealIndex.length < meals.length){
-                let random_m_i = Math.floor(Math.random() * meals.length);
+            while(createdMealIndex.length < props.meals.length){
+                let random_m_i = Math.floor(Math.random() * props.meals.length);
 
                 if(createdMealIndex.indexOf(random_m_i) < 0){
                     createdMealIndex.push(random_m_i);
 
-                    let mealObj = meals[random_m_i];
-                    // find location of restaurant
-                    let location = "";
-                    restaurantInfo.forEach((restObj, r_i) => {
-                        if(restObj["restaurant"] === mealObj["restaurant"]){
-                            location = restObj["location"];
-                        }
-                    });
-
-                    mealCards.push({
-                        meal: mealObj["meal"],
-                        restaurant: mealObj["restaurant"],
-                        location: location,
-                    });
+                    let mealObj = props.meals[random_m_i];
+                    mealCards.push(mealObj);
                 }
             }
             
@@ -189,17 +176,6 @@ export default {
     mounted(){
         console.log("meals.mounted");
 
-        // 取得系統資料
-        let fetchMeal = fetchSysSetting("meal.json");
-        let fetchRestaurant = fetchSysSetting("restaurant.json");
-        Promise.all([fetchMeal, fetchRestaurant]).then((values) => {
-            //console.log(values); 
-            let mealJsonObj = values[0];
-            let restaurantJsonObj = values[1];
-            this.init(mealJsonObj, restaurantJsonObj);
-
-            // mount 後, 生成 mealCards
-             this.genMealCards();
-        });
+        this.init();
     },
 }

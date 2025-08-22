@@ -1,8 +1,0 @@
-[
-    { "meal": "m_A", "restaurant": "rest_A" },
-    { "meal": "m_B", "restaurant": "rest_B" },
-    { "meal": "m_C", "restaurant": "rest_C" },
-    { "meal": "m_D", "restaurant": "rest_A" },
-    { "meal": "m_E", "restaurant": "rest_D" },
-    { "meal": "m_F", "restaurant": "rest_D" }
-]

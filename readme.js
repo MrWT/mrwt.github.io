@@ -82,7 +82,7 @@ export default {
 
         // 初始化 component
         function init(){
-           
+           console.log("props.title=", props.title);
         }
 
         return {
@@ -103,5 +103,6 @@ export default {
     },
     mounted(){
         console.log("readme.mounted");
+        this.init();
     },
 }

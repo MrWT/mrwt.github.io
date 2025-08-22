@@ -39,10 +39,10 @@
                                         K49 實驗室 >
                                     </div>
                                     <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                                        <li v-if="userInfo.funcs.indexOf('faceDetect') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                        <li v-if="userInfo.funcs.indexOf('face_detect') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
                                             <a @click="gotoPage('faceDetect')">Face Detect</a>
                                         </li>
-                                        <li v-if="userInfo.funcs.indexOf('eyeMouse') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
+                                        <li v-if="userInfo.funcs.indexOf('eye_mouse') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
                                             <a @click="gotoPage('eyeMouse')">Eye Mouse</a>
                                         </li>
                                         <li class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
@@ -86,9 +86,9 @@
                                 </div>
                             </div>
                         </button>
-                        <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-62 p-2 shadow">
                             <li class="text-white text-lg">{{ userInfo.name }}</li>
-                            <li class="text-white text-lg">{{ userInfo.mail }}</li>
+                            <li v-if="userInfo.mail" class="text-white text-lg">{{ userInfo.mail }}</li>
                             <div class="divider"></div>
                             <li class="">
                                 <button class="btn w-full" @click="signout">
@@ -114,9 +114,9 @@
         
             <div class="p-4 h-9/10 mt-15">
                 <gallery-component v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title"></gallery-component>
-                <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title"></quiz-component>
+                <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
-                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title"></meals-component>
+                <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title" :meals="appSetting.meals"></meals-component>
                 <face-detect-component v-else-if="appSetting.contentComponent === 'faceDetect'" :title="appSetting.title"></face-detect-component>
                 <eye-mouse-component v-else-if="appSetting.contentComponent === 'eyeMouse'" :title="appSetting.title"></eye-mouse-component>
             </div>
@@ -164,12 +164,9 @@
                         state: "",
                         contentComponent: "gallery",
                         title: "V.Demo",
-                        roles: [],
-                        commonFuncs: [],
-                        roleFuncs: {},
-                        users: [],
                         resources: [],
-                        languages: [],
+                        meals: [],
+                        quiz: {},
                     });
                     // 使用者資訊
                     const tempAccount = ref("");
@@ -184,21 +181,8 @@
                     });
 
                     // 初始化 app
-                    function init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj, langJsonObj){
-                        console.log("app.init");
-                        console.log("common functions=", cfJsonObj);
-                        console.log("role functions=", rfJsonObj);
-                        console.log("roles=", rJsonObj);
-                        console.log("users=", urJsonObj);
-                        console.log("resources=", rsJsonObj);
-                        console.log("languages=", langJsonObj);
-
-                        appSetting.commonFuncs = cfJsonObj;
-                        appSetting.roleFuncs = rfJsonObj;
-                        appSetting.roles = rJsonObj;
-                        appSetting.users = urJsonObj;
-                        appSetting.resources = rsJsonObj;
-                        appSetting.languages = langJsonObj;
+                    function init(){
+                        
                     }
                     // 重設系統設定
                     function resetAppSetting(){
@@ -230,40 +214,79 @@
                         //console.log("tempAccount.value=", tempAccount.value);
 
                         if(tempAccount.value){
-                            userInfo.account = tempAccount.value;
-                            console.log("userInfo.account=", userInfo.account);
-                            userInfo.name = tempAccount.value;
-                            console.log("userInfo.name=", userInfo.name);
-                            userInfo.shortName = userInfo.name.substr(0, 1);
-                            console.log("userInfo.shortName=", userInfo.shortName);
-                            userInfo.mail = tempAccount.value + "@mail.io";
-                            console.log("userInfo.mail=", userInfo.mail);
-                            // 使用者角色
-                            let userLang = "EN";
-                            userInfo.role = "tn000";
-                            for(let ur_i = 0; ur_i < appSetting.users.length; ur_i++){
-                                let ur = appSetting.users[ur_i];
-                                if(ur.account === tempAccount.value){
-                                    userInfo.role = ur.role;
-                                    userLang = ur.lang;
-                                    break;
-                                }
-                            }
-                            console.log("userInfo.role=", userInfo.role);
-                            // 角色限定功能
-                            userInfo.funcs = appSetting.roleFuncs[userInfo.role];
-                            // 共用功能
-                            appSetting.commonFuncs.forEach((cf, cf_i) => {
-                                userInfo.funcs.push(cf);
-                            });
-                            console.log("userInfo.funcs=", userInfo.funcs);
-
-                            userInfo.languages = appSetting.languages[userLang]; 
-
-                            // 設定 title of application
-                            appSetting.title = appSetting.roles[userInfo.role] ? appSetting.roles[userInfo.role]["appTitle"] : appSetting.title;
                             // close signinModal
                             document.getElementById("signinModal").close();
+
+                            let fetchAppSetting = fetchData({ 
+                                api: "get_app_setting",
+                            });
+
+                            let fetchUserData = fetchData({
+                                api: "login",
+                                data: {
+                                    account: tempAccount.value
+                                }
+                            });
+
+                            let fetchUserLanguage = fetchData({
+                                api: "get_language",
+                                data: {
+                                    account: tempAccount.value
+                                }
+                            });
+
+                            Promise.all([fetchAppSetting, fetchUserData, fetchUserLanguage]).then((values) => {
+                                console.log(values); 
+
+                                let appSettingObj = values[0];
+                                console.log("appSettingObj=", appSettingObj);
+                                // appSetting.resources
+                                {
+                                    appSetting.resources = [];
+                                    appSettingObj["resource"].forEach((appSetObj, as_i) => {
+                                        appSetting.resources.push({
+                                            name: appSetObj["name"],
+                                            link: appSetObj["link_url"],
+                                            text: appSetObj["display_text"],
+                                        });
+                                    });
+                                }
+
+                                // appSetting.meals
+                                appSetting.meals = appSettingObj["meal"];
+                                
+                                // appSetting.quiz
+                                appSetting.quiz = appSettingObj["quiz"];
+
+                                // user info
+                                {
+                                    let userInfoObj = values[1];
+                                    console.log("userInfoObj=", userInfoObj);
+                                    userInfo.account = userInfoObj["account"];
+                                    userInfo.name = userInfoObj["name"];
+                                    userInfo.shortName = userInfo.name.substr(0, 1);
+                                    userInfo.mail = userInfoObj["mail"];
+                                    userInfo.role = userInfoObj["role"];
+                                    userInfo.funcs = userInfoObj["function"];
+                                    appSetting.title = userInfoObj["app_title"];
+                                }
+
+                                // user language
+                                {
+                                    let userLangObj = values[2];
+                                    console.log("userLangObj=", userLangObj);
+                                    userInfo.languages = {};
+                                    userLangObj["words"].forEach((word, w_i) => {
+                                        let w_key = word["name"];
+                                        let w_display = word["display_text"];
+
+                                        userInfo.languages[w_key] = w_display;
+                                    });
+                                }
+
+                                // close signinModal
+                                document.getElementById("signinModal").close();
+                            });
                         }
                     }
                     // 登出
@@ -306,30 +329,11 @@
                 mounted(){
                     console.log("app.mounted", this.userInfo);
 
-                    // 取得系統資料
-                    {
-                        let fetchCommonFunc = fetchSysSetting("commonFunction.json");
-                        let fetchRoleFunc = fetchSysSetting("roleFunction.json");
-                        let fetchRole = fetchSysSetting("role.json");
-                        let fetchUserRole = fetchSysSetting("user.json");
-                        let fetchRscs = fetchSysSetting("resources.json");
-                        let fetchLanguage = fetchSysSetting("language.json");
+                    this.init();
 
-                        Promise.all([fetchCommonFunc, fetchRoleFunc, fetchRole, fetchUserRole, fetchRscs, fetchLanguage]).then((values) => {
-                            //console.log(values); 
-                            let cfJsonObj = values[0];
-                            let rfJsonObj = values[1];
-                            let rJsonObj = values[2];
-                            let urJsonObj = values[3];
-                            let rsJsonObj = values[4];
-                            let langJsonObj = values[5];
-                            this.init(cfJsonObj, rfJsonObj, rJsonObj, urJsonObj, rsJsonObj, langJsonObj);
-
-                            // 沒有使用者資訊時, 跳出 signinModal
-                            if(!this.userInfo.account){
-                                document.getElementById("signinModal").showModal();
-                            }
-                        });
+                    // 沒有使用者資訊時, 跳出 signinModal
+                    if(!this.userInfo.account){
+                        document.getElementById("signinModal").showModal();
                     }
                 },
             });
