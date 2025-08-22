@@ -1,5 +1,5 @@
 
-// 取得系統設定檔案  json 內容
+// 取得檔案  json 內容
 function fetchSysSetting(jsonFileName){
     if(!jsonFileName) return  null;
 
@@ -13,11 +13,9 @@ function fetchSysSetting(jsonFileName){
     return fetchJsonPromise;
 }
 
+// 至 Cloud Run Function 取得 Firestore 資料
 function fetchData(postData){
     let fetchDataPromise = new Promise((resolve, reject) => {
-        // 開啟"系統處理中 mask"
-        $("#loading").show();
-
         const cloudRunUrl = "https://coder-k49-582921678854.asia-east1.run.app/";
 
         fetch(cloudRunUrl, {
@@ -36,16 +34,10 @@ function fetchData(postData){
             return response.json();
         })
         .then(data => {
-            // 關閉"系統處理中 mask"
-            $("#loading").hide();
-
             //console.log('Success:', data);
             resolve(data);
         })
         .catch(error => {
-            // 關閉"系統處理中 mask"
-            $("#loading").hide();
-            
             console.error('Error:', error);
             reject('Error:' + error);
         });

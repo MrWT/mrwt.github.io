@@ -214,6 +214,9 @@
                         //console.log("tempAccount.value=", tempAccount.value);
 
                         if(tempAccount.value){
+                            // 開啟"系統處理中 mask"
+                            $("#loading").show();
+
                             // close signinModal
                             document.getElementById("signinModal").close();
 
@@ -286,6 +289,9 @@
 
                                 // close signinModal
                                 document.getElementById("signinModal").close();
+
+                                // 關閉"系統處理中 mask"
+                                $("#loading").hide();
                             });
                         }
                     }
