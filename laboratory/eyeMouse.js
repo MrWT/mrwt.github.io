@@ -12,7 +12,7 @@ const template = `
     </div>
 
     <div v-show="!isLoading" class="relative w-full max-w-3xl">
-      <video ref="videoEl" @play="onPlay" muted autoplay playsinline class="w-full h-auto rounded-lg shadow-lg"></video>
+      <video ref="videoEl" muted autoplay playsinline class="w-full h-auto rounded-lg shadow-lg"></video>
       <canvas ref="canvasEl" class="absolute top-0 left-0"></canvas>
     </div>
     <p v-if="errorMsg" class="text-red-500 mt-4">{{ errorMsg }}</p>
@@ -41,7 +41,7 @@ export default {
         let isBlinking = false;
         // -------------------------
 
-        let detectionInterval = null;
+        let detectionInterval = ref(null);
 
         // 初始化 component
         async function init() {
@@ -58,7 +58,7 @@ export default {
                 startVideo();
             } catch (err) {
                 console.error("模型載入失敗:", err);
-                errorMsg.value = "模型載入失敗，請檢查網路連線或模型路徑。";
+                errorMsg.value = "模型載入失敗，請檢查網路連線或模型路徑。"; 
                 isLoading.value = false;
             }
         }
@@ -69,6 +69,8 @@ export default {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
                 if (videoEl.value) {
                     videoEl.value.srcObject = stream;
+
+                    play();
                 }
             } catch (err) {
                 console.error("無法啟動攝影機:", err);
@@ -78,14 +80,14 @@ export default {
         }
 
         // 當影像開始播放時觸發
-        function onPlay() {
+        function play() {
             console.log("攝影機已啟動");
             isLoading.value = false;
 
-            if (detectionInterval) clearInterval(detectionInterval);
+            if (detectionInterval.value) clearInterval(detectionInterval.value);
 
             // 每 100 毫秒偵測一次
-            detectionInterval = setInterval(async () => {
+            detectionInterval.value = setInterval(async () => {
                 if (!videoEl.value || !canvasEl.value) return;
 
                 // --- 核心偵測與控制邏輯 ---
@@ -197,9 +199,9 @@ export default {
             isLoading,
             errorMsg,
             customCursor,
+            detectionInterval,
 
             init,
-            onPlay,
         }
     },
     mounted() {
@@ -209,7 +211,7 @@ export default {
     beforeUnmount() {
         console.log("eye-mouse.beforeUnmount");
         // 元件銷毀前，清除 interval 並關閉攝影機
-        if (detectionInterval) clearInterval(detectionInterval);
+        if (this.detectionInterval) clearInterval(this.detectionInterval);
         if (this.videoEl && this.videoEl.srcObject) {
             this.videoEl.srcObject.getTracks().forEach(track => track.stop());
         }
