@@ -125,7 +125,7 @@
                 <div class="modal-box">
                     <h3 class="text-lg font-bold text-center">Hello!</h3>
                     <div class="flex justify-center items-center gap-2">
-                        <input type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" />
+                        <input id="signinName" type="text" placeholder="What's your name?" class="input input-ghost" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" autofocus />
                         <button class="btn btn-primary" @click="signin" >
                             <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
@@ -256,7 +256,7 @@
 
                                 // 動態載入 Google Maps API
                                 {
-                                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?key=" + appSettingObj["google_map_key"];
+                                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?key=" + appSettingObj["google_map_key"]; // + "&libraries=marker";
                                     const script = document.createElement('script');
                                     script.src = google_map_api_src;
                                     script.defer = true;
@@ -267,7 +267,7 @@
                                 
                                 //console.log("appSetting.google_map_key=", appSetting.google_map_key);
                                 // appSetting.meals
-                                appSetting.meals = appSettingObj["meal"];
+                                appSetting.meals = appSettingObj["restaurant"];
                                 
                                 // appSetting.quiz
                                 appSetting.quiz = {
@@ -316,6 +316,9 @@
                         resetUserInfo();
                         resetAppSetting();
                         document.getElementById("signinModal").showModal();
+                        setTimeout(() => {
+                            document.getElementById("signinName").focus();
+                        }, 400);
                     }
                     // 進入全螢幕模式
                     function launchIntoFullscreen() {
@@ -356,6 +359,10 @@
                     // 沒有使用者資訊時, 跳出 signinModal
                     if(!this.userInfo.account){
                         document.getElementById("signinModal").showModal();
+                        setTimeout(() => {
+                            document.getElementById("signinName").focus();
+                        }, 400);
+
                     }
                 },
             });
