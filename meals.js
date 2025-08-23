@@ -13,11 +13,8 @@ const template = `
                 <div class="w-10/10 text-xl">
                     {{ mealObj.name }}
                 </div>
-                <div class="w-10/10 text-md">
-                    {{ mealObj.restaurant.name }}
-                </div>
                 <div class="w-10/10 text-xs flex items-center">
-                    ( {{ mealObj.restaurant.address }} )
+                    ( {{ mealObj.address }} )
                     <svg class="w-6 h-6 text-gray-800 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
@@ -44,16 +41,6 @@ const template = `
             </div>
         </div>
     </div>
-    <!--
-    <div class="w-10/10 h-10/10 grid grid-cols-3">
-        <div class="w-10/10 h-10/10 col-start-2 flex flex-col gap-4">
-            <div class="skeleton h-32 w-full"></div>
-            <div class="skeleton h-4 w-28"></div>
-            <div class="skeleton h-4 w-full"></div>
-            <div class="skeleton h-4 w-full"></div>
-        </div>
-    </div>
-    -->
     <div class="w-10/10 h-10/10">
         <div id="map" class="w-full h-full"></div>
     </div>
@@ -78,8 +65,6 @@ export default {
             console.log("props.meals=", props.meals);
 
             genMealCards();
-
-            drawMap();
         }
         // 依序產生 meal 清單
         function genMealCards(){
@@ -112,6 +97,10 @@ export default {
 
             // 將翻卡開關設定回原來狀態
             $('#iptToggle').prop('checked', isOriginalChecked);
+
+            // 準備畫 google map
+            drawMap(mealCards[0].name, parseFloat(mealCards[0].latitude), parseFloat(mealCards[0].longitude));
+
         }
         // 自動翻卡開關
         function toggleChangeCard(event){
@@ -152,6 +141,10 @@ export default {
 
                     clearInterval(turnOverId);
                     turnOverId = null;
+
+                    // 準備畫 google map 
+                    drawMap(mealCards[0].name, parseFloat(mealCards[0].latitude), parseFloat(mealCards[0].longitude));
+
                 }
                 turnOver_count += 1;
             }, 100);
@@ -165,24 +158,46 @@ export default {
             console.log("selectCard", sel_mealObj);
         }
         // 畫 Google Map
-        function drawMap(){
-            // 設定地圖的中心點座標
-            const center = { lat: 23.025185874028434, lng: 120.19128847252192 };
+        async function drawMap(restaurantName, lat, lng){
+            console.log("drawMap", lat, lng);
+            if(lat && lng){
+                // 設定地圖的中心點座標
+                const location = { lat: lat, lng: lng };
 
-            // 創建一個新的地圖實例
-            const map = new google.maps.Map(document.getElementById("map"), {
-                center: center, // 設定地圖的中心點
-                // 設定地圖縮放比例 0-20
-                zoom: 17,
-                // 限制使用者能縮放地圖的最大比例
-                maxZoom: 20,
-                // 限制使用者能縮放地圖的最小比例
-                minZoom: 3,
-                // 設定是否呈現右下角街景小人
-                streetViewControl: false,
-                // 設定是否讓使用者可以切換地圖樣式：一般、衛星圖等
-                mapTypeControl: false
-            });
+                // 創建一個新的地圖實例
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    mapId: "DEMO_MAP_ID", // Map ID is required for advanced markers.
+                    center: location, // 設定地圖的中心點
+                    // 設定地圖縮放比例 0-20
+                    zoom: 17,
+                    // 限制使用者能縮放地圖的最大比例
+                    maxZoom: 20,
+                    // 限制使用者能縮放地圖的最小比例
+                    minZoom: 3,
+                    // 設定是否呈現右下角街景小人
+                    streetViewControl: false,
+                    // 設定是否讓使用者可以切換地圖樣式：一般、衛星圖等
+                    mapTypeControl: false,
+                });
+
+                const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+                
+                // 建立一個黃色底色、白色文字的 PinElement
+                const pin = new google.maps.marker.PinElement({
+                    scale: 1.25,
+                    background: 'black',
+                    borderColor: 'red',
+                    glyph: restaurantName,             // 可填入文字或字元
+                    glyphColor: 'white'
+                });
+                const marker = new AdvancedMarkerElement({
+                    position: location,
+                    map: map,
+                    //content: pin.element,
+                });
+
+            }
         }
 
         return {
