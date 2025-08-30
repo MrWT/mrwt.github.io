@@ -9,9 +9,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
-        <script src="./index.js"></script>
-        <link href="./masonry.css" rel="stylesheet" type="text/css" />
-        <link href="./app.css" rel="stylesheet" type="text/css" />
+        <script src="../index.js"></script>
+        <link href="../masonry.css" rel="stylesheet" type="text/css" />
+        <link href="../app.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <!-- 系統 loading mask -->
@@ -78,7 +78,7 @@
                         </div>
                     </button>
                     <button v-if="userInfo.funcs.indexOf('setting') !== -1" class="btn btn-ghost btn-circle" @click="gotoPage('setting')">
-                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                         </svg>
@@ -123,8 +123,8 @@
                 <quiz-component v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz"></quiz-component>
                 <readme-component v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"></readme-component>
                 <meals-component v-else-if="appSetting.contentComponent === 'meals'" :title="appSetting.title" :meals="appSetting.meals" :googleMapKey="appSetting.google_map_key"></meals-component>
-                <finance-component v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :meals="appSetting.meals" :googleMapKey="appSetting.google_map_key"></finance-component>
-                <setting-component v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :meals="appSetting.meals" :googleMapKey="appSetting.google_map_key"></setting-component>
+                <finance-component v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" :googleMapKey="appSetting.google_map_key"></finance-component>
+                <setting-component v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :googleMapKey="appSetting.google_map_key"></setting-component>
                 
                 <face-detect-component v-else-if="appSetting.contentComponent === 'faceDetect'" :title="appSetting.title"></face-detect-component>
                 <eye-mouse-component v-else-if="appSetting.contentComponent === 'eyeMouse'" :title="appSetting.title"></eye-mouse-component>
@@ -151,15 +151,15 @@
         </script>
         <script type="module">
             import { createApp, ref, reactive } from 'vue'
-            import gallery from './gallery.js'
-            import quiz from './quiz.js'
-            import readme from './readme.js'
-            import meals from './meals.js'
-            import finance from './finance.js'
-            import setting from './setting.js'
+            import gallery from '../gallery.js'
+            import quiz from '../quiz.js'
+            import readme from '../readme.js'
+            import meals from '../meals.js'
+            import finance from '../finance.js'
+            import setting from '../setting.js'
 
-            import faceDetect from './laboratory/faceDetect.js'
-            import eyeMouse from './laboratory/eyeMouse.js'
+            import faceDetect from '../laboratory/faceDetect.js'
+            import eyeMouse from '../laboratory/eyeMouse.js'
 
             const app = createApp({
                 components: {
