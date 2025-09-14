@@ -22,6 +22,10 @@
             target: 0,
             remain: 0,
         },
+        deposit_Speed:{
+            value1: 0,
+            value2: 0,
+        },
         deposit_TWD:{
             value: 0,
         },
@@ -135,6 +139,10 @@
                     // 奈米投資訊
                     finance.stock_nano.value = finObj["value1"];
                     finance.stock_nano.currency = finObj["value2"];
+                } else if(finObj["name"] === "speed"){
+                    // 台幣存款速度
+                    finance.deposit_Speed.value1 = finObj["value1"];
+                    finance.deposit_Speed.value2 = finObj["value2"];
                 } else if(finObj["name"] === "deposit" && finObj["currency"] === "TWD"){
                     // 台幣存款資訊
                     finance.deposit_TWD.value = finObj["value1"];
@@ -367,6 +375,118 @@
 <template>
 
 <div class="tabs tabs-border">
+
+    <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定 Finance" />
+    <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
+        <div class="divider">
+            Finance 資料
+        </div>
+        <div class="flex w-10/10 h-4/10 md:flex-row flex-col">
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
+                <legend class="fieldset-legend text-lg">House</legend>
+
+                <label class="label">目標</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.house.target" />
+            </fieldset>
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
+                <legend class="fieldset-legend text-lg">信貸</legend>
+
+                <label class="label">目標</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.target" />
+
+                <label class="label">剩餘</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.remain" />
+
+            </fieldset>
+
+        </div>
+        <div class="flex w-10/10 h-4/10 md:flex-row flex-col">
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
+                <legend class="fieldset-legend text-lg">存款速度</legend>
+
+                <label class="label">每期台幣存款( 每期為 3 個月 )</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value1" />
+
+                <label class="label">每期進帳股息( 每期為 3 個月 )</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value2" />
+            </fieldset>
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
+                <legend class="fieldset-legend text-lg">存款( TWD )</legend>
+
+                <label class="label">價值</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_TWD.value" />
+            </fieldset>
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
+                <legend class="fieldset-legend text-lg">存款( USD )</legend>
+
+                <label class="label">價值</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.value" />
+
+                <label class="label">匯率</label>
+                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.currency" />
+            </fieldset>
+        </div>
+        <div class="flex w-10/10 h-4/10 md:flex-row flex-col mt-1">
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
+                <legend class="fieldset-legend text-lg">0056.TW</legend>
+
+                <div class="flex w-10/10 flex-col">
+                    <label class="label">股數</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.num" />
+
+                    <label class="label">單價</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.price" />
+                </div>
+            </fieldset>
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
+                <legend class="fieldset-legend text-lg">00878.TW</legend>
+
+                <div class="flex w-10/10 flex-col">
+                    <label class="label">股數</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.num" />
+
+                    <label class="label">單價</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.price" />
+                </div>
+            </fieldset>
+        </div>
+        <div class="flex w-10/10 h-4/10 md:flex-row flex-col mt-1">
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
+                <legend class="fieldset-legend text-lg">00919.TW</legend>
+
+                <div class="flex w-10/10 flex-col">
+                    <label class="label">股數</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.num" />
+
+                    <label class="label">單價</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.price" />
+                </div>
+            </fieldset>
+
+            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
+                <legend class="fieldset-legend text-lg">nano.USD</legend>
+
+                <div class="flex w-10/10 flex-col">
+                    <label class="label">價值</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_nano.value" />
+
+                    <label class="label">匯率</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_nano.currency" />
+                </div>
+            </fieldset>
+        </div>
+        <div class="w-10/10 h-1/10 flex flex-row-reverse mt-1">
+            <button class="btn btn-neutral w-1/10 mx-1" @click="saveFinance">
+                save
+            </button>
+        </div>
+    </div>
+
     <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定個人資料" />
     <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -395,90 +515,6 @@
         </div>
         <div class="w-10/10 flex flex-row-reverse mt-1">
             <button class="btn btn-neutral w-1/10 mx-1" @click="saveUser">
-                save
-            </button>
-        </div>
-    </div>
-
-    <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定 Finance" />
-    <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
-        <div class="divider">
-            Finance 資料
-        </div>
-        <div class="flex w-10/10 h-4/10 flex-row">
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">House</legend>
-
-                <label class="label">目標</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.house.target" />
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">信貸</legend>
-
-                <label class="label">目標</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.target" />
-
-                <label class="label">剩餘</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.remain" />
-
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">存款( TWD )</legend>
-
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_TWD.value" />
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">存款( USD )</legend>
-
-                <label class="label">價值</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.value" />
-
-                <label class="label">匯率</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.currency" />
-            </fieldset>
-        </div>
-        <div class="flex w-10/10 h-4/10 flex-row mt-1">
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">0056.TW</legend>
-
-                <div class="flex w-10/10 flex-row">
-                    <label class="label">股數</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.num" />
-
-                    <label class="label">單價</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.price" />
-                </div>
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">00878.TW</legend>
-
-                <div class="flex w-10/10 flex-row">
-                    <label class="label">股數</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.num" />
-
-                    <label class="label">單價</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.price" />
-                </div>
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">00919.TW</legend>
-
-                <div class="flex w-10/10 flex-row">
-                    <label class="label">股數</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.num" />
-
-                    <label class="label">單價</label>
-                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.price" />
-                </div>
-            </fieldset>
-        </div>
-        <div class="w-10/10 h-1/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-1/10 mx-1" @click="saveFinance">
                 save
             </button>
         </div>

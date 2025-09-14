@@ -20,106 +20,66 @@
     let appState = ref("");
     // 選擇的圖片 url
     let selImgUrl = ref("");
-    // 生成的磚塊清單
-    let bricks = reactive([]);
+    // 生成的 channels
+    let channel_1 = reactive([]);
+    let channel_2 = reactive([]);
+    let channel_3 = reactive([]);
+    let channel_4 = reactive([]);
     // 圖片清單
-    let imageUrls = reactive([
-        "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp",
-        "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp",
-        "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp",
-        "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp",
-        "https://img.daisyui.com/images/stock/453966.webp",
-    ]);
-    // 生成的 sin wave 資料
-    let sinTime = ref(0);
+    let imageUrls = [
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
+        "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
+    ];
 
     // 初始化 component
     function init(){
         console.log("gallery.init");
-        // 建立區塊
-        genBricks();
+        // 建立 channel
+        genChannels();
     }
-    // 取得 image 長寬比
-    function getImageRatio(imageUrl){
-        return new Promise((resolve, reject) => {
-            let img = new Image();
-            img.onload = function() {
-                const naturalWidth = img.naturalWidth;
-                const naturalHeight = img.naturalHeight;
+    // 建立 channel
+    function genChannels(){
+        // 清空 channels
+        channel_1.splice(0, channel_1.length);
+        channel_2.splice(0, channel_2.length);
+        channel_3.splice(0, channel_3.length);
+        channel_4.splice(0, channel_4.length);
 
-                function gcd(a, b) {
-                    return b === 0 ? a : gcd(b, a % b);
-                }
+        let imgCount = imageUrls.length / 4;
+        console.log("imgCount=", imgCount);
 
-                const commonDivisor = gcd(naturalWidth, naturalHeight);
-                const simplifiedWidth = naturalWidth / commonDivisor;
-                const simplifiedHeight = naturalHeight / commonDivisor;
+        let channelIndex = 0;
+        let imgGrpIndex = 0;
+        imageUrls.forEach((imgSrc, is_i) => {
+            imgGrpIndex = imgGrpIndex % imgCount;
+            channelIndex += imgGrpIndex === 0 ? 1 : 0;
+            channelIndex = channelIndex % 4;
 
-                resolve({width: simplifiedWidth, height: simplifiedHeight});
-            }
-            img.src = imageUrl;
-        });
-    }
-    // 建立區塊
-    async function genBricks(imageUrl){
-        // 清空 bricks
-        bricks.splice(0, bricks.length);
-
-        let brickCount = getRandomNumber(7, 20);
-
-        let imageBrickIndexs = [];
-        imageUrls.forEach((iu, iu_i) => {
-            while(imageBrickIndexs.length < imageUrls.length){
-            let randomIndex = getRandomNumber(0, brickCount);
-
-            if(imageBrickIndexs.indexOf(randomIndex) < 0){
-                imageBrickIndexs.push(randomIndex);
-            }
+            switch(channelIndex){
+                case 0:
+                channel_1.push( imgSrc );
+                break;
+                case 1:
+                channel_2.push( imgSrc );
+                break;
+                case 2:
+                channel_3.push( imgSrc );
+                break;
+                case 3:
+                channel_4.push( imgSrc );
+                break;
             }
         });
-
-        let imgSrc = null;
-        let imgRatio = null;
-        let className = "";
-        let bgColor = "";
-        for(let mb_i = 0; mb_i < brickCount; mb_i++){
-            imgSrc = null;
-            imgRatio = null;
-            className = "";
-            bgColor = "#"
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16)
-                        + getRandomNumber(0, 15).toString(16);
-
-            if(imageBrickIndexs.indexOf(mb_i) >= 0){
-                imgSrc = imageUrls[ imageBrickIndexs.indexOf(mb_i) ];
-                imgRatio = await getImageRatio(imgSrc);
-            }
-
-            if(imgSrc){
-                if(imgRatio["height"] > imgRatio["width"]){
-                    // 直式圖
-                    className = "h-70 w-55 rounded-box object-fill cursor-pointer";
-                }else{
-                    // 橫式圖
-                    className = "h-20 w-96 rounded-box object-fill cursor-pointer";
-                }
-                bgColor = "transparent";
-            }else{
-                let sizeValue = getRandomNumber(3, 10);
-                className = "h-" + sizeValue + " w-" + sizeValue + " rounded-box";
-            }
-
-            bricks.push({
-                text: "",
-                style: "background-color: " + bgColor + ";",
-                imgSrc: imgSrc,
-                className: className,
-            });
-        }
     }
     // showModal
     function showModal(imgUrl){
@@ -131,18 +91,34 @@
 
 <template>
 
-<div class="w-10/10 h-10/10 overflow-y-auto flex flex-wrap justify-center">
-    <div v-for="(brickObj, brick_i) in bricks" class="m-1 rounded-box place-content-center" :style="brickObj.style">
-        <img v-if="brickObj.imgSrc !== null" :src="brickObj.imgSrc" :class="brickObj.className" @click="showModal(brickObj.imgSrc)" />
-        <div v-if="brickObj.imgSrc === null" :class="brickObj.className">{{ brickObj.text }}</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid gap-4">
+        <div v-for="(imgSrc, is_i) in channel_1">
+            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
+        </div>
+    </div>
+    <div class="grid gap-4">
+        <div v-for="(imgSrc, is_i) in channel_2">
+            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
+        </div>
+    </div>
+    <div class="grid gap-4">
+        <div v-for="(imgSrc, is_i) in channel_3">
+            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
+        </div>
+    </div>
+    <div class="grid gap-4">
+        <div v-for="(imgSrc, is_i) in channel_4">
+            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
+        </div>
     </div>
 </div>
 
 <dialog id="imgModal" class="modal">
-  <div class="modal-box">
+  <div class="modal-box w-10/10 h-8/10">
     <h3 class="text-lg font-bold">Hello!</h3>
-    <div class="w-10/10 h-10/10">
-      <img :src="selImgUrl" class="object-none" />
+    <div class="w-10/10 h-8/10 justify-items-center content-center">
+      <img :src="selImgUrl" class="max-h-full object-fill rounded-lg" />
     </div>
 
     <div class="modal-action">

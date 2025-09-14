@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mr.K49</title>
+
+    <!-- 防止出現 favion.ico 錯誤 -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
   </head>
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -69,7 +72,7 @@
       }
     </script>
 
-    <div id="app" class="w-full h-screen overflow-hidden"></div>
+    <div id="app" class="w-full h-screen overflow-y-auto overflow-x-hidden"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

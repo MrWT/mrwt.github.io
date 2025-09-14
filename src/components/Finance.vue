@@ -27,6 +27,7 @@
             remainText: "",
             remainValue: null,
         },
+        speed: 0,
     });
     let deposit_TWD = ref(0);
     let deposit_USD = ref(0);
@@ -72,6 +73,7 @@
             let creditObj = null;
             let depositObj_TWD = null;
             let depositObj_USD = null;
+            let depositObj_Speed = null;
             values[0].forEach((finObj, fin_i) => {
                 if(finObj["name"] === "house"){
                     // 購屋資訊
@@ -91,6 +93,9 @@
                 } else if(finObj["name"] === "deposit" && finObj["currency"] === "USD"){
                     // 美金存款資訊
                     depositObj_USD = finObj;
+                } else if(finObj["name"] === "speed"){
+                    // 存款速度資訊
+                    depositObj_Speed = finObj;
                 }
             });
             buildStockTW(stockDatas_TWD);
@@ -99,6 +104,7 @@
             buildDepositUSD(depositObj_USD);
             buildCreditBlock(creditObj, depositObj_TWD);
             buildHouseBlock(houseObj, depositObj_USD,  stockData_USD);
+            buildSpeedBlock(depositObj_Speed);
         });
     }
     // 建立"購屋進度"區塊
@@ -139,6 +145,23 @@
                                                 + "=" + (new Intl.NumberFormat().format(currentValue - depositValue)) + "";
         progressSetting.credit.remainText += "( " + progressSetting.credit.remainValue + "% )";
     }
+    // 建立"存款速度"區塊
+    function buildSpeedBlock(depositData){
+        //console.log("buildSpeedBlock.depositData=", depositData);
+
+        let targetValue = 100 * 10000; // 目標: 存到 100 萬台幣的速度
+        let value1 = parseInt( depositData["value1"] ); // 每期可以存到的台幣( 每期是 3 個月 )
+        let value2 = parseInt( depositData["value2"] ); // 每期可以存到的股息( 每期是 3 個月 )
+        let valuePerMonth = ( value1 + value2 ) / 3; // 每個月共可存到的台幣
+
+        let speed = Math.floor( targetValue / valuePerMonth );
+
+        console.log("buildSpeedBlock.targetValue=" + targetValue);
+        console.log("buildSpeedBlock.valuePerMonth=" + valuePerMonth);
+        console.log("buildSpeedBlock.speed=" + speed);
+
+        progressSetting["speed"] = speed;
+    }
     // 建立"台灣股票"區塊
     function buildStockTW(stockDatas){
         console.log("buildStockTW.stockDatas=", stockDatas);
@@ -173,68 +196,6 @@
         });
         stockTW.totalValue = new Intl.NumberFormat().format(stockTotalValue);
         stockTW.totalTWD = new Intl.NumberFormat().format(stockTotalTWD);
-
-        // console.log("stockLabels=", stockLabels);
-        // console.log("stockSeries=", stockSeries);
-
-        let selDataPointIndex = -1;
-        // 設定 echart option
-        let option = {
-            chart: {
-                type: 'pie',
-                height: '100%',
-                events: {
-                    dataPointMouseEnter: function(event, chartContext, opts) {
-                        // console.log("chart.events.event", event);
-                        // console.log("chart.events.chartContext", chartContext);
-                        // console.log("chart.events.opts", opts);
-
-                        selDataPointIndex = opts["dataPointIndex"];
-                    },
-                    /*
-                    dataPointMouseLeave: function(event, chartContext, opts) {
-                        console.log("chart.events.event", event);
-                        console.log("chart.events.chartContext", chartContext);
-                        console.log("chart.events.opts", opts);
-                    }
-                    */
-                },
-            },
-            legend: {
-                show: true,
-                position: 'bottom',
-            },
-            tooltip: {
-                custom: function({series, seriesIndex, dataPointIndex, w}) {
-                    //console.log("tooltip.custom.w=", w);
-                    let stockName = w["config"]["labels"][selDataPointIndex];
-                    let stockNum = series[selDataPointIndex];
-                    let stockTWD = stockNum * stockDatas[selDataPointIndex]["value2"];
-                    let stockStatus = stockDatas[selDataPointIndex]["status"];
-
-                    let format_v = new Intl.NumberFormat('en-US').format(stockNum);
-                    let format_t = new Intl.NumberFormat('en-US').format(stockTWD);
-
-                    let tooltipContent = "";
-                    tooltipContent += "<div class='flex flex-col p-5'>";
-
-                    tooltipContent += "<div class='w-10/10 h-3/10 text-center text-xl'>" + stockName + "</div>";
-                    tooltipContent += "<div class='w-10/10 h-3/10 text-left text-base'>股數: " + format_v + "</div>";
-                    tooltipContent += "<div class='w-10/10 h-3/10 text-left text-base'>TWD: " + format_t + "</div>";
-                    tooltipContent += "<div class='w-10/10 h-3/10 text-center text-base'>" + stockStatus + "</div>";
-
-                    tooltipContent += "</div>";
-
-                    return tooltipContent;
-                }
-            },
-            series: stockSeries,
-            labels: stockLabels,
-
-        };
-
-        let twStock = new ApexCharts(document.getElementById("twStock"), option);
-        twStock.render();
     }
     // 建立"全球股票"區塊
     function buildStockGlobal(stockData){
@@ -262,97 +223,91 @@
 <template>
 
 <div class="flex flex-col w-10/10 h-10/10">
-    <div class="flex flex-row w-10/10 h-3/10">
-        <div class="card bg-base-300 rounded-box grid h-10/10 w-5/10 place-items-center">
-            <div class="flex flex-col w-8/10">
-                <span>{{ progressSetting.house.targetText }}</span>
-                <span>{{ progressSetting.house.progressText }}</span>
-            </div>
-            <progress class="w-8/10 progress"
-                    :class="{ 'progress-error': progressSetting.house.value && progressSetting.house.value < 50,
-                              'progress-warning': progressSetting.house.value && 50 <= progressSetting.house.value && progressSetting.house.value < 80,
-                              'progress-info': progressSetting.house.value && 80 <= progressSetting.house.value && progressSetting.house.value < 90,
-                              'progress-success': progressSetting.house.value && 90 <= progressSetting.house.value }"
-                    :value="progressSetting.house.value" :max="progressSetting.house.max">
-            </progress>
+
+    <div class="flex md:flex-row flex-col w-10/10">
+        <div class="card bg-red-300 rounded-box grid h-10/10 md:w-2/10 w-10/10 place-items-center">
+            <div class="w-10/10 text-3xl text-center">{{ progressSetting["speed"] }}<span class="text-sm">個月</span></div>
         </div>
-        <div class="divider divider-horizontal"></div>
-        <div class="card bg-base-300 rounded-box grid h-10/10 w-5/10 place-items-center">
-            <div class="flex flex-col w-8/10">
-                <span>{{ progressSetting.credit.targetText }}</span>
-                <span>{{ progressSetting.credit.progressText }}</span>
-            </div>
-            <progress class="w-8/10 progress"
-                    :class="{ 'progress-error': progressSetting.credit.value && progressSetting.credit.value < 50,
-                              'progress-warning': progressSetting.credit.value && 50 <= progressSetting.credit.value && progressSetting.credit.value < 80,
-                              'progress-info': progressSetting.credit.value && 80 <= progressSetting.credit.value && progressSetting.credit.value < 90,
-                              'progress-success': progressSetting.credit.value && 90 <= progressSetting.credit.value }"
-                    :value="progressSetting.credit.value" :max="progressSetting.credit.max">
-            </progress>
-            <div class="flex flex-col w-8/10">
-                <span>{{ progressSetting.credit.remainText }}</span>
-            </div>
-            <progress class="w-8/10 progress"
-                    :class="{ 'progress-error': progressSetting.credit.remainValue && progressSetting.credit.remainValue < 50,
-                              'progress-warning': progressSetting.credit.remainValue && 50 <= progressSetting.credit.remainValue && progressSetting.credit.remainValue < 80,
-                              'progress-info': progressSetting.credit.remainValue && 80 <= progressSetting.credit.remainValue && progressSetting.credit.remainValue < 90,
-                              'progress-success': progressSetting.credit.remainValue && 90 <= progressSetting.credit.remainValue }"
-                    :value="progressSetting.credit.remainValue" :max="progressSetting.credit.max">
-            </progress>
+        <div class="divider"></div>
+        <div class="card bg-base-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 place-items-center px-10">
+            <div class="w-10/10 text-xl">總股數: {{ stockTW.totalValue }}</div>
+            <div class="w-10/10 text-lg">台股總市值 TWD: {{ stockTW.totalTWD }}</div>
         </div>
-    </div>
-    <div class="divider">
-        &nbsp;&nbsp;
-    </div>
-    <div class="flex flex-row w-10/10 h-7/10">
-        <div class="flex flex-col w-5/10 h-10/10">
-            <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
-                <div class="w-6/10 text-2xl">存款 USD: {{ deposit_USD }}</div>
-                <div class="w-6/10 text-lg">約當 TWD( 1:30 ): {{ deposit_LikeTWD }}</div>
-            </div>
+        <div class="divider"></div>
+        <div class="card bg-gray-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 place-items-start px-10">
+            <span>0056.TW </span> 
+            <span>股數: {{ stockTW.tw0056 }} / TWD: {{ stockTW.tw0056_TWD }}</span>
             <div class="divider"></div>
-            <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
-                <div class="w-6/10 text-2xl">奈米投 USD: {{ stock_USD }}</div>
-                <div class="w-6/10 text-lg">約當 TWD( 1:30 ): {{ stock_LikeTWD }}</div>
-            </div>
-        </div>
-        <div class="divider divider-horizontal"></div>
-        <div class="flex flex-col w-5/10 h-10/10">
-            <div class="card bg-base-300 rounded-box grid h-3/10 w-10/10 place-items-center">
-                <div class="w-6/10 text-2xl">存款 TWD: {{ deposit_TWD }}</div>
-            </div>
-            <div class="divider"></div>
-            <div class="flex flex-row w-10/10 h-7/10">
-                <div class="card bg-base-300 rounded-box grid h-10/10 w-6/10 place-items-center">
-                    <!-- Pie Chart -->
-                    <div id="twStock" class="h-10/10 w-10/10"></div>
-                </div>
-                <div class="divider divider-horizontal"></div>
-                <div class="card bg-base-300 rounded-box h-10/10 w-4/10 px-2">
-                    <div class="w-10/10 text-sm">總股數: {{ stockTW.totalValue }}</div>
-                    <div class="w-10/10 text-sm">TWD: {{ stockTW.totalTWD }}</div>
-
-                    <div class="card bg-slate-300 rounded-box w-10/10 mb-1 px-2">
-                        <div class="w-10/10 text-xs">0056.TW</div>
-                        <div class="w-10/10 text-xs">股數: {{ stockTW.tw0056 }}</div>
-                        <div class="w-10/10 text-xs">TWD: {{ stockTW.tw0056_TWD }}</div>
-                    </div>
-
-                    <div class="card bg-slate-300 rounded-box w-10/10 mb-1 px-2">
-                        <div class="w-10/10 text-xs">00878.TW</div>
-                        <div class="w-10/10 text-xs">股數: {{ stockTW.tw00878 }}</div>
-                        <div class="w-10/10 text-xs">TWD: {{ stockTW.tw00878_TWD }}</div>
-                    </div>
-
-                    <div class="card bg-slate-300 rounded-box w-10/10 px-2">
-                        <div class="w-10/10 text-xs">00919.TW</div>
-                        <div class="w-10/10 text-xs">股數: {{ stockTW.tw00919 }}</div>
-                        <div class="w-10/10 text-xs">TWD: {{ stockTW.tw00919_TWD }}</div>
-                    </div>
-                </div>
-            </div>
+            <span>00878.TW </span>
+            <span>股數: {{ stockTW.tw00878 }} / TWD: {{ stockTW.tw00878_TWD }}</span>
+            <div class="divider"></div>            
+            <span>00919.TW </span>
+            <span>股數: {{ stockTW.tw00919 }} / TWD: {{ stockTW.tw00919_TWD }}</span>
         </div>
     </div>
+
+    <div class="divider"></div>
+
+    <div class="card bg-base-300 rounded-box grid h-3/10 w-10/10 place-items-center">
+        <div class="w-8/10 text-2xl">存款 TWD: {{ deposit_TWD }}</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 place-items-center">
+        <div class="flex flex-col md:w-8/10 w-10/10">
+            <span>{{ progressSetting.credit.targetText }}</span>
+            <span>{{ progressSetting.credit.progressText }}</span>
+        </div>
+        <progress class="md:w-8/10 w-10/10 progress"
+                :class="{ 'progress-error': progressSetting.credit.value && progressSetting.credit.value < 50,
+                            'progress-warning': progressSetting.credit.value && 50 <= progressSetting.credit.value && progressSetting.credit.value < 80,
+                            'progress-info': progressSetting.credit.value && 80 <= progressSetting.credit.value && progressSetting.credit.value < 90,
+                            'progress-success': progressSetting.credit.value && 90 <= progressSetting.credit.value }"
+                :value="progressSetting.credit.value" :max="progressSetting.credit.max">
+        </progress>
+        <div class="flex flex-col md:w-8/10 w-10/10">
+            <span>{{ progressSetting.credit.remainText }}</span>
+        </div>
+        <progress class="md:w-8/10 w-10/10 progress"
+                :class="{ 'progress-error': progressSetting.credit.remainValue && progressSetting.credit.remainValue < 50,
+                            'progress-warning': progressSetting.credit.remainValue && 50 <= progressSetting.credit.remainValue && progressSetting.credit.remainValue < 80,
+                            'progress-info': progressSetting.credit.remainValue && 80 <= progressSetting.credit.remainValue && progressSetting.credit.remainValue < 90,
+                            'progress-success': progressSetting.credit.remainValue && 90 <= progressSetting.credit.remainValue }"
+                :value="progressSetting.credit.remainValue" :max="progressSetting.credit.max">
+        </progress>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 place-items-center">
+        <div class="flex flex-col md:w-8/10 w-10/10">
+            <span>{{ progressSetting.house.targetText }}</span>
+            <span>{{ progressSetting.house.progressText }}</span>
+        </div>
+        <progress class="md:w-8/10 w-10/10 progress"
+                :class="{ 'progress-error': progressSetting.house.value && progressSetting.house.value < 50,
+                            'progress-warning': progressSetting.house.value && 50 <= progressSetting.house.value && progressSetting.house.value < 80,
+                            'progress-info': progressSetting.house.value && 80 <= progressSetting.house.value && progressSetting.house.value < 90,
+                            'progress-success': progressSetting.house.value && 90 <= progressSetting.house.value }"
+                :value="progressSetting.house.value" :max="progressSetting.house.max">
+        </progress>
+    </div>
+
+    <div class="divider"></div>
+    
+    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
+        <div class="w-8/10 text-2xl">存款 USD: {{ deposit_USD }}</div>
+        <div class="w-8/10 text-lg">約當 TWD( 1:30 ): {{ deposit_LikeTWD }}</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
+        <div class="w-8/10 text-2xl">奈米投 USD: {{ stock_USD }}</div>
+        <div class="w-8/10 text-lg">約當 TWD( 1:30 ): {{ stock_LikeTWD }}</div>
+    </div>
+
 </div>
 
 </template>
