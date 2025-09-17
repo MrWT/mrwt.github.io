@@ -6,6 +6,7 @@
     import Quiz from './components/Quiz.vue'
     import Readme from './components/Readme.vue'
     import Setting from './components/Setting.vue'
+    import Chat from './components/Chat.vue'
 
     onMounted(() => {
         console.log("App mounted.");
@@ -101,7 +102,7 @@
             let fetchUserData = fetchData({
                 api: "login",
                 data: {
-                    account: tempAccount.value
+                    account: tempAccount.value.trim()
                 }
             });
 
@@ -246,6 +247,7 @@
                     <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('quiz')">> {{ userInfo.languages["quiz"] }}</a></li>
                     <li v-if="userInfo.funcs.indexOf('restaurant') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('restaurant')">> {{ userInfo.languages["restaurant"] }}</a></li>
                     <li v-if="userInfo.funcs.indexOf('finance') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('finance')">> {{ userInfo.languages["finance"] }}</a></li>
+                    <li v-if="userInfo.funcs.indexOf('chat') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('chat')">> {{ userInfo.languages["chat"] }}</a></li>
 
                     <li v-if="userInfo.funcs.indexOf('laboratory') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown group">
                         <div class="dropdown dropdown-right dropdown-start">
@@ -346,6 +348,7 @@
         <Restaurant v-else-if="appSetting.contentComponent === 'restaurant'" :title="appSetting.title" :account="userInfo.account" />
         <Finance v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" />
         <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" />
+        <Chat v-else-if="appSetting.contentComponent === 'chat'" :title="appSetting.title" :account="userInfo.account" />
     </div>
 
     <!-- signin modal -->
