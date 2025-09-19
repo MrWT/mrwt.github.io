@@ -308,6 +308,7 @@
         <div class="w-8/10 text-lg">約當 TWD( 1:30 ): {{ stock_LikeTWD }}</div>
     </div>
 
+    <div class="divider"></div>
 </div>
 
 </template>

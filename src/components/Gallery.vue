@@ -21,12 +21,11 @@
     // 選擇的圖片 url
     let selImgUrl = ref("");
     // 生成的 channels
-    let channel_1 = reactive([]);
-    let channel_2 = reactive([]);
-    let channel_3 = reactive([]);
-    let channel_4 = reactive([]);
-    // 圖片清單
-    let imageUrls = [
+    let channelCount = 1;
+    let channels = reactive([]);
+    // 圖片候選清單
+    let imageCount = 100;
+    let candidateImageUrls = [
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
@@ -40,22 +39,44 @@
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
         "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
     ];
+    let imageUrls = [];
 
     // 初始化 component
     function init(){
         console.log("gallery.init");
-        // 建立 channel
+        // 依據 imageCount 生成 imageUrls
+        imageCount = getRandomNumber(candidateImageUrls.length, 100);
+        for(let img_i = 0; img_i < imageCount; img_i++){
+            let imgIndex = getRandomNumber(0, candidateImageUrls.length -1);
+            let imgUrl = candidateImageUrls[ imgIndex ];
+            imageUrls.push( imgUrl );
+        }
+
+        // w-sm 約等於 384px
+        // w-md 約等於 448px
+        //console.log("window.innerWidth=" + window.innerWidth);
+        if(window.innerWidth > 448){
+            channelCount = getRandomNumber(3, 4);
+        }else if(304 < window.innerWidth && window.innerWidth < 448 ){
+            channelCount = getRandomNumber(1, 2);
+        }else{
+            channelCount = getRandomNumber(1, 1);
+        }
+        // 依據 channelCount 生成 channel
+        for(let c_i = 0; c_i < channelCount; c_i++){
+            channels.push( [] );
+        }
+        // 建立 channel 內容
         genChannels();
     }
     // 建立 channel
     function genChannels(){
         // 清空 channels
-        channel_1.splice(0, channel_1.length);
-        channel_2.splice(0, channel_2.length);
-        channel_3.splice(0, channel_3.length);
-        channel_4.splice(0, channel_4.length);
+        for(let c_i = 0; c_i < channelCount; c_i++){
+            channels[c_i].splice(0, channels[c_i].length);
+        }
 
-        let imgCount = imageUrls.length / 4;
+        let imgCount = imageUrls.length / channelCount;
         console.log("imgCount=", imgCount);
 
         let channelIndex = 0;
@@ -63,22 +84,9 @@
         imageUrls.forEach((imgSrc, is_i) => {
             imgGrpIndex = imgGrpIndex % imgCount;
             channelIndex += imgGrpIndex === 0 ? 1 : 0;
-            channelIndex = channelIndex % 4;
+            channelIndex = channelIndex % channelCount;
 
-            switch(channelIndex){
-                case 0:
-                channel_1.push( imgSrc );
-                break;
-                case 1:
-                channel_2.push( imgSrc );
-                break;
-                case 2:
-                channel_3.push( imgSrc );
-                break;
-                case 3:
-                channel_4.push( imgSrc );
-                break;
-            }
+            channels[channelIndex].push( imgSrc );
         });
     }
     // showModal
@@ -91,25 +99,18 @@
 
 <template>
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div class="grid gap-4">
-        <div v-for="(imgSrc, is_i) in channel_1">
-            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
-        </div>
-    </div>
-    <div class="grid gap-4">
-        <div v-for="(imgSrc, is_i) in channel_2">
-            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
-        </div>
-    </div>
-    <div class="grid gap-4">
-        <div v-for="(imgSrc, is_i) in channel_3">
-            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
-        </div>
-    </div>
-    <div class="grid gap-4">
-        <div v-for="(imgSrc, is_i) in channel_4">
-            <img class="h-auto max-w-full rounded-lg" :src="imgSrc" alt="" @click="showModal(imgSrc)">
+<div class="grid gap-4"
+:class="{ 'grid-cols-1': channels.length === 1,
+          'grid-cols-2': channels.length === 2,
+          'grid-cols-3': channels.length === 3,
+          'grid-cols-4': channels.length === 4 }">
+    <div v-for="(channel, c_i) in channels" class="grid"
+      :class="{ 'gap-16': channels.length === 1,
+                'gap-20': channels.length === 2,
+                'gap-20': channels.length === 3,
+                'gap-20': channels.length === 4 }">
+        <div v-for="(imgSrc, is_i) in channel">
+            <img class="h-auto max-w-full rounded-lg shadow-2xl" :src="imgSrc" alt="" @click="showModal(imgSrc)">
         </div>
     </div>
 </div>

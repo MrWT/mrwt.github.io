@@ -7,6 +7,7 @@
     import Readme from './components/Readme.vue'
     import Setting from './components/Setting.vue'
     import Chat from './components/Chat.vue'
+    import Author from './components/Author.vue'
 
     onMounted(() => {
         console.log("App mounted.");
@@ -43,6 +44,8 @@
         funcs: [],
         languages: {},
     });
+
+
 
     // 初始化 app
     function init(){
@@ -213,20 +216,12 @@
             document.getElementById("signinName").focus();
         }, 400);
     }
-    // 進入全螢幕模式
-    function launchIntoFullscreen() {
-        let ele = document.documentElement;
-
-        if (ele.requestFullscreen) {
-            ele.requestFullscreen();
-        } else if (ele.mozRequestFullScreen) { /* Firefox */
-            ele.mozRequestFullScreen();
-        } else if (ele.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-            ele.webkitRequestFullscreen();
-        } else if (ele.msRequestFullscreen) { /* IE/Edge */
-            ele.msRequestFullscreen();
-        }
+    // 前往作者簡介
+    function gotoIntroduceAuthor(data){
+        console.log("gotoIntroduceAuthor.data=", data);
+        gotoPage("author");
     }
+
 </script>
 
 <template>
@@ -242,7 +237,7 @@
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
                 </div>
-                <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-65 p-2 shadow">
+                <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 p-2 w-45 md:w-65 shadow">
                     <li v-if="userInfo.funcs.indexOf('gallery') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('gallery')">> {{ userInfo.languages["gallery"] }}</a></li>
                     <li v-if="userInfo.funcs.indexOf('quiz') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('quiz')">> {{ userInfo.languages["quiz"] }}</a></li>
                     <li v-if="userInfo.funcs.indexOf('restaurant') !== -1" class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown"><a @click="gotoPage('restaurant')">> {{ userInfo.languages["restaurant"] }}</a></li>
@@ -251,10 +246,10 @@
 
                     <li v-if="userInfo.funcs.indexOf('laboratory') !== -1" class="text-white hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown group">
                         <div class="dropdown dropdown-right dropdown-start">
-                            <div tabindex="0" role="button" class="w-40  group-hover:text-black group-hover:rounded-lg">
-                                > K49 實驗室 >
+                            <div tabindex="0" role="button" class="w-30 md:w-40 group-hover:text-black group-hover:rounded-lg">
+                                > 實驗室 >
                             </div>
-                            <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-60 p-2 shadow">
+                            <ul tabindex="0" class="menu menu-lg dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 p-2 w-40 md:w-60 shadow">
                                 <li class="text-white  hover:bg-gray-100/100 hover:text-black hover:rounded-lg menu-dropdown">
                                     <a>> 實驗1</a>
                                 </li>
@@ -279,20 +274,6 @@
             </a>
         </div>
         <div class="navbar-end">
-            <button v-if="userInfo.funcs.indexOf('fullscreen') !== -1" class="btn btn-ghost btn-circle" title="全螢幕" @click="launchIntoFullscreen">
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/>
-                </svg>
-            </button>
-            <button v-if="userInfo.funcs.indexOf('search') !== -1" class="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
-            </button>
-            <button v-if="userInfo.funcs.indexOf('notify') !== -1" class="btn btn-ghost btn-circle">
-                <div class="indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
-                    <span class="badge badge-xs badge-primary indicator-item"></span>
-                </div>
-            </button>
             <button v-if="userInfo.funcs.indexOf('setting') !== -1" class="btn btn-ghost btn-circle" @click="gotoPage('set_system')">
                 <svg class="w-5 h-5 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
@@ -308,7 +289,7 @@
                         </div>
                     </div>
                 </button>
-                <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 w-120 p-2 shadow">
+                <ul tabindex="0" class="dropdown-content bg-gray-800/80 rounded-box z-1 mt-3 p-2 w-80 md:w-120 shadow">
                     <li class="text-white text-lg">{{ userInfo.name }}</li>
                     <li v-if="userInfo.mail" class="text-white text-lg">{{ userInfo.mail }}</li>
                     <div class="divider"></div>
@@ -341,14 +322,15 @@
         </div>
     </div>
 
-    <div class="p-4 h-9/10 mt-15">
+    <div class="p-4 h-9/10 mt-20 md:mt-15">
         <Gallery v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title" />
         <Quiz v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz" />
-        <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources" />
+        <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"  @introduce-author="gotoIntroduceAuthor" />
         <Restaurant v-else-if="appSetting.contentComponent === 'restaurant'" :title="appSetting.title" :account="userInfo.account" />
         <Finance v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" />
         <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" />
         <Chat v-else-if="appSetting.contentComponent === 'chat'" :title="appSetting.title" :account="userInfo.account" />
+        <Author v-else-if="appSetting.contentComponent === 'author'" :title="appSetting.title" />
     </div>
 
     <!-- signin modal -->

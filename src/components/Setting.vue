@@ -156,7 +156,7 @@
     }
     // 儲存 finance 設定資料
     function saveFinance(){
-        console.log("saveFinance");
+        console.log("saveFinance.finance=", finance);
 
         let saveFinancePromise = fetchData({
             api: "save_finance",
@@ -375,113 +375,116 @@
 <template>
 
 <div class="tabs tabs-border">
-
     <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定 Finance" />
     <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
             Finance 資料
         </div>
-        <div class="flex w-10/10 h-4/10 md:flex-row flex-col">
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">House</legend>
-
-                <label class="label">目標</label>
+        <div class="w-10/10 flex flex-col">
+            <div class="divider divider-warning">
+                買房
+            </div>
+            <div class="w-10/10 md:w-5/10">
+                <label class="label">目標房價</label>
                 <input type="number" min="0" class="input" placeholder="0" v-model="finance.house.target" />
-            </fieldset>
+            </div>
 
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">信貸</legend>
+            <div class="divider divider-error">
+                信貸
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
+                    <label class="label">目標</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.target" />
+                </div>
+                <div class="w-5/10">
+                    <label class="label">剩餘</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.remain" />
+                </div>
+            </div>
 
-                <label class="label">目標</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.target" />
-
-                <label class="label">剩餘</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.credit.remain" />
-
-            </fieldset>
-
-        </div>
-        <div class="flex w-10/10 h-4/10 md:flex-row flex-col">
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">存款速度</legend>
-
-                <label class="label">每期台幣存款( 每期為 3 個月 )</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value1" />
-
-                <label class="label">每期進帳股息( 每期為 3 個月 )</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value2" />
-            </fieldset>
-
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">存款( TWD )</legend>
-
-                <label class="label">價值</label>
+            <div class="divider divider-success">
+                存款( TWD )
+            </div>
+            <div class="w-10/10 md:w-5/10 flex flex-row">
                 <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_TWD.value" />
-            </fieldset>
+            </div>
 
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-md border p-2 m-2">
-                <legend class="fieldset-legend text-lg">存款( USD )</legend>
+            <div class="divider divider-success">
+                存款( USD )
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
+                    <label class="label">價值</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.value" />
+                </div>
+                <div class="w-5/10">
+                    <label class="label">匯率</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.currency" />
+                </div>
+            </div>
 
-                <label class="label">價值</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.value" />
-
-                <label class="label">匯率</label>
-                <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_USD.currency" />
-            </fieldset>
-        </div>
-        <div class="flex w-10/10 h-4/10 md:flex-row flex-col mt-1">
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">0056.TW</legend>
-
-                <div class="flex w-10/10 flex-col">
+            <div class="divider divider-success">
+                存股
+            </div>
+            <div class="divider divider-neutral">
+                0056.TW
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
                     <label class="label">股數</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.num" />
-
+                </div>
+                <div class="w-5/10">
                     <label class="label">單價</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw0056.price" />
                 </div>
-            </fieldset>
+            </div>
 
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">00878.TW</legend>
-
-                <div class="flex w-10/10 flex-col">
+            <div class="divider divider-neutral">
+                00878.TW
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
                     <label class="label">股數</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.num" />
-
+                </div>
+                <div class="w-5/10">
                     <label class="label">單價</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00878.price" />
                 </div>
-            </fieldset>
-        </div>
-        <div class="flex w-10/10 h-4/10 md:flex-row flex-col mt-1">
+            </div>
 
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">00919.TW</legend>
-
-                <div class="flex w-10/10 flex-col">
+            <div class="divider divider-neutral">
+                00919.TW
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
                     <label class="label">股數</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.num" />
-
+                </div>
+                <div class="w-5/10">
                     <label class="label">單價</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_tw00919.price" />
                 </div>
-            </fieldset>
+            </div>
 
-            <fieldset class="fieldset bg-gray-300 border-gray-500 rounded-box w-lg border p-2 m-2">
-                <legend class="fieldset-legend text-lg">nano.USD</legend>
-
-                <div class="flex w-10/10 flex-col">
-                    <label class="label">價值</label>
+            <div class="divider">
+                奈米投
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
+                    <label class="label">USD</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_nano.value" />
-
+                </div>
+                <div class="w-5/10">
                     <label class="label">匯率</label>
                     <input type="number" min="0" class="input" placeholder="0" v-model="finance.stock_nano.currency" />
                 </div>
-            </fieldset>
+            </div>
         </div>
-        <div class="w-10/10 h-1/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-1/10 mx-1" @click="saveFinance">
+        <div class="w-10/10 flex flex-row-reverse mt-5">
+            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveFinance">
                 save
             </button>
         </div>
@@ -492,29 +495,29 @@
         <div class="divider">
             個人資料
         </div>
-        <div class="flex w-10/10 flex-col place-items-center">
-            <div class="w-5/10">
+        <div class="flex w-10/10 flex-col place-items-center gap-5">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">Name: </label><br />
                 <input type="text" class="input" v-model="userObj.name" />
             </div>
-            <div class="w-5/10 mt-5">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">Mail: </label><br />
                 <input type="text" class="input" v-model="userObj.mail" />
             </div>
-            <div class="w-5/10 mt-5">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">Language: </label><br />
                 <label v-for="option in languageRadioParam.options" :key="option.value" class="mr-2">
                     <input type="radio" class="radio" :value="option.value" :name="languageRadioParam.radioGroupName" v-model="languageRadioParam.selectedOption">
                     {{ option.label }}
                 </label>
             </div>
-            <div class="w-5/10 mt-5">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">App Title: </label><br />
                 <input type="text" class="input" v-model="userObj.app_title" />
             </div>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-1/10 mx-1" @click="saveUser">
+        <div class="w-10/10 flex flex-row-reverse mt-5">
+            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveUser">
                 save
             </button>
         </div>
@@ -525,18 +528,18 @@
         <div class="divider">
             Quiz 預設值
         </div>
-        <div class="flex w-10/10 flex-col place-items-center">
-            <div class="w-5/10">
+        <div class="flex w-10/10 flex-col gap-5 place-items-center">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">題數: </label>
                 <input type="number" min="0" class="input" placeholder="0" v-model="quiz_setting.count" />
             </div>
-            <div class="w-5/10 mt-5">
+            <div class="w-10/10 md:w-5/10">
                 <label class="label mr-1">最大的數字: </label>
                 <input type="number" min="0" class="input" placeholder="0" v-model="quiz_setting.max_number" />
             </div>
         </div>
         <div class="w-10/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-1/10 mx-1" @click="saveQuiz">
+            <button class="btn btn-neutral w-5/10 md:w-1/10 mx-1" @click="saveQuiz">
                 save
             </button>
         </div>
@@ -547,20 +550,20 @@
         <div class="divider">
             Restaurant 資料
         </div>
-        <div class="flex w-10/10 flex-col">
-            <fieldset v-for="(restObj, rest_i) in restaurants" class="fieldset bg-gray-300 border-gray-500 rounded-box border p-2 my-2 w-10/10">
-                <label class="label">{{ restObj.name }} ( {{ restObj.latitude }}, {{ restObj.longitude }} )</label>
-                <div class="join">
-                    <input type="text" class="input join-item w-5/10" placeholder="店名" v-model="restObj.edit_name" />
-                    <input type="text" class="input join-item w-5/10" placeholder="地址" v-model="restObj.edit_address" />
+        <div class="flex w-10/10 flex-col gap-2">
+            <fieldset v-for="(restObj, rest_i) in restaurants" class="fieldset bg-gray-300 border-gray-500 rounded-box border md:p-2 w-10/10">
+                <label class="label">{{ restObj.name }} ( {{ restObj.latitude.toFixed(4) }}, {{ restObj.longitude.toFixed(4) }} )</label>
+                <div class="md:join">
+                    <input type="text" class="input md:join-item w-10/10 md:w-5/10" placeholder="店名" v-model="restObj.edit_name" />
+                    <input type="text" class="input md:join-item w-10/10 md:w-5/10" placeholder="地址" v-model="restObj.edit_address" />
                 </div>
             </fieldset>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-1/10 mx-1" @click="newRestaurant">
+        <div class="w-10/10 flex flex-row-reverse mt-2 gap-2">
+            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="newRestaurant">
                 new
             </button>
-            <button class="btn btn-neutral w-1/10 mx-1" @click="saveRestaurant">
+            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveRestaurant">
                 save
             </button>
         </div>
