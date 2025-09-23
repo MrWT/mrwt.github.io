@@ -75,7 +75,7 @@
     function gotoPage(page) {
         // close userInfoModal
         document.getElementById("userInfoModal").close();
-        toggleMenu();
+        switchMenu.value = false;
 
         appSetting.contentComponent = "reset";
 
