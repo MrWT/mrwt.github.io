@@ -483,8 +483,8 @@
                 </div>
             </div>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-5">
-            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveFinance">
+        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-5 justify-center">
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveFinance">
                 save
             </button>
         </div>
@@ -516,8 +516,8 @@
                 <input type="text" class="input" v-model="userObj.app_title" />
             </div>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-5">
-            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveUser">
+        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-5 justify-center">
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveUser">
                 save
             </button>
         </div>
@@ -538,8 +538,8 @@
                 <input type="number" min="0" class="input" placeholder="0" v-model="quiz_setting.max_number" />
             </div>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-1">
-            <button class="btn btn-neutral w-5/10 md:w-1/10 mx-1" @click="saveQuiz">
+        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-1 justify-center">
+            <button class="btn btn-neutral w-10/10 md:w-5/10 mx-1" @click="saveQuiz">
                 save
             </button>
         </div>
@@ -559,11 +559,11 @@
                 </div>
             </fieldset>
         </div>
-        <div class="w-10/10 flex flex-row-reverse mt-2 gap-2">
-            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="newRestaurant">
+        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-2 gap-2 justify-center">
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="newRestaurant">
                 new
             </button>
-            <button class="btn btn-neutral w-5/10 md:w-1/10" @click="saveRestaurant">
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveRestaurant">
                 save
             </button>
         </div>

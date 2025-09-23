@@ -67,7 +67,14 @@
         </div>
 
         <div v-if="screenSize === 'md'" class="divider md:divider-horizontal"><--></div>
-        <div v-if="screenSize !== 'md'" class="divider">Database / AI Agent</div>
+        <div v-if="screenSize !== 'md'" class="flex flex-row w-10/10 gap-2">
+            <div class="w-5/10">
+                <div class="divider">Database</div>
+            </div>
+            <div class="w-5/10">
+                <div class="divider">AI Agent</div>
+            </div>
+        </div>
         <div class="flex flex-row md:flex-col h-[200px] md:h-10/10 w-10/10 md:w-3/10 gap-2">
             <div class="card bg-base-300 rounded-box grid h-10/10 w-5/10 md:h-5/10 md:w-10/10 place-items-center">
                 <div class="w-10/10 text-center text-2xl underline">Firestore <br v-if="screenSize !== 'md'" />( NoSQL )</div>
