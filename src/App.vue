@@ -230,6 +230,7 @@
     function signout(){
         // close userInfoModal
         document.getElementById("userInfoModal").close();
+        switchMenu.value = false;
 
         resetUserInfo();
         resetAppSetting();
@@ -271,7 +272,7 @@
                       'flex-none': !switchMenu && screenSize !== 'md',
                       'flex-none': screenSize === 'md'}">
             <ul class="menu menu-horizontal bg-slate-200/100 rounded-box" 
-               :class="{'w-10/10': switchMenu && screenSize !== 'md'}">
+               :class="{'w-8/10': switchMenu && screenSize !== 'md'}">
                 <!-- quiz -->
                 <li v-if="(screenSize === 'md' || (screenSize !== 'md' && switchMenu)) && userInfo.funcs.indexOf('quiz') !== -1" @click="gotoPage('quiz')">
                     <a class="tooltip tooltip-bottom" :data-tip="userInfo.languages.quiz">
@@ -318,7 +319,7 @@
                 </li>
                 <!-- setting -->
                 <li v-if="(screenSize === 'md' || (screenSize !== 'md' && switchMenu)) && userInfo.funcs.indexOf('setting') !== -1" @click="gotoPage('set_system')">
-                    <a class="tooltip tooltip-bottom" :data-tip="userInfo.languages.setting">
+                    <a class="tooltip tooltip-bottom" :data-tip="userInfo.languages.app_setting">
                         <svg class="w-5 h-5 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M9.586 2.586A2 2 0 0 1 11 2h2a2 2 0 0 1 2 2v.089l.473.196.063-.063a2.002 2.002 0 0 1 2.828 0l1.414 1.414a2 2 0 0 1 0 2.827l-.063.064.196.473H20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-.089l-.196.473.063.063a2.002 2.002 0 0 1 0 2.828l-1.414 1.414a2 2 0 0 1-2.828 0l-.063-.063-.473.196V20a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-.089l-.473-.196-.063.063a2.002 2.002 0 0 1-2.828 0l-1.414-1.414a2 2 0 0 1 0-2.827l.063-.064L4.089 15H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h.09l.195-.473-.063-.063a2 2 0 0 1 0-2.828l1.414-1.414a2 2 0 0 1 2.827 0l.064.063L9 4.089V4a2 2 0 0 1 .586-1.414ZM8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" clip-rule="evenodd"/>
                         </svg>
@@ -326,14 +327,17 @@
                 </li>
                 <!-- userInfo -->
                 <li v-if="(screenSize === 'md' || (screenSize !== 'md' && switchMenu))" @click="openUserInfoModal">
-                    <a class="tooltip tooltip-bottom" :data-tip="userInfo.languages.setting">
+                    <a class="tooltip tooltip-bottom" :data-tip="userInfo.languages.user_setting">
                         <svg class="w-5 h-5" :class="{'text-lime-900/100': userInfo.role === 'admin', 'text-yellow-900/100': userInfo.role === 'tn100'}"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z" clip-rule="evenodd"/>
                         </svg>
                     </a>
                 </li>
+            </ul>
 
+            <ul class="menu menu-horizontal bg-slate-200/100 rounded-box" 
+               :class="{'w-2/10': switchMenu && screenSize !== 'md'}">
                 <!-- screenSize 小於 md 時, 開啟 menu -->
                 <li v-if="screenSize !== 'md' && !switchMenu" @click="toggleMenu">
                     <a>
@@ -392,7 +396,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                     </svg>
-                    Setting
+                    {{ userInfo.languages["user_setting"] }}
                 </button>
                 <button class="btn w-5/10" @click="signout">
                     <span v-if="userInfo.account">
