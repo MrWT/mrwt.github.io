@@ -27,7 +27,11 @@
             remainText: "",
             remainValue: null,
         },
-        speed: 0,
+        speed: {
+            target: 0,
+            speed: 0,
+            perMonth: 0,
+        },
     });
     let deposit_TWD = ref(0);
     let deposit_USD = ref(0);
@@ -160,7 +164,9 @@
         console.log("buildSpeedBlock.valuePerMonth=" + valuePerMonth);
         console.log("buildSpeedBlock.speed=" + speed);
 
-        progressSetting["speed"] = speed;
+        progressSetting["speed"]["target"] = targetValue / 10000;
+        progressSetting["speed"]["speed"] = speed;
+        progressSetting["speed"]["perMonth"] = valuePerMonth;
     }
     // 建立"台灣股票"區塊
     function buildStockTW(stockDatas){
@@ -225,16 +231,39 @@
 <div class="flex flex-col w-10/10 h-10/10">
 
     <div class="flex md:flex-row flex-col w-10/10">
-        <div class="card bg-red-300 rounded-box grid h-10/10 md:w-2/10 w-10/10 place-items-center">
-            <div class="w-10/10 text-3xl text-center">{{ progressSetting["speed"] }}<span class="text-sm">個月</span></div>
+        <div class="flex flex-row w-10/10 h-10/10 gap-2">
+            <div class="card rounded-box grid h-10/10 md:w-2/10 w-5/10 p-5 place-items-center"
+                 :class="{'bg-red-300': 36 <= progressSetting.speed.speed,
+                          'bg-orange-300': 20 <= progressSetting.speed.speed && progressSetting.speed.speed < 36,
+                          'bg-blue-300': 10 < progressSetting.speed.speed && progressSetting.speed.speed < 20,
+                          'bg-green-300': progressSetting.speed.speed <= 10}">
+                <div class="w-10/10 text-3xl text-center">
+                    {{ progressSetting["speed"]["speed"] }}
+                    <span class="text-sm">個月</span>
+                    <br />
+                    <span class="text-sm">
+                       ( 存到 {{ progressSetting["speed"]["target"] }} 萬 )
+                    </span>
+                </div>
+            </div>
+            <div class="card rounded-box grid h-10/10 md:w-2/10 w-5/10 p-5 place-items-center"
+                 :class="{'bg-red-300': 36 <= progressSetting.speed.speed,
+                          'bg-orange-300': 20 <= progressSetting.speed.speed && progressSetting.speed.speed < 36,
+                          'bg-blue-300': 10 < progressSetting.speed.speed && progressSetting.speed.speed < 20,
+                          'bg-green-300': progressSetting.speed.speed <= 10}">
+                <div class="w-10/10 text-3xl text-center">
+                    {{ progressSetting["speed"]["perMonth"] }}
+                    <span class="text-sm">/月</span>
+                </div>
+            </div>
         </div>
         <div class="divider"></div>
-        <div class="card bg-base-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 place-items-center px-10">
+        <div class="card bg-base-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 p-5 place-items-center">
             <div class="w-10/10 text-xl">總股數: {{ stockTW.totalValue }}</div>
             <div class="w-10/10 text-lg">台股總市值 TWD: {{ stockTW.totalTWD }}</div>
         </div>
         <div class="divider"></div>
-        <div class="card bg-gray-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 place-items-start px-10">
+        <div class="card bg-gray-300 rounded-box grid h-10/10 md:w-4/10 w-10/10 p-5 place-items-start">
             <span>0056.TW </span> 
             <span>股數: {{ stockTW.tw0056 }} / TWD: {{ stockTW.tw0056_TWD }}</span>
             <div class="divider"></div>
@@ -248,13 +277,13 @@
 
     <div class="divider"></div>
 
-    <div class="card bg-base-300 rounded-box grid h-3/10 w-10/10 place-items-center">
-        <div class="w-8/10 text-2xl">存款 TWD: {{ deposit_TWD }}</div>
+    <div class="card bg-base-300 rounded-box grid h-3/10 w-10/10 p-5 place-items-center">
+        <div class="w-10/10 text-2xl">存款 TWD: {{ deposit_TWD }}</div>
     </div>
 
     <div class="divider"></div>
 
-    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 place-items-center">
+    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 p-5 place-items-center">
         <div class="flex flex-col md:w-8/10 w-10/10">
             <span>{{ progressSetting.credit.targetText }}</span>
             <span>{{ progressSetting.credit.progressText }}</span>
@@ -280,7 +309,7 @@
 
     <div class="divider"></div>
 
-    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 place-items-center">
+    <div class="card bg-base-300 rounded-box grid h-10/10 w-10/10 p-5 place-items-center">
         <div class="flex flex-col md:w-8/10 w-10/10">
             <span>{{ progressSetting.house.targetText }}</span>
             <span>{{ progressSetting.house.progressText }}</span>
@@ -296,16 +325,16 @@
 
     <div class="divider"></div>
     
-    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
-        <div class="w-8/10 text-2xl">存款 USD: {{ deposit_USD }}</div>
-        <div class="w-8/10 text-lg">約當 TWD( 1:30 ): {{ deposit_LikeTWD }}</div>
+    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 p-5 place-items-center">
+        <div class="w-10/10 text-2xl">存款 USD: {{ deposit_USD }}</div>
+        <div class="w-10/10 text-lg">約當 TWD( 1:30 ): {{ deposit_LikeTWD }}</div>
     </div>
 
     <div class="divider"></div>
 
-    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 place-items-center">
-        <div class="w-8/10 text-2xl">奈米投 USD: {{ stock_USD }}</div>
-        <div class="w-8/10 text-lg">約當 TWD( 1:30 ): {{ stock_LikeTWD }}</div>
+    <div class="card bg-base-300 rounded-box grid h-5/10 w-10/10 p-5 place-items-center">
+        <div class="w-10/10 text-2xl">奈米投 USD: {{ stock_USD }}</div>
+        <div class="w-10/10 text-lg">約當 TWD( 1:30 ): {{ stock_LikeTWD }}</div>
     </div>
 
     <div class="divider"></div>
