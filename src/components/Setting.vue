@@ -403,6 +403,21 @@
                 </div>
             </div>
 
+            <div class="divider divider-success">存款</div>
+            <div class="divider divider-success">
+                存款速度( 以 3 個月為一期 )
+            </div>
+            <div class="w-10/10 md:w-8/10 flex flex-row">
+                <div class="w-5/10">
+                    <label class="label">台幣/期</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value1" />
+                </div>
+                <div class="w-5/10">
+                    <label class="label">股息/期</label>
+                    <input type="number" min="0" class="input" placeholder="0" v-model="finance.deposit_Speed.value2" />
+                </div>
+            </div>
+
             <div class="divider divider-success">
                 存款( TWD )
             </div>
@@ -424,7 +439,7 @@
                 </div>
             </div>
 
-            <div class="divider divider-success">
+            <div class="divider divider-neutral">
                 存股
             </div>
             <div class="divider divider-neutral">
