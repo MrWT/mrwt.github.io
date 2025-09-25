@@ -22,13 +22,14 @@
                 boxContainer.append(box_div);
             }
 
-
             for(let box_i = 1; box_i <= boxCount; box_i++){
                 let tl = gsap.timeline({ yoyo: true, repeat: -1, });
                 tl.to("#box_" + box_i, {
-                    duration: box_i,
+                    duration: box_i/10,
                     opacity: 0,
                 });
+
+                timelineAry.push(tl);
             }
         }, 100);
     });
@@ -37,6 +38,7 @@
     let ctx_card = null;
     let isDrawing = false;
     let isReceive = ref(false);
+    let timelineAry = reactive([]);
 
     // 初始化 component
     function init(){
@@ -133,6 +135,10 @@
         ctx_card.globalCompositeOperation = 'destination-in';
         ctx_card.fillStyle = 'transparent'; // 塗層顏色，也可以用圖片
         ctx_card.fillRect(0, 0, canvas_card.width, canvas_card.height);
+
+        timelineAry.forEach((tl, tl_i) => {
+            
+        });
     }
 
 </script>
