@@ -10,26 +10,29 @@
         // gsap animation
         setTimeout(() => {
             let boxColors = ["green", "blue", "purple", "gold", "peru", "blanchedalmond", "blueviolet", "goldenrod"];
-            let boxContainer = document.getElementById("boxContainer");
             let boxCount = 50;
-            for(let box_i = 1; box_i <= boxCount; box_i++){
-                let box_div = document.createElement("div");
-                box_div.setAttribute("id", "box_" + box_i);
-                box_div.style.backgroundColor = boxColors[ box_i % boxColors.length ];
-                box_div.style.width = "30px";
-                box_div.style.height = "30px";
 
-                boxContainer.append(box_div);
-            }
+            for(let bc_i = 1; bc_i <= 1; bc_i++){
+                let boxContainer = document.getElementById("boxContainer" + bc_i);
+                for(let box_i = 1; box_i <= boxCount; box_i++){
+                    let box_div = document.createElement("div");
+                    box_div.setAttribute("id", "box_" + bc_i + "_" + box_i);
+                    box_div.style.backgroundColor = boxColors[ box_i % boxColors.length ];
+                    box_div.style.width = "30px";
+                    box_div.style.height = "30px";
 
-            for(let box_i = 1; box_i <= boxCount; box_i++){
-                let tl = gsap.timeline({ yoyo: true, repeat: -1, });
-                tl.to("#box_" + box_i, {
-                    duration: box_i/10,
-                    opacity: 0,
-                });
+                    boxContainer.append(box_div);
+                }
 
-                timelineAry.push(tl);
+                for(let box_i = 1; box_i <= boxCount; box_i++){
+                    let tl = gsap.timeline({ yoyo: true, repeat: -1, });
+                    tl.to("#box_" + bc_i + "_" + box_i, {
+                        duration: getRandomNumber(10, 20)/10,
+                        opacity: 0,
+                    });
+
+                    timelineAry.push(tl);
+                }
             }
         }, 100);
     });
@@ -152,7 +155,7 @@
         </div>
 
         <!-- 刮刮卡 container -->
-        <div id="scratchCardContainer" class="w-10/10 h-5/10 mt-5">
+        <div id="scratchCardContainer" class="w-10/10 h-5/10 mt-2">
             <!-- 刮刮卡 -->
             <canvas id="scratchCardCanvas" style="cursor: crosshair;"></canvas>
         </div>
@@ -162,25 +165,14 @@
             <canvas id="awardCanvas"></canvas>
         </div>
 
-        <div class="w-10/10 h-1/10 flex flex-row justify-center">
-            <button class="btn btn-primary w-5/10 mt-5" @click="receiveAward">
+        <div class="w-10/10 h-1/10 flex flex-row justify-center mt-2">
+            <button class="btn btn-primary w-5/10" @click="receiveAward">
                 領獎
             </button>
         </div>
 
-        <div id="boxContainer" class="w-10/10 h-3/10 flex flex-row justify-center">
-            <!--
-            <div id="box1" style="background-color: green;height:30px;width:30px;"></div>
-            <div id="box2" style="background-color: blue;height:30px;width:30px;"></div>
-            <div id="box3" style="background-color: purple;height:30px;width:30px;"></div>
-            <div id="box8" style="background-color: gold;height:30px;width:30px;"></div>
-            <div id="box4" style="background-color: peru;height:30px;width:30px;"></div>
-            <div id="box5" style="background-color: blanchedalmond;height:30px;width:30px;"></div>
-            <div id="box6" style="background-color: blueviolet;height:30px;width:30px;"></div>
-            <div id="box7" style="background-color: goldenrod;height:30px;width:30px;"></div>
-            -->
+        <div id="boxContainer1" class="w-10/10 h-1/10 flex flex-row justify-center mt-2">
         </div>
-
 
     </div>
 </template>
