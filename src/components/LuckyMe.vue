@@ -6,42 +6,15 @@
     onMounted(() => {
         console.log("LuckyMe mounted.");
         init();
-
-        // gsap animation
-        setTimeout(() => {
-            let boxColors = ["green", "blue", "purple", "gold", "peru", "blanchedalmond", "blueviolet", "goldenrod"];
-            let boxCount = 50;
-
-            for(let bc_i = 1; bc_i <= 1; bc_i++){
-                let boxContainer = document.getElementById("boxContainer" + bc_i);
-                for(let box_i = 1; box_i <= boxCount; box_i++){
-                    let box_div = document.createElement("div");
-                    box_div.setAttribute("id", "box_" + bc_i + "_" + box_i);
-                    box_div.style.backgroundColor = boxColors[ box_i % boxColors.length ];
-                    box_div.style.width = "30px";
-                    box_div.style.height = "30px";
-
-                    boxContainer.append(box_div);
-                }
-
-                for(let box_i = 1; box_i <= boxCount; box_i++){
-                    let tl = gsap.timeline({ yoyo: true, repeat: -1, });
-                    tl.to("#box_" + bc_i + "_" + box_i, {
-                        duration: getRandomNumber(10, 20)/10,
-                        opacity: 0,
-                    });
-
-                    timelineAry.push(tl);
-                }
-            }
-        }, 100);
     });
 
     let canvas_card = null;
     let ctx_card = null;
     let isDrawing = false;
     let isReceive = ref(false);
-    let timelineAry = reactive([]);
+
+    let uniqueIds = [];
+    let gsapTimelines = [];
 
     // 初始化 component
     function init(){
@@ -51,6 +24,8 @@
         let base64Image_award = buildAwardCanvas();
         // 製作刮刮卡
         buildScratchCardCanvas(base64Image_award);
+        // 生成碎花片
+        genConfetti();
     }
     // 建立刮刮卡背景圖
     function buildAwardCanvas(){
@@ -139,16 +114,110 @@
         ctx_card.fillStyle = 'transparent'; // 塗層顏色，也可以用圖片
         ctx_card.fillRect(0, 0, canvas_card.width, canvas_card.height);
 
-        timelineAry.forEach((tl, tl_i) => {
-            
+        // 控制 gsap animation
+        let funContainer = document.getElementById("funContainer");
+        console.log("funContainer.clientWidth=" + funContainer.clientWidth);
+        console.log("funContainer.clientHeight=" + funContainer.clientHeight);
+        gsapTimelines.forEach((timeline, tl_i) => {
+            let tweenId = "tween_" + uniqueIds[tl_i];
+            let targetElementId = "box_" + uniqueIds[tl_i];
+
+            // kill timeline
+            {
+                timeline.kill();
+                let boxElement = document.getElementById(targetElementId);
+                boxElement.style.opacity = 100;
+                boxElement.style.zIndex = 999;
+                boxElement.style.position = "fixed";
+                funContainer.appendChild(boxElement);
+            }
+
+            // 爆炸效果
+            {
+                // 爆炸起點
+                let bombOriginalPoint = {
+                    x: funContainer.clientWidth / 2 - 15,
+                    y: funContainer.clientHeight / 2 - 15
+                };
+                // 計算爆炸終點
+                let bombTargetPoint = { x: 0, y: 0, };
+                {
+                    bombTargetPoint.y = bombOriginalPoint.y - getRandomNumber(1, bombOriginalPoint.y);
+                    let bombXOp = getRandomNumber(0, 1);
+                    if(bombXOp === 0){
+                        // 往左跑
+                        bombTargetPoint.x = bombOriginalPoint.x - getRandomNumber(1, bombOriginalPoint.x);
+                    }else{
+                        // 往右跑
+                        bombTargetPoint.x = bombOriginalPoint.x + getRandomNumber(1, bombOriginalPoint.x);
+                    }
+                }
+                // 設定動畫
+                {
+                    let bombTimeline = gsap.timeline({ yoyo:false, repeat: 0 });
+                    // 移動到爆炸起點
+                    bombTimeline.to("#" + targetElementId, {
+                        x: bombOriginalPoint.x,
+                        y: bombOriginalPoint.y,
+                        duration: 0.5
+                    });
+                    // 開始爆炸
+                    bombTimeline.to("#" + targetElementId, {
+                        x: bombTargetPoint.x,
+                        y: bombTargetPoint.y,
+                        rotate: 360,
+                        duration: 1, //getRandomNumber(10, 20)/10,
+                    });
+                    // 漸漸消逝
+                    bombTimeline.to("#" + targetElementId, {
+                        opacity: 0,
+                        duration: 0.5,
+                    });
+                }
+            }
         });
+    }
+    // 生成碎花片
+    function genConfetti(){
+        // 碎花片 - 候選顏色
+        let boxColors = ["green", "blue", "purple", "gold", "peru", "blanchedalmond", "blueviolet", "goldenrod"];
+        // 碎花片 - 數量上限
+        let boxCount = 60;
+
+        for(let bc_i = 1; bc_i <= 1; bc_i++){
+            let boxContainer = document.getElementById("boxContainer" + bc_i);
+            for(let box_i = 1; box_i <= boxCount; box_i++){
+                let box_div = document.createElement("div");
+                box_div.setAttribute("id", "box_" + bc_i + "_" + box_i);
+                box_div.style.backgroundColor = boxColors[ box_i % boxColors.length ];
+                box_div.style.width = "30px";
+                box_div.style.height = "30px";
+
+                boxContainer.append(box_div);
+            }
+
+            // 控制 gsap animation
+            for(let box_i = 1; box_i <= boxCount; box_i++){
+                let uniqueId = "" + bc_i + "_" + box_i;
+
+                let tl = gsap.timeline({ yoyo: true, repeat: -1 });
+                tl.to("#" + "box_" + uniqueId, {
+                    id: "tween_" + uniqueId,
+                    duration: getRandomNumber(10, 20)/10,
+                    opacity: 0,
+                });
+                gsapTimelines.push(tl);
+
+                uniqueIds.push(uniqueId);
+            }
+        }
     }
 
 </script>
 
 <template>
 
-    <div class="w-10/10 h-10/10 flex flex-col justify-center">
+    <div id="funContainer" class="w-10/10 h-10/10 flex flex-col justify-center">
         <div class="w-10/10 h-1/10 flex flex-col justify-center">
             <div class="w-10/10 text-3xl">Lucky Me!</div>
             <div v-if="isReceive" class="w-10/10 text-2xl">You are so lucky~~</div> 
@@ -166,12 +235,12 @@
         </div>
 
         <div class="w-10/10 h-1/10 flex flex-row justify-center mt-2">
-            <button class="btn btn-primary w-5/10" @click="receiveAward">
+            <button v-if="!isReceive" class="btn btn-primary w-5/10" @click="receiveAward">
                 領獎
             </button>
         </div>
 
-        <div id="boxContainer1" class="w-10/10 h-1/10 flex flex-row justify-center mt-2">
+        <div id="boxContainer1" class="w-10/10 h-1/10 flex flex-wrap justify-center mt-2">
         </div>
 
     </div>
