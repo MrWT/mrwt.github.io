@@ -52,9 +52,10 @@
 
                 <div class="flex flex-wrap justify-center">
                     <div class="p-2 justify-center content-center rounded-4xl w-fit text-base bg-green-200">DaisyUI</div>
-                    <div class="p-2 justify-center content-center rounded-4xl w-fit text-2xl bg-teal-300">TailwindCSS</div>
+                    <div class="p-2 justify-center content-center rounded-4xl w-fit text-xl bg-teal-300">TailwindCSS</div>
+                    <div class="p-2 justify-center content-center rounded-4xl w-fit text-lg bg-yellow-300/50">gsap.js</div>
                     <div class="py-2 px-1 justify-center content-center rounded-4xl w-fit text-sm bg-blue-100">ApexChart</div>
-                    <div class="p-2 justify-center content-center rounded-4xl w-fit text-3xl bg-red-300">VueJS</div>
+                    <div class="p-2 justify-center content-center rounded-4xl w-fit text-2xl bg-red-300">VueJS</div>
                     <div class="p-2 justify-center content-center rounded-4xl w-fit text-xl bg-orange-200">Vite</div>
                 </div>
             </div>
