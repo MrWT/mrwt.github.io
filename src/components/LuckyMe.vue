@@ -137,7 +137,7 @@
         // 設定繪圖樣式，這裡使用 destination-out 模式來「擦除」塗層
         ctx_card.globalCompositeOperation = 'destination-out';
         ctx_card.beginPath();
-        ctx_card.arc(pos.x, pos.y, 10, 0, Math.PI * 2); // 繪製圓形作為刮開的區域
+        ctx_card.arc(pos.x, pos.y, 20, 0, Math.PI * 2); // 繪製圓形作為刮開的區域
         ctx_card.fill();
     }
     // 領取獎勵
