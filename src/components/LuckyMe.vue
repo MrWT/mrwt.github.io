@@ -30,6 +30,9 @@
     function fetchAward(){
         let fetchAwardPromise = fetchData({
             api: "get_awards",
+            data: {
+                check_receive_count: "true",
+            },
         });
         Promise.all([fetchAwardPromise]).then((values) => {
             //console.log("fetchAwardPromise.values=", values);
