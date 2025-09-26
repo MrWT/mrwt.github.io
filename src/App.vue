@@ -176,7 +176,7 @@
                     }
                 }
                 if(!hasImportGoogleMapLibrary){
-                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?key=" + appSettingObj["google_map_key"]; // + "&libraries=marker";
+                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?loading=async&key=" + appSettingObj["google_map_key"]; // + "&libraries=marker";
                     const script = document.createElement('script');
                     script.src = google_map_api_src;
                     script.defer = true;
