@@ -8,6 +8,9 @@
         init();
     });
 
+    let awards = [];
+    let selAwardObj = {};
+
     let canvas_card = null;
     let ctx_card = null;
     let isDrawing = false;
@@ -20,15 +23,44 @@
     function init(){
         console.log("LuckyMe.init");
 
-        // 利用 canvas 製作刮刮卡背景圖
-        let base64Image_award = buildAwardCanvas();
-        // 製作刮刮卡
-        buildScratchCardCanvas(base64Image_award);
-        // 生成碎花片
-        genConfetti();
+        // 取得 award 資料
+        fetchAward();
+    }
+    // 取得 award 資料
+    function fetchAward(){
+        let fetchAwardPromise = fetchData({
+            api: "get_awards",
+        });
+        Promise.all([fetchAwardPromise]).then((values) => {
+            //console.log("fetchAwardPromise.values=", values);
+            awards = values[0];
+            console.log("awards=", awards);
+            // 選擇一個獎項
+            {
+                // 建立候選獎項
+                let candidateAwards = [];
+                awards.forEach((award, award_i) => {
+                    let remainCount = parseInt( award["pickup_percent"] );
+                    //console.log("remainCount=" + remainCount);
+                    for(let rc_i = 0; rc_i < remainCount; rc_i++){
+                        candidateAwards.push(award_i);
+                    }
+                });
+                console.log("candidateAwards=", candidateAwards);
+                selAwardObj = awards[ candidateAwards[ getRandomNumber(0, candidateAwards.length -1) ] ];
+                console.log("selAwardObj=", selAwardObj);
+            }
+
+            // 利用 canvas 製作刮刮卡背景圖
+            let base64Image_award = buildAwardCanvas(selAwardObj["display_text"]);
+            // 製作刮刮卡
+            buildScratchCardCanvas(base64Image_award);
+            // 生成碎花片
+            genConfetti();
+        });
     }
     // 建立刮刮卡背景圖
-    function buildAwardCanvas(){
+    function buildAwardCanvas(awardText){
         let canvas_award = document.getElementById("awardCanvas");
         let container_award = document.getElementById('awardContainer');
         canvas_award.setAttribute("width", container_award.clientWidth);
@@ -38,7 +70,7 @@
         ctx_award.font = "50px Arial"; // Sets font to 30px Arial
         ctx_award.textAlign = "center";
         ctx_award.textBaseline = "middle";
-        ctx_award.fillText("Biggest Award", canvas_award.width / 2, canvas_award.height / 2);
+        ctx_award.fillText(awardText, canvas_award.width / 2, canvas_award.height / 2);
 
         let base64Image_award = canvas_award.toDataURL('image/png', 1.0); // Get PNG with full quality
         return base64Image_award;
@@ -109,72 +141,95 @@
     function receiveAward(){
         isReceive.value = true;
 
-        // 將[刮刮卡]層全部變成透明
-        ctx_card.globalCompositeOperation = 'destination-in';
-        ctx_card.fillStyle = 'transparent'; // 塗層顏色，也可以用圖片
-        ctx_card.fillRect(0, 0, canvas_card.width, canvas_card.height);
+        let paramObj = {
+            op: "EDIT",
+            name: selAwardObj["name"],
+            display_text: selAwardObj["display_text"],
+            count: selAwardObj["count"],
+            pickup_percent: selAwardObj["pickup_percent"],
+            receive_count: selAwardObj["receive_count"] + 1,
+        };
+        console.log("receiveAward.paramObj=", paramObj);
+        let fetchReceiveAwardPromise = fetchData({
+            api: "edit_awards",
+            data: [ paramObj ],
+        });
+        Promise.all([fetchReceiveAwardPromise]).then((values) => {
+            console.log("fetchReceiveAwardPromise.values=", values);
+          
+            // 將[刮刮卡]層全部變成透明
+            ctx_card.globalCompositeOperation = 'destination-in';
+            ctx_card.fillStyle = 'transparent'; // 塗層顏色，也可以用圖片
+            ctx_card.fillRect(0, 0, canvas_card.width, canvas_card.height);
 
-        // 控制 gsap animation
-        let funContainer = document.getElementById("funContainer");
-        console.log("funContainer.clientWidth=" + funContainer.clientWidth);
-        console.log("funContainer.clientHeight=" + funContainer.clientHeight);
-        gsapTimelines.forEach((timeline, tl_i) => {
-            let tweenId = "tween_" + uniqueIds[tl_i];
-            let targetElementId = "box_" + uniqueIds[tl_i];
+            // 控制 gsap animation
+            let funContainer = document.getElementById("funContainer");
+            console.log("funContainer.clientWidth=" + funContainer.clientWidth);
+            console.log("funContainer.clientHeight=" + funContainer.clientHeight);
+            gsapTimelines.forEach((timeline, tl_i) => {
+                let tweenId = "tween_" + uniqueIds[tl_i];
+                let targetElementId = "box_" + uniqueIds[tl_i];
 
-            // kill timeline
-            {
-                timeline.kill();
-                let boxElement = document.getElementById(targetElementId);
-                boxElement.style.opacity = 100;
-                boxElement.style.zIndex = 999;
-                boxElement.style.position = "fixed";
-                funContainer.appendChild(boxElement);
-            }
-
-            // 爆炸效果
-            {
-                // 爆炸起點
-                let bombOriginalPoint = {
-                    x: funContainer.clientWidth / 2 - 15,
-                    y: funContainer.clientHeight / 2 - 15
-                };
-                // 計算爆炸終點
-                let bombTargetPoint = { x: 0, y: 0, };
+                // kill timeline
                 {
-                    bombTargetPoint.y = bombOriginalPoint.y - getRandomNumber(1, bombOriginalPoint.y);
-                    let bombXOp = getRandomNumber(0, 1);
-                    if(bombXOp === 0){
-                        // 往左跑
-                        bombTargetPoint.x = bombOriginalPoint.x - getRandomNumber(1, bombOriginalPoint.x);
-                    }else{
-                        // 往右跑
-                        bombTargetPoint.x = bombOriginalPoint.x + getRandomNumber(1, bombOriginalPoint.x);
+                    timeline.kill();
+                    let boxElement = document.getElementById(targetElementId);
+                    funContainer.appendChild(boxElement);
+                    boxElement.style.opacity = 100;
+                    boxElement.style.zIndex = 999;
+                    boxElement.style.position = "fixed";
+                }
+
+                // 爆炸效果
+                {
+                    // 爆炸起點
+                    let bombOriginalPoint = {
+                        x: funContainer.clientWidth / 2 - 15,
+                        y: funContainer.clientHeight / 2 - 15
+                    };
+                    // 計算爆炸終點
+                    let bombTargetPoint = { x: 0, y: 0, };
+                    {
+                        bombTargetPoint.y = bombOriginalPoint.y - getRandomNumber(1, bombOriginalPoint.y);
+                        let bombXOp = getRandomNumber(0, 1);
+                        if(bombXOp === 0){
+                            // 往左跑
+                            bombTargetPoint.x = bombOriginalPoint.x - getRandomNumber(1, bombOriginalPoint.x);
+                        }else{
+                            // 往右跑
+                            bombTargetPoint.x = bombOriginalPoint.x + getRandomNumber(1, bombOriginalPoint.x);
+                        }
+                    }
+                    // 設定動畫
+                    {
+                        let bombTimeline = gsap.timeline({ yoyo:false, repeat: 0 });
+                        // 移動到爆炸起點
+                        bombTimeline.to("#" + targetElementId, {
+                            x: bombOriginalPoint.x,
+                            y: bombOriginalPoint.y,
+                            rotation: 360,
+                            duration: 0.5,
+                        });
+                        // 開始爆炸
+                        bombTimeline.to("#" + targetElementId, {
+                            x: bombTargetPoint.x,
+                            y: bombTargetPoint.y,
+                            rotation: 0,
+                            duration: getRandomNumber(10, 20)/10,
+                        });
+                        bombTimeline.to("#" + targetElementId, {
+                            rotation: 360,
+                            duration: getRandomNumber(1, 10)/10,
+                        });
+                        // 漸漸消逝
+                        bombTimeline.to("#" + targetElementId, {
+                            opacity: 0,
+                            duration: getRandomNumber(1, 10)/10,
+                        });
                     }
                 }
-                // 設定動畫
-                {
-                    let bombTimeline = gsap.timeline({ yoyo:false, repeat: 0 });
-                    // 移動到爆炸起點
-                    bombTimeline.to("#" + targetElementId, {
-                        x: bombOriginalPoint.x,
-                        y: bombOriginalPoint.y,
-                        duration: 0.5
-                    });
-                    // 開始爆炸
-                    bombTimeline.to("#" + targetElementId, {
-                        x: bombTargetPoint.x,
-                        y: bombTargetPoint.y,
-                        rotate: 360,
-                        duration: 1, //getRandomNumber(10, 20)/10,
-                    });
-                    // 漸漸消逝
-                    bombTimeline.to("#" + targetElementId, {
-                        opacity: 0,
-                        duration: 0.5,
-                    });
-                }
-            }
+            });
+
         });
     }
     // 生成碎花片
