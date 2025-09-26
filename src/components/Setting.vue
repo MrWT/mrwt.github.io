@@ -59,6 +59,7 @@
         status: true,
     });
     let restaurants = reactive([]);
+    let awards = reactive([]);
     let userObj = reactive({
         account: "",
         name: "",
@@ -102,6 +103,7 @@
             fetchUser();
         }else{
             fetchRestaurant();
+            fetchAward();
         }
     }
     // 取得使用者個人 finance 資料
@@ -309,6 +311,72 @@
             });
         });
         return geoPromise;
+    }
+    // 取得 award 資料
+    function fetchAward(){
+        let fetchAwardPromise = fetchData({
+            api: "get_awards",
+            data: {
+                check_receive_count: "false",
+            },
+        });
+        Promise.all([fetchAwardPromise]).then((values) => {
+            console.log("fetchAwardPromise.values=", values);
+
+            // 清空 awards
+            awards.splice(0, awards.length);
+            values[0].forEach((awardObj, award_i) => {
+                awards.push({
+                    op: "EDIT",
+                    name: awardObj["name"],
+                    display_text: awardObj["display_text"],
+                    count: awardObj["count"],
+                    pickup_percent: awardObj["pickup_percent"],
+                    receive_count: awardObj["receive_count"],
+                });
+            });
+            console.log("awards", awards);
+        });
+    }
+    // 新增 award 設定資料
+    function newAward(){
+        //console.log("newAward");
+
+        awards.push({
+            op: "NEW",
+            name: "",
+            display_text: "",
+            count: 0,
+            pickup_percent: 0,
+            receive_count: 0,
+        });
+    }
+    // 儲存 award 設定資料
+    function saveAward(){
+        console.log("saveAward.awards=", awards);
+
+        let saveAwardsPromise = fetchData({
+            api: "edit_awards",
+            data: awards
+        });
+        Promise.all([saveAwardsPromise]).then((values) => {
+            console.log("saveAwardsPromise.values=", values);
+
+            opObj.status = values[0]["result"];
+            if(values[0]["result"] === true){
+                opObj.message = "儲存成功";
+                // 更新資料
+                fetchAward();
+            }else{
+                opObj.message = values[0]["message"];
+            }
+            document.getElementById("alertMsg").classList.remove("hidden");
+
+            setTimeout(() => {
+                document.getElementById("alertMsg").classList.add("hidden");
+            }, 3000);
+
+        });
     }
     // 取得使用者個人資料
     function fetchUser(){
@@ -579,6 +647,49 @@
                 new
             </button>
             <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveRestaurant">
+                save
+            </button>
+        </div>
+    </div>
+
+    <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定獎項清單" />
+    <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
+        <div class="divider">
+            Award 資料
+        </div>
+        <div class="flex w-10/10 flex-col gap-2">
+            <fieldset v-for="(awardObj, award_i) in awards" class="fieldset bg-gray-300 border-gray-500 rounded-box border p-2 w-10/10">
+                <div class="join">
+                    <div class="flex flex-col join-item w-5/10">
+                        <label class="label">ID</label>
+                        <input type="text" class="input w-10/10" placeholder="ID" :disabled="awardObj.op === 'EDIT'" v-model="awardObj.name" />
+                    </div>
+                    <div class="flex flex-col join-item w-5/10">
+                        <label class="label">名稱</label>
+                        <input type="text" class="input w-10/10" placeholder="名稱" v-model="awardObj.display_text" />
+                    </div>
+                </div>
+                <div class="join">
+                    <div class="flex flex-col join-item w-4/12">
+                        <label class="label">總量</label>
+                        <input type="number" class="input w-10/10" placeholder="總量" v-model="awardObj.count" />
+                    </div>
+                    <div class="flex flex-col join-item w-4/12">
+                        <label class="label">已領量</label>
+                        <input type="number" class="input w-10/10" placeholder="已領量" v-model="awardObj.receive_count" />
+                    </div>
+                    <div class="flex flex-col join-item w-4/12">
+                        <label class="label">出現機率</label>
+                        <input type="number" class="input w-10/10" placeholder="出現機率" v-model="awardObj.pickup_percent" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-2 gap-2 justify-center">
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="newAward">
+                new
+            </button>
+            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveAward">
                 save
             </button>
         </div>
