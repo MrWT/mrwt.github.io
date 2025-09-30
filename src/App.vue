@@ -1,4 +1,6 @@
 <script setup>
+    import { gsap } from "gsap"
+
     import { ref, reactive, onMounted } from 'vue'
     import Finance from './components/Finance.vue'
     import Gallery from './components/Gallery.vue'
@@ -19,6 +21,8 @@
             document.getElementById("signinModal").showModal();
             setTimeout(() => {
                 document.getElementById("signinName").focus();
+
+                genAnimation_gsap();
             }, 400);
 
         }
@@ -112,9 +116,6 @@
         //console.log("tempAccount.value=", tempAccount.value);
 
         if(tempAccount.value){
-            // 開啟"系統處理中 mask"
-            $("#loading").show();
-
             // close signinModal
             document.getElementById("signinModal").close();
 
@@ -191,8 +192,6 @@
                     max_number: appSettingObj["quiz_max_number"],
                 };
 
-
-
                 // user info
                 {
                     let userInfoObj = values[1];
@@ -221,9 +220,6 @@
 
                 // close signinModal
                 document.getElementById("signinModal").close();
-
-                // 關閉"系統處理中 mask"
-                $("#loading").hide();
             });
         }
     }
@@ -252,6 +248,25 @@
     // 使用者資訊
     function openUserInfoModal(){
         document.getElementById("userInfoModal").showModal();
+    }
+
+    function genAnimation_gsap(){
+        gsap.set(".ball",{
+            xPercent: -50,
+            yPercent: -50,
+        });
+
+        window.addEventListener("mousemove", e => {
+            gsap.to(".ball" , {
+                x: e.pageX,
+                y: e.pageY,
+                duration: 0.4,
+                stagger: {
+                    each: 0.05,
+                    from: "end"
+                }
+            })
+        });
     }
 
 </script>
@@ -382,17 +397,23 @@
 
     <!-- signin modal -->
     <dialog id="signinModal" class="modal">
-        <div class="modal-box">
-            <h3 class="text-lg font-bold text-center">Hello!</h3>
-            <h4 v-if="signinError" class="text-red-900 text-center mb-5">Error! 登入失敗~ 請檢查登入帳號!</h4>
-            <div class="flex justify-center items-center join">
-                <input id="signinName" type="text" placeholder="What's your name?" class="input input-ghost join-item" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" autofocus />
-                <button class="btn btn-primary join-item ml-1" @click="signin" >
-                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
-                    </svg>
-                </button>
+        <div class="modal-box h-10/10 w-10/10 md:h-7/10 md:w-7/10 flex flex-col place-content-center bg-neutral-500 overflow-hidden">
+
+            <div class="h-auto w-10/10 flex flex-col place-content-center rounded-2xl bg-white p-3">
+                <h3 class="text-lg font-bold text-center">Hello!</h3>
+                <h4 v-if="signinError" class="text-red-900 text-center mb-5">Error! 登入失敗~ 請檢查登入帳號!</h4>
+                <div class="flex justify-center items-center join">
+                    <input id="signinName" type="text" placeholder="What's your name?" class="input input-ghost join-item" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" autofocus />
+                    <button class="btn btn-primary join-item ml-1" @click="signin" >
+                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
+
+            <div class="ball fixed top-0 left-0 rounded-full size-[100px] border-3 border-red-900"></div>
+            <div class="ball fixed top-0 left-0 rounded-full size-[75px] border-3 border-blue-900"></div>
         </div>
     </dialog>
      <!-- userInfo modal -->
@@ -434,6 +455,5 @@
 </template>
 
 <style scoped>
-
 
 </style>
