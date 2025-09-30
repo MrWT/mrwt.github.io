@@ -33,6 +33,8 @@
           let fetchDataPromise = new Promise((resolve, reject) => {
               const cloudRunUrl = "https://mr-k49-281406713443.asia-east1.run.app";
 
+              $("#loading").show();
+
               fetch(cloudRunUrl, {
                   method: 'POST',
                   headers: {
@@ -45,14 +47,19 @@
                   if (!response.ok) {
                       reject(`HTTP error! status: ${response.status}`);
                   }
+
                   // 解析 JSON 格式的回應
                   return response.json();
               })
               .then(data => {
+                  $("#loading").hide();
+
                   //console.log('Success:', data);
                   resolve(data);
               })
               .catch(error => {
+                  $("#loading").hide();
+
                   console.error('Error:', error);
                   reject('Error:' + error);
               });
