@@ -341,10 +341,11 @@
     // 新增 award 設定資料
     function newAward(){
         //console.log("newAward");
+        const guid = crypto.randomUUID();
 
         awards.push({
             op: "NEW",
-            name: "",
+            name: guid,
             display_text: "",
             count: 0,
             pickup_percent: 0,
@@ -443,6 +444,7 @@
 <template>
 
 <div class="tabs tabs-border">
+    <!-- Finance -->
     <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定 Finance" />
     <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -573,6 +575,7 @@
         </div>
     </div>
 
+    <!-- 個人資料 -->
     <input v-if="appState === 'SET_PERSON'" type="radio" name="setting_tabs" class="tab" aria-label="設定個人資料" />
     <div v-if="appState === 'SET_PERSON'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -606,6 +609,7 @@
         </div>
     </div>
 
+    <!-- Quiz 預設值 -->
     <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定 Quiz 預設值" />
     <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -628,6 +632,7 @@
         </div>
     </div>
 
+    <!-- Restaurant -->
     <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定餐廳清單" />
     <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -652,6 +657,7 @@
         </div>
     </div>
 
+    <!-- Award -->
     <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定獎項清單" />
     <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
         <div class="divider">
@@ -659,29 +665,23 @@
         </div>
         <div class="flex w-10/10 flex-col gap-2">
             <fieldset v-for="(awardObj, award_i) in awards" class="fieldset bg-gray-300 border-gray-500 rounded-box border p-2 w-10/10">
-                <div class="join">
-                    <div class="flex flex-col join-item w-5/10">
-                        <label class="label">ID</label>
-                        <input type="text" class="input w-10/10" placeholder="ID" :disabled="awardObj.op === 'EDIT'" v-model="awardObj.name" />
-                    </div>
-                    <div class="flex flex-col join-item w-5/10">
-                        <label class="label">名稱</label>
-                        <input type="text" class="input w-10/10" placeholder="名稱" v-model="awardObj.display_text" />
-                    </div>
+                <div class="flex flex-col join-item w-10/10">
+                    <label class="label">名稱</label>
+                    <input type="text" class="input w-10/10" placeholder="名稱" v-model="awardObj.display_text" />
                 </div>
                 <div class="join">
-                    <div class="flex flex-col join-item w-4/12">
+                    <div class="flex flex-col join-item w-5/10">
                         <label class="label">總量</label>
                         <input type="number" class="input w-10/10" placeholder="總量" v-model="awardObj.count" />
                     </div>
-                    <div class="flex flex-col join-item w-4/12">
+                    <div class="flex flex-col join-item w-5/10">
                         <label class="label">已領量</label>
                         <input type="number" class="input w-10/10" placeholder="已領量" v-model="awardObj.receive_count" />
                     </div>
-                    <div class="flex flex-col join-item w-4/12">
-                        <label class="label">出現機率</label>
-                        <input type="number" class="input w-10/10" placeholder="出現機率" v-model="awardObj.pickup_percent" />
-                    </div>
+                </div>
+                <div class="flex flex-col w-10/10">
+                    <label class="label">(相對)出現機率: {{ awardObj.pickup_percent }}%</label>
+                    <input type="range" min="0" max="100" v-model="awardObj.pickup_percent" class="range range-info w-10/10" />
                 </div>
             </fieldset>
         </div>
