@@ -251,21 +251,32 @@
     }
 
     function genAnimation_gsap(){
-        gsap.set(".ball",{
-            xPercent: -50,
-            yPercent: -50,
-        });
+        let tl = gsap.timeline({ yoyo: true, repeat: -1 });
 
-        window.addEventListener("mousemove", e => {
-            gsap.to(".ball" , {
-                x: e.pageX,
-                y: e.pageY,
-                duration: 0.4,
-                stagger: {
-                    each: 0.05,
-                    from: "end"
-                }
-            })
+        tl.to("#circle1", {
+            x: 10,
+            y: 10,
+            duration: 0.4,            
+        });
+        tl.to("#circle2", {
+            x: 10,
+            y: 60,
+            duration: 0.4,            
+        });
+        tl.to("#circle3", {
+            x: 60,
+            y: 10,
+            duration: 0.4,            
+        });
+        tl.to("#circle4", {
+            x: 60,
+            y: 60,
+            duration: 0.4,            
+        });
+        tl.to("#circle5", {
+            x: 400,
+            y: 400,
+            duration: 0.4,            
         });
     }
 
@@ -412,8 +423,11 @@
                 </div>
             </div>
 
-            <div class="ball fixed top-0 left-0 rounded-full size-[100px] border-3 border-red-900"></div>
-            <div class="ball fixed top-0 left-0 rounded-full size-[75px] border-3 border-blue-900"></div>
+            <div id="circle1" class="fixed top-0 left-0 rounded-full size-[100px] border-3 border-red-900"></div>
+            <div id="circle2" class="fixed top-0 left-0 rounded-full size-[75px] border-3 border-blue-900"></div>
+            <div id="circle3" class="fixed top-0 left-0 rounded-full size-[55px] border-3 border-green-900"></div>
+            <div id="circle4" class="fixed top-0 left-0 rounded-full size-[125px] border-3 border-neutral-900"></div>
+            <div id="circle5" class="fixed top-0 left-0 rounded-full size-[175px] border-3 border-emerald-900"></div>
         </div>
     </dialog>
      <!-- userInfo modal -->
