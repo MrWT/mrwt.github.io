@@ -1,7 +1,7 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
     import moment from 'moment'
-    import { gsap } from "gsap";
+    import { gsap } from "gsap"
 
     onMounted(() => {
         console.log("LuckyMe mounted.");
