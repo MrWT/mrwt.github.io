@@ -291,14 +291,14 @@
     <div id="loading" class="w-full h-full flex justify-center items-center bg-gray-700/70 absolute top-0 left-0 z-999" style="display:none;">
         <progress class="w-5/10 progress progress-neutral" max="100"></progress>
     </div>
-
-    <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
+    <!-- 功能 component -->
+    <div class="navbar bg-slate-200/100 h-[10px] fixed top-0 left-0 z-50">
         <div class="flex-1">
             <a class="btn btn-ghost text-xl" @click="gotoPage('gallery')">
                 <span>{{ appSetting.title }}</span>
             </a>
         </div>
-        <div class="place-items-center flex-none">
+        <div class="flex-none">
             <ul class="menu menu-horizontal bg-slate-200/100 rounded-box w-10/10">
                 <!-- setting -->
                 <li v-if="userInfo.funcs.indexOf('setting') !== -1" @click="gotoPage('set_system')">
@@ -320,16 +320,20 @@
             </ul>
         </div>
     </div>
-    <div class="navbar shadow-lg h-1/10 fixed top-20 left-0 z-50 flex flex-row content-center gap-5 overflow-x-auto">
-        <button v-if="userInfo.funcs.indexOf('quiz') !== -1" class="btn btn-ghost" @click="gotoPage('quiz')">{{ userInfo.languages.quiz }}</button>
+    <!-- 為了製造出"功能 menu 白霧底效果" -->
+    <div class="navbar bg-white opacity-50 h-[10px] fixed top-15 left-0 z-50">
+    </div>
+    <!-- 功能 menu -->
+    <div class="navbar shadow-lg h-[10px] fixed top-15 left-0 z-50 flex flex-row content-center gap-5 overflow-x-auto">
+        <button v-if="userInfo.funcs.indexOf('quiz') !== -1" class="btn btn-ghost text-black font-black" @click="gotoPage('quiz')">{{ userInfo.languages.quiz }}</button>
         <button v-if="userInfo.funcs.indexOf('restaurant') !== -1" class="btn btn-ghost" @click="gotoPage('restaurant')">{{ userInfo.languages.restaurant }}</button>
         <button v-if="userInfo.funcs.indexOf('finance') !== -1" class="btn btn-ghost" @click="gotoPage('finance')">{{ userInfo.languages.finance }}</button>
         <button v-if="userInfo.funcs.indexOf('chat') !== -1" class="btn btn-ghost" @click="gotoPage('chat')">{{ userInfo.languages.chat }}</button>
         <button v-if="userInfo.funcs.indexOf('lockLucky') !== -1" class="btn btn-ghost" @click="gotoPage('lockLucky')">{{ userInfo.languages.lockLucky }}</button>
         <button v-if="userInfo.funcs.indexOf('readme') !== -1" class="btn btn-ghost" @click="gotoPage('readme')">{{ userInfo.languages.readme }}</button>
     </div>
-
-    <div class="p-4 h-8/10 mt-40">
+    <!-- 功能 component -->
+    <div class="p-4 h-8/10 mt-30">
         <Gallery v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title" />
         <Quiz v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz" />
         <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"  @introduce-author="gotoIntroduceAuthor" />
