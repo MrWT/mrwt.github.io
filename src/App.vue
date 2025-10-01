@@ -22,7 +22,7 @@
             setTimeout(() => {
                 document.getElementById("signinName").focus();
 
-                genAnimation_gsap();
+                genSigninAnimation_gsap();
             }, 400);
 
         }
@@ -249,35 +249,39 @@
     function openUserInfoModal(){
         document.getElementById("userInfoModal").showModal();
     }
-
-    function genAnimation_gsap(){
-        let tl = gsap.timeline({ yoyo: true, repeat: -1 });
-
-        tl.to("#circle1", {
-            x: 10,
-            y: 10,
-            duration: 0.4,            
-        });
-        tl.to("#circle2", {
-            x: 10,
-            y: 60,
-            duration: 0.4,            
-        });
-        tl.to("#circle3", {
-            x: 60,
-            y: 10,
-            duration: 0.4,            
-        });
-        tl.to("#circle4", {
-            x: 60,
-            y: 60,
-            duration: 0.4,            
-        });
-        tl.to("#circle5", {
-            x: 400,
-            y: 400,
-            duration: 0.4,            
-        });
+    // 產生登入 modal 動畫
+    function genSigninAnimation_gsap(){
+        let signinModal = document.getElementById("signinModal");
+        console.log("signinModal.clientHeight=", signinModal.clientHeight);
+        console.log("signinModal.clientWidth=", signinModal.clientWidth);
+        
+        let tlList = [];
+        for(let c_i = 0; c_i < 10; c_i++){
+            let tl = gsap.timeline({ yoyo: true, repeat: -1 });
+            tl.to("#circle" + c_i, {
+                x: getRandomNumber(10, 300),
+                y: getRandomNumber(10, 300),
+                duration: getRandomNumber(1, 10)/10,        
+            })
+            .to("#circle" + c_i, {
+                opacity: 100,
+                x: getRandomNumber(10, signinModal.clientWidth - 100),
+                y: getRandomNumber(10, signinModal.clientHeight - 100),
+                duration: getRandomNumber(20, 30),        
+                ease: "power2.inOut",    
+            })
+            .to("#circle" + c_i, {
+                scale: 0.5,
+                x: getRandomNumber(10, signinModal.clientWidth - 100),
+                y: getRandomNumber(10, signinModal.clientHeight - 100),
+                duration: getRandomNumber(10, 20),            
+            })
+            .to("#circle" + c_i, {
+                x: getRandomNumber(10, signinModal.clientWidth - 100),
+                y: getRandomNumber(10, signinModal.clientHeight - 100),
+                duration: getRandomNumber(10, 20),            
+            });
+        }
     }
 
 </script>
@@ -408,7 +412,7 @@
 
     <!-- signin modal -->
     <dialog id="signinModal" class="modal">
-        <div class="modal-box h-10/10 w-10/10 md:h-7/10 md:w-7/10 flex flex-col place-content-center bg-neutral-500 overflow-hidden">
+        <div class="modal-box h-10/10 w-10/10 md:h-8/10 md:w-8/10 flex flex-col place-content-center bg-neutral-500 overflow-hidden">
 
             <div class="h-auto w-10/10 flex flex-col place-content-center rounded-2xl bg-white p-3">
                 <h3 class="text-lg font-bold text-center">Hello!</h3>
@@ -423,11 +427,16 @@
                 </div>
             </div>
 
-            <div id="circle1" class="fixed top-0 left-0 rounded-full size-[100px] border-3 border-red-900"></div>
-            <div id="circle2" class="fixed top-0 left-0 rounded-full size-[75px] border-3 border-blue-900"></div>
-            <div id="circle3" class="fixed top-0 left-0 rounded-full size-[55px] border-3 border-green-900"></div>
-            <div id="circle4" class="fixed top-0 left-0 rounded-full size-[125px] border-3 border-neutral-900"></div>
-            <div id="circle5" class="fixed top-0 left-0 rounded-full size-[175px] border-3 border-emerald-900"></div>
+            <div id="circle0" class="circle fixed top-0 left-0 rounded-full size-[35px] border-3 border-fuchsia-900 opacity-0"></div>
+            <div id="circle1" class="circle fixed top-0 left-0 rounded-full size-[55px] border-3 border-green-900 opacity-0"></div>
+            <div id="circle2" class="circle fixed top-0 left-0 rounded-full size-[75px] border-3 border-blue-900 opacity-0"></div>
+            <div id="circle3" class="circle fixed top-0 left-0 rounded-full size-[100px] border-3 border-red-900 opacity-0"></div>
+            <div id="circle4" class="circle fixed top-0 left-0 rounded-full size-[125px] border-3 border-neutral-900 opacity-0"></div>
+            <div id="circle5" class="circle fixed top-0 left-0 rounded-full size-[155px] border-3 border-emerald-900 opacity-0"></div>
+            <div id="circle6" class="circle fixed top-0 left-0 rounded-full size-[185px] border-3 border-teal-900 opacity-0"></div>
+            <div id="circle7" class="circle fixed top-0 left-0 rounded-full size-[215px] border-3 border-sky-900 opacity-0"></div>
+            <div id="circle8" class="circle fixed top-0 left-0 rounded-full size-[245px] border-3 border-lime-900 opacity-0"></div>
+            <div id="circle9" class="circle fixed top-0 left-0 rounded-full size-[275px] border-3 border-rose-900 opacity-0"></div>
         </div>
     </dialog>
      <!-- userInfo modal -->
