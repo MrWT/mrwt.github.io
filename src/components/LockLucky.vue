@@ -4,7 +4,7 @@
     import { gsap } from "gsap"
 
     onMounted(() => {
-        console.log("LuckyMe mounted.");
+        console.log("LockLucky mounted.");
         init();
     });
 
@@ -21,7 +21,7 @@
 
     // 初始化 component
     function init(){
-        console.log("LuckyMe.init");
+        console.log("LockLucky.init");
 
         // 取得 award 資料
         fetchAward();
