@@ -261,13 +261,13 @@
             tl.to("#circle" + c_i, {
                 x: getRandomNumber(10, screenSize.value === "md" ? 300 : signinModal.clientWidth),
                 y: getRandomNumber(10, screenSize.value === "md" ? 300 : signinModal.clientHeight),
-                duration: getRandomNumber(1, 10)/10,        
+                duration: 0.1,        
             })
             .to("#circle" + c_i, {
                 opacity: 100,
                 x: getRandomNumber(10, signinModal.clientWidth - 100),
                 y: getRandomNumber(10, signinModal.clientHeight - 100),
-                duration: getRandomNumber(20, 30),        
+                duration: getRandomNumber(10, 20),        
                 ease: "power2.inOut",    
             })
             .to("#circle" + c_i, {
