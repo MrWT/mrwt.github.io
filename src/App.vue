@@ -259,8 +259,8 @@
         for(let c_i = 0; c_i < 10; c_i++){
             let tl = gsap.timeline({ yoyo: true, repeat: -1 });
             tl.to("#circle" + c_i, {
-                x: getRandomNumber(10, 300),
-                y: getRandomNumber(10, 300),
+                x: getRandomNumber(10, screenSize.value === "md" ? 300 : signinModal.clientWidth),
+                y: getRandomNumber(10, screenSize.value === "md" ? 300 : signinModal.clientHeight),
                 duration: getRandomNumber(1, 10)/10,        
             })
             .to("#circle" + c_i, {
@@ -289,8 +289,7 @@
 <template>
     <!-- 系統 loading mask -->
     <div id="loading" class="w-full h-full flex justify-center items-center bg-gray-700/70 absolute top-0 left-0 z-999" style="display:none;">
-        <span class="loading loading-spinner text-white loading-xl"></span>
-        <span class="sr-only">Loading...</span>
+        <progress class="w-5/10 progress progress-neutral" max="100"></progress>
     </div>
 
     <div class="navbar bg-slate-200/100 shadow-lg h-1/10 fixed top-0 left-0 z-50">
@@ -349,7 +348,7 @@
             <div class="h-auto w-10/10 flex flex-col place-content-center rounded-2xl bg-white p-3">
                 <h3 class="text-lg font-bold text-center">Hello!</h3>
                 <h4 v-if="signinError" class="text-red-900 text-center mb-5">Error! 登入失敗~ 請檢查登入帳號!</h4>
-                <div class="flex justify-center items-center join">
+                <div class="flex justify-center items-center join z-51">
                     <input id="signinName" type="text" placeholder="What's your name?" class="input input-ghost join-item" :value="tempAccount" @change="keyinAccount" @keyup.enter="signin" autofocus />
                     <button class="btn btn-primary join-item ml-1" @click="signin" >
                         <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
