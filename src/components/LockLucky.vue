@@ -1,7 +1,8 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
-    import moment from 'moment'
     import { gsap } from "gsap"
+    import { fetchData } from "@/composables/fetchData"
+    import { getRandomNumber } from "@/composables/random"
 
     onMounted(() => {
         console.log("LockLucky mounted.");

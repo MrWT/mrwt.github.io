@@ -1,5 +1,6 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
+    import { fetchData } from "@/composables/fetchData"
 
     const props = defineProps({
         title: String,

@@ -1,5 +1,7 @@
 <script setup>
     import { gsap } from "gsap"
+    import { fetchData } from "./composables/fetchData"
+    import { getRandomNumber } from "./composables/random"
 
     import { ref, reactive, onMounted } from 'vue'
     import Finance from './components/Finance.vue'
@@ -36,6 +38,7 @@
         state: "",
         contentComponent: "gallery",
         title: "V.Demo",
+        googleMapApiKey: "",
         resources: [],
         quiz: {},
     });
@@ -69,7 +72,6 @@
         console.log("window.innerWidth=" + window.innerWidth);
         console.log("screenSize.value=" + screenSize.value);
         console.log("switchMenu.value=" + switchMenu.value);
-        
     }
     // 重設系統設定
     function resetAppSetting(){
@@ -149,6 +151,10 @@
 
                 let appSettingObj = values[0];
                 console.log("appSettingObj=", appSettingObj);
+
+                // appSetting.googleMapApiKey
+                appSetting.googleMapApiKey = appSettingObj["google_map_api_key"];
+
                 // appSetting.resources
                 {
                     appSetting.resources = [];
@@ -163,27 +169,6 @@
                             link: appSetObj["value2"],
                         });
                     });
-                }
-
-                // 動態載入 Google Maps API
-                let hasImportGoogleMapLibrary = false;
-                {
-                    let scripts = document.getElementsByTagName('script');
-                    for(let s_i = 0; s_i < scripts.length; s_i++){
-                        if(scripts[s_i].src.indexOf("maps.googleapis.com/maps/api/js?key=") >= 0){
-                            hasImportGoogleMapLibrary = true;
-                            break;
-                        }
-                    }
-                }
-                if(!hasImportGoogleMapLibrary){
-                    let google_map_api_src = "https://maps.googleapis.com/maps/api/js?key=" + appSettingObj["google_map_key"] + "&loading=async";
-                    const script = document.createElement('script');
-                    script.src = google_map_api_src;
-                    script.defer = true;
-                    script.async = true;
-                    script.onload = () => { /* 成功載入回調 */ };
-                    document.body.appendChild(script);
                 }
 
                 // appSetting.quiz
@@ -337,7 +322,7 @@
         <Gallery v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title" />
         <Quiz v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz" />
         <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"  @introduce-author="gotoIntroduceAuthor" />
-        <Restaurant v-else-if="appSetting.contentComponent === 'restaurant'" :title="appSetting.title" :account="userInfo.account" />
+        <Restaurant v-else-if="appSetting.contentComponent === 'restaurant'" :title="appSetting.title" :account="userInfo.account" :googleMapApiKey="appSetting.googleMapApiKey" />
         <Finance v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" />
         <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" />
         <Chat v-else-if="appSetting.contentComponent === 'chat'" :title="appSetting.title" :account="userInfo.account" />

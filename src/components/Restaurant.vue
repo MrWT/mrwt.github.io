@@ -1,9 +1,12 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
+    import { fetchData } from "@/composables/fetchData"
+    import { GoogleMap, Marker } from 'vue3-google-map'
 
     const props = defineProps({
         title: String,
         account: String,
+        googleMapApiKey: String,
     })
 
     onMounted(() => {
@@ -17,11 +20,26 @@
     let showHandChangeCard = ref(true);
     let restCards = reactive([]);
     let restaurants = [];
-
+    
+    let googleMapCenter = reactive({
+        lat: 0, lng:0
+    });
+    let googleMapMakerOptions = reactive({
+        position: {
+            lat: 0, lng: 0
+        }
+    });
+    let googleMapSetting = reactive({
+       center_lat: 0,
+       center_lng: 0, 
+    });
+    
     // 初始化 component
     function init(){
         console.log("restaurants.init");
+        console.log("props.title=", props.title);
         console.log("props.account=", props.account);
+        console.log("props.googleMapApiKey=", props.googleMapApiKey);
 
         fetchRestaurant();
     }
@@ -131,42 +149,11 @@
     async function drawMap(restaurantName, lat, lng){
         console.log("drawMap", lat, lng);
         if(lat && lng){
-            // 設定地圖的中心點座標
-            const location = { lat: lat, lng: lng };
+            googleMapCenter.lat = lat;
+            googleMapCenter.lng = lng;
 
-            // 創建一個新的地圖實例
-            const map = new google.maps.Map(document.getElementById("map"), {
-                mapId: "DEMO_MAP_ID", // Map ID is required for advanced markers.
-                center: location, // 設定地圖的中心點
-                // 設定地圖縮放比例 0-20
-                zoom: 17,
-                // 限制使用者能縮放地圖的最大比例
-                maxZoom: 20,
-                // 限制使用者能縮放地圖的最小比例
-                minZoom: 3,
-                // 設定是否呈現右下角街景小人
-                streetViewControl: false,
-                // 設定是否讓使用者可以切換地圖樣式：一般、衛星圖等
-                mapTypeControl: false,
-            });
-
-            const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
-
-
-            // 建立一個黃色底色、白色文字的 PinElement
-            const pin = new google.maps.marker.PinElement({
-                scale: 1.25,
-                background: 'black',
-                borderColor: 'red',
-                glyph: restaurantName,             // 可填入文字或字元
-                glyphColor: 'white'
-            });
-            const marker = new AdvancedMarkerElement({
-                position: location,
-                map: map,
-                //content: pin.element,
-            });
-
+            googleMapMakerOptions.position.lat = lat;
+            googleMapMakerOptions.position.lng = lng;
         }
     }
 
@@ -201,7 +188,12 @@
     </div>
 </div>
 <div class="w-10/10 h-7/10 content-center p-2">
-    <div id="map" class="w-10/10 h-6/10"></div>
+    <GoogleMap class="w-10/10 h-6/10"
+        :api-key="props.googleMapApiKey"
+        :center="googleMapCenter"
+        :zoom="17">
+        <Marker :options="googleMapMakerOptions"></Marker>        
+    </GoogleMap>
 </div>
 <div class="w-10/10 h-1/10 flex flex-row gap-2">
     <div class="h-10/10" :class="{ 'w-5/10': showHandChangeCard, 'w-10/10': !showHandChangeCard }">

@@ -1,5 +1,6 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
+    import { getRandomNumber } from "@/composables/random"
 
     const props = defineProps({
         title: String,

@@ -1,6 +1,7 @@
 <script setup>
     import { ref, reactive, onMounted } from 'vue'
     import moment from 'moment'
+    import { fetchData } from "@/composables/fetchData"
 
     const props = defineProps({
         title: String,
