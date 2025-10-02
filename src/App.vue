@@ -1,12 +1,12 @@
 <script setup>
+    import { ref, reactive, onMounted } from 'vue'
     import { gsap } from "gsap"
     import { fetchData } from "./composables/fetchData"
     import { getRandomNumber } from "./composables/random"
 
-    import { ref, reactive, onMounted } from 'vue'
     import Finance from './components/Finance.vue'
     import Gallery from './components/Gallery.vue'
-    import Restaurant from './components/Restaurant.vue'
+    import Footmark from './components/Footmark.vue'
     import Quiz from './components/Quiz.vue'
     import Readme from './components/Readme.vue'
     import Setting from './components/Setting.vue'
@@ -311,7 +311,7 @@
     <!-- 功能 menu -->
     <div class="navbar shadow-lg h-[10px] fixed top-15 left-0 z-50 flex flex-row content-center gap-5 overflow-x-auto">
         <button v-if="userInfo.funcs.indexOf('quiz') !== -1" class="btn btn-ghost text-black font-black" @click="gotoPage('quiz')">{{ userInfo.languages.quiz }}</button>
-        <button v-if="userInfo.funcs.indexOf('restaurant') !== -1" class="btn btn-ghost" @click="gotoPage('restaurant')">{{ userInfo.languages.restaurant }}</button>
+        <button v-if="userInfo.funcs.indexOf('footmark') !== -1" class="btn btn-ghost" @click="gotoPage('footmark')">{{ userInfo.languages.footmark }}</button>
         <button v-if="userInfo.funcs.indexOf('finance') !== -1" class="btn btn-ghost" @click="gotoPage('finance')">{{ userInfo.languages.finance }}</button>
         <button v-if="userInfo.funcs.indexOf('chat') !== -1" class="btn btn-ghost" @click="gotoPage('chat')">{{ userInfo.languages.chat }}</button>
         <button v-if="userInfo.funcs.indexOf('lockLucky') !== -1" class="btn btn-ghost" @click="gotoPage('lockLucky')">{{ userInfo.languages.lockLucky }}</button>
@@ -322,7 +322,7 @@
         <Gallery v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title" />
         <Quiz v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz" />
         <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"  @introduce-author="gotoIntroduceAuthor" />
-        <Restaurant v-else-if="appSetting.contentComponent === 'restaurant'" :title="appSetting.title" :account="userInfo.account" :googleMapApiKey="appSetting.googleMapApiKey" />
+        <Footmark v-else-if="appSetting.contentComponent === 'footmark'" :title="appSetting.title" :account="userInfo.account" :googleMapApiKey="appSetting.googleMapApiKey" />
         <Finance v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" />
         <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" />
         <Chat v-else-if="appSetting.contentComponent === 'chat'" :title="appSetting.title" :account="userInfo.account" />
@@ -359,14 +359,14 @@
             <div id="circle9" class="circle fixed top-0 left-0 rounded-full size-[275px] border-3 border-rose-900 opacity-0"></div>
         </div>
     </dialog>
-     <!-- userInfo modal -->
+    <!-- userInfo modal -->
     <dialog id="userInfoModal" class="modal">
         <div class="modal-box bg-gray-800/80 rounded-box p-2 w-80 md:w-120">
             <li class="text-white text-lg">{{ userInfo.name }}</li>
             <li v-if="userInfo.mail" class="text-white text-lg">{{ userInfo.mail }}</li>
             <div class="divider"></div>
-            <li class="flex flex-row w-10/10">
-                <button v-if="userInfo.account" class="btn w-5/10 mr-1" @click="gotoPage('set_person')">
+            <li class="flex flex-row gap-2 w-10/10">
+                <button v-if="userInfo.account" class="btn w-5/10" @click="gotoPage('set_person')">
                     <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
