@@ -14,7 +14,4 @@ export default defineConfig({
     vue(), 
     tailwindcss()
   ],
-  server: {
-    allowedHosts: ['.ngrok-free.app'],
-  },
 })

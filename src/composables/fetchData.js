@@ -15,7 +15,7 @@ export function fetchData(postData) {
     */
 
     let fetchDataPromise = new Promise((resolve, reject) => {
-        const cloudRunUrl = import.meta.env.VITE_API_URL;// "https://mr-k49-281406713443.asia-east1.run.app";
+        const cloudRunUrl = "https://mr-k49-281406713443.asia-east1.run.app";
 
         $("#loading").show();
 
