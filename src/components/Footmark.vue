@@ -79,7 +79,8 @@
                     mark_date: fmObj["mark_date"],
                     type: fmObj["type"],
                     marker: {
-                        position: { lat: fmObj["latitude"], lng: fmObj["longitude"] }
+                        position: { lat: fmObj["latitude"], lng: fmObj["longitude"] },
+                        title: fmObj["location_name"]
                     }
                 });
 
