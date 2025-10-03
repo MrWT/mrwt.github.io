@@ -60,7 +60,6 @@
         message: "",
         status: true,
     });
-    let restaurants = reactive([]);
     let awards = reactive([]);
     let userObj = reactive({
         account: "",
