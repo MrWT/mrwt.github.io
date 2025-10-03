@@ -2,6 +2,7 @@
     import { ref, reactive, onMounted } from 'vue'
     import { fetchData } from "@/composables/fetchData"
 
+    const emit = defineEmits(['popupMessage']);
     const props = defineProps({
         app_state: String,
         title: String,
@@ -103,7 +104,6 @@
             fetchFinance();
             fetchUser();
         }else{
-            fetchRestaurant();
             fetchAward();
         }
     }
@@ -177,11 +177,8 @@
             }else{
                 opObj.message = values[0]["message"];
             }
-            document.getElementById("alertMsg").classList.remove("hidden");
 
-            setTimeout(() => {
-                document.getElementById("alertMsg").classList.add("hidden");
-            }, 3000);
+            emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
         });
     }
     // 儲存 quiz 設定資料
@@ -201,94 +198,8 @@
             }else{
                 opObj.message = values[0]["message"];
             }
-            document.getElementById("alertMsg").classList.remove("hidden");
-
-            setTimeout(() => {
-                document.getElementById("alertMsg").classList.add("hidden");
-            }, 3000);
-
+            emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
         });
-    }
-    // 取得 restaurant 資料
-    function fetchRestaurant(){
-        let fetchRestaurantPromise = fetchData({
-            api: "get_restaurants",
-        });
-        Promise.all([fetchRestaurantPromise]).then((values) => {
-            console.log("fetchRestaurantPromise.values=", values);
-
-            // 清空 restaurants
-            restaurants.splice(0, restaurants.length);
-            values[0].forEach((restObj, rest_i) => {
-                restaurants.push({
-                    name: restObj["name"],
-                    longitude: restObj["longitude"],
-                    latitude: restObj["latitude"],
-                    address: restObj["address"],
-                    edit_name: restObj["name"],
-                    edit_longitude: restObj["longitude"],
-                    edit_latitude: restObj["latitude"],
-                    edit_address: restObj["address"],
-                });
-            });
-            console.log("restaurants", restaurants);
-        });
-    }
-        // 新增 restaurant 設定資料
-    function newRestaurant(){
-        //console.log("newRestaurant");
-
-        restaurants.push({
-            name: "NEW",
-            address: "",
-            latitude: 0,
-            longitude: 0,
-            edit_name: "",
-            edit_address: "",
-            edit_latitude: 0,
-            edit_longitude: 0,
-        });
-    }
-    // 儲存 restaurant 設定資料
-    function saveRestaurant(){
-        //console.log("saveRestaurant");
-
-        restaurants.forEach((restObj, rest_i) => {
-            let edit_address = restObj["edit_address"];
-            let geoPromise = geocodeAddress(edit_address);
-            Promise.all([geoPromise]).then((values) => {
-                console.log("edit_address=" + edit_address + " / values=", values);
-                restObj["edit_latitude"] = values[0].latitude;
-                restObj["edit_longitude"] = values[0].longitude;
-            });
-        });
-        console.log("saveRestaurant.restaurants=", restaurants);
-
-        setTimeout(() => {
-            let saveRestaurantPromise = fetchData({
-                api: "save_restaurants",
-                data: restaurants
-            });
-            Promise.all([saveRestaurantPromise]).then((values) => {
-                console.log("saveRestaurantPromise.values=", values);
-
-                opObj.status = values[0]["result"];
-                if(values[0]["result"] === true){
-                    opObj.message = "儲存成功";
-                    // 更新資料
-                    fetchRestaurant();
-                }else{
-                    opObj.message = values[0]["message"];
-                }
-                document.getElementById("alertMsg").classList.remove("hidden");
-
-                setTimeout(() => {
-                    document.getElementById("alertMsg").classList.add("hidden");
-                }, 3000);
-
-            });
-
-        }, 500);
     }
     // 藉由 google map 依地址取得經緯度
     function geocodeAddress(address) {
@@ -304,8 +215,7 @@
                 } else {
                     opObj.status = false;
                     opObj.message = 'Geocode was not successful for the following reason: ' + status;
-
-                    document.getElementById("alertMsg").classList.remove("hidden");
+                    emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
 
                     reject(opObj.message);
                 }
@@ -372,12 +282,7 @@
             }else{
                 opObj.message = values[0]["message"];
             }
-            document.getElementById("alertMsg").classList.remove("hidden");
-
-            setTimeout(() => {
-                document.getElementById("alertMsg").classList.add("hidden");
-            }, 3000);
-
+            emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
         });
     }
     // 取得使用者個人資料
@@ -432,12 +337,7 @@
             }else{
                 opObj.message = values[0]["message"];
             }
-            document.getElementById("alertMsg").classList.remove("hidden");
-
-            setTimeout(() => {
-                document.getElementById("alertMsg").classList.add("hidden");
-            }, 3000);
-
+            emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
         });
     }
 </script>
@@ -633,31 +533,6 @@
         </div>
     </div>
 
-    <!-- Restaurant -->
-    <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定餐廳清單" />
-    <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
-        <div class="divider">
-            Restaurant 資料
-        </div>
-        <div class="flex w-10/10 flex-col gap-2">
-            <fieldset v-for="(restObj, rest_i) in restaurants" class="fieldset bg-gray-300 border-gray-500 rounded-box border md:p-2 w-10/10">
-                <label class="label">{{ restObj.name }} ( {{ restObj.latitude.toFixed(4) }}, {{ restObj.longitude.toFixed(4) }} )</label>
-                <div class="md:join">
-                    <input type="text" class="input md:join-item w-10/10 md:w-5/10" placeholder="店名" v-model="restObj.edit_name" />
-                    <input type="text" class="input md:join-item w-10/10 md:w-5/10" placeholder="地址" v-model="restObj.edit_address" />
-                </div>
-            </fieldset>
-        </div>
-        <div class="w-10/10 flex flex-col md:flex-row-reverse mt-2 gap-2 justify-center">
-            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="newRestaurant">
-                new
-            </button>
-            <button class="btn btn-neutral w-10/10 md:w-5/10" @click="saveRestaurant">
-                save
-            </button>
-        </div>
-    </div>
-
     <!-- Award -->
     <input v-if="appState === 'SET_SYSTEM'" type="radio" name="setting_tabs" class="tab" aria-label="設定獎項清單" />
     <div v-if="appState === 'SET_SYSTEM'" class="tab-content border-base-300 bg-base-100 pt-1 px-5">
@@ -694,12 +569,6 @@
                 save
             </button>
         </div>
-    </div>
-</div>
-
-<div id="alertMsg" class="toast hidden w-5/10">
-    <div class="alert w-10/10" :class="{ 'alert-success': opObj.status == true, 'alert-error': opObj.status == false }">
-        <span>{{ opObj.message }}</span>
     </div>
 </div>
 

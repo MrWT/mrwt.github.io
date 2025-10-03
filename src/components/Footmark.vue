@@ -4,6 +4,7 @@
     import { fetchData } from "@/composables/fetchData"
     import { GoogleMap, AdvancedMarker, CustomControl, InfoWindow } from 'vue3-google-map'
 
+    const emit = defineEmits(['popupMessage']);
     const props = defineProps({
         title: String,
         account: String,
@@ -32,7 +33,8 @@
         longitude: 0,
         type: "ByGogoro",
         mark_date: moment().format("YYYY-MM-DD"),
-        belong_to_user: "BRYANT",
+        belong_to_user: props.account.toUpperCase(),
+        memo: "",
     });
     // 編輯狀態
     let opObj = reactive({
@@ -78,6 +80,7 @@
                     location_name: fmObj["location_name"],
                     mark_date: fmObj["mark_date"],
                     type: fmObj["type"],
+                    memo: fmObj["memo"],
                     marker: {
                         position: { lat: fmObj["latitude"], lng: fmObj["longitude"] },
                         title: fmObj["location_name"]
@@ -112,11 +115,7 @@
             opObj.status = false;
             opObj.message = "請填好資料再新增!";
 
-            document.getElementById("alertMsg").classList.remove("hidden");
-
-            setTimeout(() => {
-                document.getElementById("alertMsg").classList.add("hidden");
-            }, 3000);
+            emit('popupMessage', opObj.status, opObj.message); // Emitting the event with data
             return;
         }
 
@@ -149,8 +148,9 @@
             
             <AdvancedMarker v-for="(markObj, m_i) in googleMapMarks" :options="markObj.marker" :pin-options="googleMapMarkPins[m_i]">
                 <InfoWindow class="flex flex-col gap-2 pr-5">
-                    <h1 class="text-lg text-black">{{ markObj.location_name }}</h1>    
-                    <h3 class="text-base text-black">{{ markObj.mark_date }}</h3>    
+                    <h3 class="text-lg text-black">{{ markObj.mark_date }}</h3>    
+                    <h1 class="text-2xl text-black">{{ markObj.location_name }}</h1>    
+                    <h3 class="text-base text-black">{{ markObj.memo }}</h3>    
                 </InfoWindow>
             </AdvancedMarker>        
         
@@ -170,6 +170,8 @@
             <input type="text" placeholder="地點名稱" class="input input-info w-10/10" v-model="editObj.location_name" />
 
             <input type="date" placeholder="踩點日期" class="input input-info w-10/10" v-model="editObj.mark_date" />
+
+            <input type="text" placeholder="備註" class="input input-info w-10/10" v-model="editObj.memo" />
 
             <div class="flex flex-row gap-2 w-10/10">
                 <label class="text-white text-lg w-5/10">
@@ -196,11 +198,6 @@
         </form>
     </dialog>
 
-    <div id="alertMsg" class="toast hidden w-5/10">
-        <div class="alert w-10/10" :class="{ 'alert-success': opObj.status == true, 'alert-error': opObj.status == false }">
-            <span>{{ opObj.message }}</span>
-        </div>
-    </div>
 </template>
 
 <style scoped>

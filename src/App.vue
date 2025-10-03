@@ -13,6 +13,7 @@
     import Chat from './components/Chat.vue'
     import Author from './components/Author.vue'
     import LockLucky from './components/LockLucky.vue'
+    import PopupMessage from './components/PopupMessage.vue'
 
     onMounted(() => {
         console.log("App mounted.");
@@ -53,6 +54,10 @@
         role: null,
         funcs: [],
         languages: {},
+    });
+    let opObj = reactive({
+        status: false,
+        message: "",
     });
 
     // 初始化 app
@@ -268,6 +273,17 @@
             });
         }
     }
+    // popup message
+    function popupMessage(status, message){
+        opObj.status = status;
+        opObj.message = message;
+
+        document.getElementById("alertMsg").classList.remove("hidden");
+
+        setTimeout(() => {
+            document.getElementById("alertMsg").classList.add("hidden");
+        }, 5000);
+    }
 
 </script>
 
@@ -322,9 +338,9 @@
         <Gallery v-if="appSetting.contentComponent === 'gallery'" :title="appSetting.title" />
         <Quiz v-else-if="appSetting.contentComponent === 'quiz'" :title="appSetting.title" :setting="appSetting.quiz" />
         <Readme v-else-if="appSetting.contentComponent === 'readme'" :title="appSetting.title" :resources="appSetting.resources"  @introduce-author="gotoIntroduceAuthor" />
-        <Footmark v-else-if="appSetting.contentComponent === 'footmark'" :title="appSetting.title" :account="userInfo.account" :googleMapApiKey="appSetting.googleMapApiKey" />
+        <Footmark v-else-if="appSetting.contentComponent === 'footmark'" :title="appSetting.title" :account="userInfo.account" :googleMapApiKey="appSetting.googleMapApiKey" @popup-message="popupMessage" />
         <Finance v-else-if="appSetting.contentComponent === 'finance'" :title="appSetting.title" :account="userInfo.account" />
-        <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" />
+        <Setting v-else-if="appSetting.contentComponent === 'setting'" :title="appSetting.title" :account="userInfo.account" :quiz_setting="appSetting.quiz" :app_state="appState" @popup-message="popupMessage" />
         <Chat v-else-if="appSetting.contentComponent === 'chat'" :title="appSetting.title" :account="userInfo.account" />
         <Author v-else-if="appSetting.contentComponent === 'author'" :title="appSetting.title" />
         <LockLucky v-else-if="appSetting.contentComponent === 'lockLucky'" />
@@ -395,6 +411,7 @@
         </form>
     </dialog>
 
+    <PopupMessage id="alertMsg" class="hidden" :status="opObj.status" :message="opObj.message" />
 </template>
 
 <style scoped>
