@@ -2,7 +2,7 @@
     import { ref, reactive, onMounted } from 'vue'
     import moment from 'moment'
     import { fetchData } from "@/composables/fetchData"
-    import { GoogleMap, AdvancedMarker, CustomControl } from 'vue3-google-map'
+    import { GoogleMap, AdvancedMarker, CustomControl, InfoWindow } from 'vue3-google-map'
 
     const props = defineProps({
         title: String,
@@ -34,7 +34,7 @@
         mark_date: moment().format("YYYY-MM-DD"),
         belong_to_user: "BRYANT",
     });
-
+    // 編輯狀態
     let opObj = reactive({
         status: true,
         message: "",
@@ -61,6 +61,9 @@
     }
     // 取得踩點足跡
     function fetchFootmark(){
+        googleMapMarks.splice(0, googleMapMarks.length);
+        googleMapMarkPins.splice(0, googleMapMarkPins.length);
+
         let fetchFootmarkPromise = fetchData({
             api: "get_footmark",
             data: {
@@ -72,19 +75,30 @@
 
             values[0].forEach((fmObj, fm_i) => {
                 googleMapMarks.push({
-                    position: { lat: fmObj["latitude"], lng: fmObj["longitude"] }
+                    location_name: fmObj["location_name"],
+                    mark_date: fmObj["mark_date"],
+                    type: fmObj["type"],
+                    marker: {
+                        position: { lat: fmObj["latitude"], lng: fmObj["longitude"] }
+                    }
                 });
 
                 googleMapMarkPins.push({
-                    background: fmObj["type"] === "ByGogoro" ? "orange" : "purple",
+                    background: fmObj["type"] === "ByGogoro" ? "red" : "pink",
                 });
             });
 
+            //console.log("googleMapMarks=", googleMapMarks);
+            //console.log("googleMapMarkPins=", googleMapMarkPins);
         });
     }
     // 開啟編輯 modal
     function openEditModal(){
         document.getElementById("editMarkModal").showModal();
+
+        editObj.location_name = "";
+        editObj.mark_date = moment().format("YYYY-MM-DD");
+        editObj.type = "ByGogoro";
     }
     // 關閉編輯 modal
     function closeEditModal(){
@@ -92,6 +106,7 @@
     }
     // 儲存 Mark 資訊
     function saveMark(){
+        // 資料檢核
         if(!editObj.location_name || !editObj.mark_date || !editObj.type){
             opObj.status = false;
             opObj.message = "請填好資料再新增!";
@@ -104,11 +119,18 @@
             return;
         }
 
+        // 新增 footmark
         console.log("saveMark.editObj=", editObj);
+        let newFootmarkPromise = fetchData({
+            api: "new_footmark",
+            data: editObj
+        });
+        Promise.all([newFootmarkPromise]).then((values) => {
+            console.log("newFootmarkPromise.values=", values);
 
-
-
-        closeEditModal();
+            fetchFootmark();
+            closeEditModal();
+        });
     }
 </script>
 
@@ -124,9 +146,14 @@
             :streetViewControl = "false"
             >
             
-            <AdvancedMarker v-for="(markObj, m_i) in googleMapMarks" :options="markObj" :pin-options="googleMapMarkPins[m_i]"></AdvancedMarker>        
+            <AdvancedMarker v-for="(markObj, m_i) in googleMapMarks" :options="markObj.marker" :pin-options="googleMapMarkPins[m_i]">
+                <InfoWindow class="flex flex-col gap-2 pr-5">
+                    <h1 class="text-lg text-black">{{ markObj.location_name }}</h1>    
+                    <h3 class="text-base text-black">{{ markObj.mark_date }}</h3>    
+                </InfoWindow>
+            </AdvancedMarker>        
         
-            <CustomControl v-if="false" position="TOP_LEFT">
+            <CustomControl v-if="true" position="TOP_LEFT">
                 <button class="custom-btn p-3" @click="openEditModal">
                     <svg class="w-8 h-8 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.583 8.445h.01M10.86 19.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 12.31 4l5.734.007A1.968 1.968 0 0 1 20 5.983v5.5a.992.992 0 0 1-.316.727l-7.44 7.5a.974.974 0 0 1-1.384.001Z"/>
