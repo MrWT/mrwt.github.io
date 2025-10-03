@@ -103,6 +103,7 @@
         editObj.location_name = "";
         editObj.mark_date = moment().format("YYYY-MM-DD");
         editObj.type = "ByGogoro";
+        editObj.memo = "";
     }
     // 關閉編輯 modal
     function closeEditModal(){
