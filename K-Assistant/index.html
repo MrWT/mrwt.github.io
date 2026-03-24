@@ -9,13 +9,25 @@
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
 
     <style>
-      .mask-glowing-text {
+      .mask-glowing-red {
         font-size: 100px;
         color: #fff;
-        animation: glow 1s ease-in-out infinite alternate;
+        animation: glow-red 1s ease-in-out infinite alternate;
       }
 
-      @keyframes glow {
+      .mask-glowing-green {
+        font-size: 100px;
+        color: #fff;
+        animation: glow-green 1s ease-in-out infinite alternate;
+      }
+
+      .mask-glowing-blue {
+        font-size: 100px;
+        color: #fff;
+        animation: glow-blue 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow-red {
         from {
           text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
         }
@@ -23,14 +35,33 @@
           text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
         }
       }
+
+      @keyframes glow-green {
+        from {
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #009900;
+        }
+        to {
+          text-shadow: 0 0 20px #fff, 0 0 30px #00ff00, 0 0 40px #00ff00;
+        }
+      }
+
+      @keyframes glow-blue {
+        from {
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0066ff;
+        }
+        to {
+          text-shadow: 0 0 20px #fff, 0 0 30px #66a3ff, 0 0 40px #66a3ff;
+        }
+      }
+
     </style>
-    <script type="module" crossorigin src="/K-Assistant/assests/index-CJx9s2nB.js"></script>
-    <link rel="stylesheet" crossorigin href="/K-Assistant/assests/index-1xycHcTu.css">
+    <script type="module" crossorigin src="/K-Assistant/assests/index-flsratF2.js"></script>
+    <link rel="stylesheet" crossorigin href="/K-Assistant/assests/index-BzDrOZfQ.css">
   </head>
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <div id="app" class="w-full h-screen overflow-y-hidden overflow-x-hidden"></div>
+    <div id="app" class="w-full h-screen overflow-y-hidden overflow-x-hidden"></div>
   </body>
 </html>
