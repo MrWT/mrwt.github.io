@@ -1,0 +1,1575 @@
+{
+  "members": [
+    {
+      "id": 1,
+      "name": "謝主君"
+    },
+    {
+      "id": 2,
+      "name": "謝佩君"
+    },
+    {
+      "id": 3,
+      "name": "謝佳君"
+    },
+    {
+      "id": 4,
+      "name": "黃培欣"
+    },
+    {
+      "id": 5,
+      "name": "黃培涵"
+    },
+    {
+      "id": 6,
+      "name": "李珮琪"
+    },
+    {
+      "id": 7,
+      "name": "李玥珊"
+    },
+    {
+      "id": 8,
+      "name": "李玉婷"
+    },
+    {
+      "id": 9,
+      "name": "李信賢"
+    },
+    {
+      "id": 10,
+      "name": "邱巧琳"
+    },
+    {
+      "id": 11,
+      "name": "邱啟源"
+    },
+    {
+      "id": 12,
+      "name": "郭政郎"
+    },
+    {
+      "id": 13,
+      "name": "郭椿蓉"
+    },
+    {
+      "id": 14,
+      "name": "郭威廷"
+    },
+    {
+      "id": 15,
+      "name": "郭政道"
+    },
+    {
+      "id": 16,
+      "name": "郭芳伶"
+    },
+    {
+      "id": 17,
+      "name": "郭又菁"
+    }
+  ],
+  "transactions": [
+    {
+      "date": "2025-10-05",
+      "member_id": 14,
+      "type": "expense",
+      "category": "前期結餘",
+      "amount": 1262,
+      "description": "前期結餘",
+      "id": 1,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-10-31",
+      "member_id": 12,
+      "type": "income",
+      "category": "個人贊助",
+      "amount": 1262,
+      "description": "郭政郎(個人贊助)",
+      "id": 2,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-02",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 3,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-03",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 4,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-03",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 5,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-03",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 6,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 7,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 8,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 9,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 10,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 11,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 12,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 13,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 14,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-05",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 15,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-05",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 16,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-10",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 17,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-10",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 18,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-11-10",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 19,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-01",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 20,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-03",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 21,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-03",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 22,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-04",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 23,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-04",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 24,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-04",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 25,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-04",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 26,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 27,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 28,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 29,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 30,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 31,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 32,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-05",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 33,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-09",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 34,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-10",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 35,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2025-12-10",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 36,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-01",
+      "member_id": 14,
+      "type": "income",
+      "category": "利息",
+      "amount": 14,
+      "description": "利息",
+      "id": 37,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-01",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 38,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-02",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 39,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-02",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 40,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-03",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 41,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-03",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 42,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-04",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 43,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-05",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 44,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-05",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 45,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-05",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 46,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-05",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 47,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-07",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 48,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-08",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 49,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-08",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 50,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-09",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 51,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-11",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 52,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-11",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 53,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-11",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 54,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-01-11",
+      "member_id": 14,
+      "type": "income",
+      "category": "利息",
+      "amount": 8,
+      "description": "利息",
+      "id": 55,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 56,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "等家寶寶",
+      "amount": 600,
+      "description": "黃培涵(等家寶寶)",
+      "id": 57,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-04",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 58,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-04",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 59,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-04",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 60,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-05",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 61,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-05",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 62,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 63,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 64,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 65,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 66,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 67,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 68,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 69,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-06",
+      "member_id": 6,
+      "type": "income",
+      "category": "等家寶寶",
+      "amount": 1797,
+      "description": "李珮琪+李玥珊+李玉婷+李信賢(等家寶寶)",
+      "id": 70,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-10",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 71,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-10",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 72,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-10",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 73,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-10",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 74,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-10",
+      "member_id": 4,
+      "type": "income",
+      "category": "等家寶寶",
+      "amount": 600,
+      "description": "黃培欣(等家寶寶)",
+      "id": 75,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-18",
+      "member_id": 14,
+      "type": "expense",
+      "category": "支出",
+      "amount": 16600,
+      "description": "初二聚會餐費(葷食)",
+      "id": 76,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-18",
+      "member_id": 14,
+      "type": "expense",
+      "category": "支出",
+      "amount": 7500,
+      "description": "初二聚會餐費(素食)",
+      "id": 77,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-19",
+      "member_id": 14,
+      "type": "income",
+      "category": "等家寶寶",
+      "amount": 3000,
+      "description": "郭威廷+游倩儀+郭馥瑄+郭珈瑜(等家寶寶)",
+      "id": 78,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-21",
+      "member_id": 14,
+      "type": "income",
+      "category": "利息",
+      "amount": 22,
+      "description": "利息",
+      "id": 79,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-21",
+      "member_id": 12,
+      "type": "income",
+      "category": "個人贊助",
+      "amount": 200,
+      "description": "郭政郎(個人贊助)",
+      "id": 80,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-02-24",
+      "member_id": 14,
+      "type": "expense",
+      "category": "支出",
+      "amount": 5990,
+      "description": "等家寶寶-蔬果盒( $599 )x10 收據 => https://drive.google.com/file/d/1lijp3IgKpqmr8dWAkIDfWfJ5v_eYmeAM/view?usp=drive_link",
+      "id": 81,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 82,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-04",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 83,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-06",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 84,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-06",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 85,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-07",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 86,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-07",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 87,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-07",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 88,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-07",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 89,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-08",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 90,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-08",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 91,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-08",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 92,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-09",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 93,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-09",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 94,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-10",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 95,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-10",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 96,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-10",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 97,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-03-10",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 98,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-01",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 99,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-01",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 100,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 101,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-02",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 102,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-06",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 103,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-06",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 104,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-07",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 105,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-08",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 106,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-08",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 107,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-08",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 108,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-08",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 109,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-08",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 110,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-09",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 111,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-10",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 112,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-10",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 113,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-10",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 114,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-04-10",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 115,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 116,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-02",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 117,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-02",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 118,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-03",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 119,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-03",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 120,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-03",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 121,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-06",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 122,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-06",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 123,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-06",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 124,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-08",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 125,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-08",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 126,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-09",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 127,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-09",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 128,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-11",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 129,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-11",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 130,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-11",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 131,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-05-11",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 132,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-01",
+      "member_id": 6,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李珮琪",
+      "id": 133,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-01",
+      "member_id": 7,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玥珊",
+      "id": 134,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-01",
+      "member_id": 8,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李玉婷",
+      "id": 135,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-01",
+      "member_id": 9,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "李信賢",
+      "id": 136,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-02",
+      "member_id": 5,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培涵",
+      "id": 137,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-04",
+      "member_id": 14,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭威廷",
+      "id": 138,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-05",
+      "member_id": 13,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭椿蓉",
+      "id": 139,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-05",
+      "member_id": 12,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政郎",
+      "id": 140,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-05",
+      "member_id": 2,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佩君",
+      "id": 141,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-05",
+      "member_id": 1,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝主君",
+      "id": 142,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-06",
+      "member_id": 16,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭芳伶",
+      "id": 143,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-06",
+      "member_id": 17,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭又菁",
+      "id": 144,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-06",
+      "member_id": 15,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "郭政道",
+      "id": 145,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-06",
+      "member_id": 10,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱巧琳",
+      "id": 146,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-06",
+      "member_id": 11,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "邱啟源",
+      "id": 147,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-11",
+      "member_id": 4,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "黃培欣",
+      "id": 148,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "date": "2026-06-11",
+      "member_id": 3,
+      "type": "income",
+      "category": "月費",
+      "amount": 500,
+      "description": "謝佳君",
+      "id": 149,
+      "created_at": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "id": 150,
+      "date": "2026-06-21",
+      "member_id": 14,
+      "type": "income",
+      "category": "利息",
+      "amount": 104,
+      "description": null,
+      "created_at": "2026-06-24T14:54:57.940Z"
+    }
+  ],
+  "nextId": 151
+}
